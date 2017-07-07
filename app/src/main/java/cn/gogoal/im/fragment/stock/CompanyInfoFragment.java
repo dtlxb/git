@@ -135,6 +135,8 @@ public class CompanyInfoFragment extends BaseFragment {
      * 公司概况
      */
     private void getCompanySummary() {
+        infoList.add(new CompanyInforData("公司概况", null, null, 1));
+
         Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
@@ -148,13 +150,18 @@ public class CompanyInfoFragment extends BaseFragment {
 
                     ArrayList<CompanyInforData> basicList = new ArrayList<>();
                     for (int i = 0; i < FtenUtils.comSummary1.length; i++) {
-                        basicList.add(new CompanyInforData("公司概况", FtenUtils.comSummary1[i],
-                                basic_data.getString(FtenUtils.comSummary1_1[i]), null));
+                        if (i == 3) {
+                            basicList.add(new CompanyInforData(FtenUtils.comSummary1[i],
+                                    basic_data.getString(FtenUtils.comSummary1_1[i]), null, 6));
+                        } else {
+                            basicList.add(new CompanyInforData(FtenUtils.comSummary1[i],
+                                    basic_data.getString(FtenUtils.comSummary1_1[i]), null, 5));
+                        }
                     }
                     infoList.addAll(basicList);
-
-                    getEquityData();
                 }
+
+                getEquityData();
             }
 
             @Override
@@ -169,6 +176,8 @@ public class CompanyInfoFragment extends BaseFragment {
      * 股本
      */
     private void getEquityData() {
+        infoList.add(new CompanyInforData("股本", null, null, 2));
+
         Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
@@ -181,13 +190,13 @@ public class CompanyInfoFragment extends BaseFragment {
 
                     ArrayList<CompanyInforData> equityList = new ArrayList<>();
                     for (int i = 0; i < FtenUtils.equity1.length; i++) {
-                        equityList.add(new CompanyInforData("股本", FtenUtils.equity1[i],
-                                data.getString(FtenUtils.equity1_1[i]), null));
+                        equityList.add(new CompanyInforData(FtenUtils.equity1[i],
+                                data.getString(FtenUtils.equity1_1[i]), null, 5));
                     }
                     infoList.addAll(equityList);
-
-                    getExecutivesData();
                 }
+
+                getExecutivesData();
             }
 
             @Override
@@ -201,6 +210,8 @@ public class CompanyInfoFragment extends BaseFragment {
      * 高管
      */
     private void getExecutivesData() {
+        infoList.add(new CompanyInforData("高管", null, null, 3));
+
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
@@ -214,14 +225,14 @@ public class CompanyInfoFragment extends BaseFragment {
 
                     ArrayList<CompanyInforData> executivesList = new ArrayList<>();
                     for (int i = 0; i < (senior_info_list.size() >= 3 ? 3 : senior_info_list.size()); i++) {
-                        executivesList.add(new CompanyInforData("高管",
+                        executivesList.add(new CompanyInforData(
                                 senior_info_list.getJSONObject(i).getString("duty"),
-                                senior_info_list.getJSONObject(i).getString("name"), null));
+                                senior_info_list.getJSONObject(i).getString("name"), null, 5));
                     }
                     infoList.addAll(executivesList);
-
-                    getPrincipalRevenue();
                 }
+
+                getPrincipalRevenue();
             }
 
             @Override
@@ -235,6 +246,9 @@ public class CompanyInfoFragment extends BaseFragment {
      * 主营收入
      */
     private void getPrincipalRevenue() {
+        infoList.add(new CompanyInforData("主营收入", null, null, 4));
+        infoList.add(new CompanyInforData("主营收入构成", "收入(万元)", "占比", 7));
+
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
@@ -247,18 +261,17 @@ public class CompanyInfoFragment extends BaseFragment {
                     JSONArray main_business_income = data.getJSONArray("main_business_income");
 
                     ArrayList<CompanyInforData> revenueList = new ArrayList<>();
-                    revenueList.add(new CompanyInforData("主营收入", "主营收入构成", "收入(万元)", "占比"));
                     for (int i = 0; i < main_business_income.size(); i++) {
-                        revenueList.add(new CompanyInforData(null,
+                        revenueList.add(new CompanyInforData(
                                 main_business_income.getJSONObject(i).getString("name"),
                                 main_business_income.getJSONObject(i).getString("product_value"),
-                                main_business_income.getJSONObject(i).getString("product_proportion")));
+                                main_business_income.getJSONObject(i).getString("product_proportion"), 8));
                     }
                     infoList.addAll(revenueList);
-
-                    summaryAdapter = new CompanySummaryAdapter(getActivity(), infoList, stockCode, stockName);
-                    rvComSummary.setAdapter(summaryAdapter);
                 }
+
+                summaryAdapter = new CompanySummaryAdapter(getActivity(), infoList, stockCode, stockName);
+                rvComSummary.setAdapter(summaryAdapter);
             }
 
             @Override

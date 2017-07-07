@@ -38,60 +38,58 @@ public class CompanySummaryAdapter extends CommonAdapter<CompanyInforData, BaseV
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, CompanyInforData data, final int position) {
-        if (position == 0 || position == 4 || position == 7 || position == 10) {
+    protected void convert(BaseViewHolder holder, final CompanyInforData data, final int position) {
+        if (data.getDisplayType() == 1 || data.getDisplayType() == 2 || data.getDisplayType() == 3
+                || data.getDisplayType() == 4) {
+
             holder.setVisible(R.id.linearProfile, true);
-            if (position == 10) {
+            if (data.getDisplayType() == 4) {
                 holder.setVisible(R.id.textCont, false);
             } else {
                 holder.setVisible(R.id.textCont, true);
             }
+            holder.setText(R.id.textTitle, listData.get(position).getCompanyName());
 
-            holder.setText(R.id.textTitle, listData.get(position).getInforTitle());
-        } else {
-            holder.setVisible(R.id.linearProfile, false);
-        }
-
-        if (position == 3) {
+        } else if (data.getDisplayType() == 6) {
             holder.setVisible(R.id.linearProfile2, true);
             holder.setText(R.id.textName2, listData.get(position).getCompanyName());
             ExpandableLayout expandableLayout = holder.getView(R.id.textContent2);
-            expandableLayout.setText(listData.get(position).getCompanyContent(), position);
-        } else if (position >= 10) {
+            expandableLayout.setText(listData.get(position).getCompanyConten1(), position);
+        } else if (data.getDisplayType() == 7 || data.getDisplayType() == 8) {
             holder.setVisible(R.id.linearProfile3, true);
             holder.setText(R.id.textName3, listData.get(position).getCompanyName());
-            if (position == 10) {
-                holder.setText(R.id.textContent3, listData.get(position).getCompanyContent());
-                holder.setText(R.id.textContent4, listData.get(position).getCompanyContent1());
+            if (data.getDisplayType() == 7) {
+                holder.setText(R.id.textContent3, listData.get(position).getCompanyConten1());
+                holder.setText(R.id.textContent4, listData.get(position).getCompanyContent2());
             } else {
                 holder.setText(R.id.textContent3, StringUtils.save2Significand(Double.parseDouble(
-                        listData.get(position).getCompanyContent()) / 10000));
+                        listData.get(position).getCompanyConten1()) / 10000));
                 holder.setText(R.id.textContent4, StringUtils.save2Significand(Double.parseDouble(
-                        listData.get(position).getCompanyContent1()) * 100) + "%");
+                        listData.get(position).getCompanyContent2()) * 100) + "%");
             }
         } else {
             holder.setVisible(R.id.linearProfile1, true);
             holder.setText(R.id.textName1, listData.get(position).getCompanyName());
-            holder.setText(R.id.textContent1, listData.get(position).getCompanyContent());
+            holder.setText(R.id.textContent1, listData.get(position).getCompanyConten1());
         }
 
         holder.setOnClickListener(R.id.textCont, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (position) {
-                    case 0:
+                switch (data.getDisplayType()) {
+                    case 1:
                         Intent intent1 = new Intent(context, CompanyProfileActivity.class);
                         intent1.putExtra("stockCode", stockCode);
                         intent1.putExtra("stockName", stockName);
                         context.startActivity(intent1);
                         break;
-                    case 4:
+                    case 2:
                         Intent intent2 = new Intent(context, CapitalStructureActivity.class);
                         intent2.putExtra("stockCode", stockCode);
                         intent2.putExtra("stockName", stockName);
                         context.startActivity(intent2);
                         break;
-                    case 7:
+                    case 3:
                         Intent intent3 = new Intent(context, CompanyExecutivesActivity.class);
                         intent3.putExtra("stockCode", stockCode);
                         intent3.putExtra("stockName", stockName);
