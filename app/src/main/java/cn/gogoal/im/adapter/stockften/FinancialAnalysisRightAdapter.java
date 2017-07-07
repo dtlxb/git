@@ -65,22 +65,12 @@ public class FinancialAnalysisRightAdapter extends MyBaseAdapter {
         }
 
         if (position == 0) {
-            holder.imgReport1.setVisibility(View.VISIBLE);
-            holder.imgReport2.setVisibility(View.VISIBLE);
-            holder.imgReport3.setVisibility(View.VISIBLE);
-            holder.imgReport4.setVisibility(View.VISIBLE);
-
             holder.textReport1.setLines(1);
             holder.textReport2.setLines(1);
             holder.textReport3.setLines(1);
             holder.textReport4.setLines(1);
             holder.textReport5.setLines(1);
         } else {
-            holder.imgReport1.setVisibility(View.INVISIBLE);
-            holder.imgReport2.setVisibility(View.INVISIBLE);
-            holder.imgReport3.setVisibility(View.INVISIBLE);
-            holder.imgReport4.setVisibility(View.INVISIBLE);
-
             holder.textReport5.setLines(2);
             holder.textReport1.setLines(2);
             holder.textReport2.setLines(2);
@@ -103,12 +93,80 @@ public class FinancialAnalysisRightAdapter extends MyBaseAdapter {
         }
 
         if (contList.get(position).size() == 0) {
+            holder.relaReport1.setVisibility(View.VISIBLE);
             holder.textReport1.setText("--");
-            holder.textReport2.setText("--");
-            holder.textReport3.setText("--");
-            holder.textReport4.setText("--");
-            holder.textReport5.setText("--");
-        } else {
+        } else if (contList.get(position).size() == 1) {
+            holder.relaReport1.setVisibility(View.VISIBLE);
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+        } else if (contList.get(position).size() == 2) {
+            holder.relaReport1.setVisibility(View.VISIBLE);
+            holder.relaReport2.setVisibility(View.VISIBLE);
+            if (position == 0) {
+                holder.imgReport1.setVisibility(View.VISIBLE);
+            } else {
+                holder.imgReport1.setVisibility(View.INVISIBLE);
+            }
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+            holder.textReport2.setText(contList.get(position).getString(1) != null ?
+                    contList.get(position).getString(1) : "--");
+        } else if (contList.get(position).size() == 3) {
+            holder.relaReport1.setVisibility(View.VISIBLE);
+            holder.relaReport2.setVisibility(View.VISIBLE);
+            holder.relaReport3.setVisibility(View.VISIBLE);
+            if (position == 0) {
+                holder.imgReport1.setVisibility(View.VISIBLE);
+                holder.imgReport2.setVisibility(View.VISIBLE);
+            } else {
+                holder.imgReport1.setVisibility(View.INVISIBLE);
+                holder.imgReport2.setVisibility(View.INVISIBLE);
+            }
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+            holder.textReport2.setText(contList.get(position).getString(1) != null ?
+                    contList.get(position).getString(1) : "--");
+            holder.textReport3.setText(contList.get(position).getString(2) != null ?
+                    contList.get(position).getString(2) : "--");
+        } else if (contList.get(position).size() == 4) {
+            holder.relaReport1.setVisibility(View.VISIBLE);
+            holder.relaReport2.setVisibility(View.VISIBLE);
+            holder.relaReport3.setVisibility(View.VISIBLE);
+            holder.relaReport4.setVisibility(View.VISIBLE);
+            if (position == 0) {
+                holder.imgReport1.setVisibility(View.VISIBLE);
+                holder.imgReport2.setVisibility(View.VISIBLE);
+                holder.imgReport3.setVisibility(View.VISIBLE);
+            } else {
+                holder.imgReport1.setVisibility(View.INVISIBLE);
+                holder.imgReport2.setVisibility(View.INVISIBLE);
+                holder.imgReport3.setVisibility(View.INVISIBLE);
+            }
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+            holder.textReport2.setText(contList.get(position).getString(1) != null ?
+                    contList.get(position).getString(1) : "--");
+            holder.textReport3.setText(contList.get(position).getString(2) != null ?
+                    contList.get(position).getString(2) : "--");
+            holder.textReport4.setText(contList.get(position).getString(3) != null ?
+                    contList.get(position).getString(3) : "--");
+        } else if (contList.get(position).size() == 5) {
+            holder.relaReport1.setVisibility(View.VISIBLE);
+            holder.relaReport2.setVisibility(View.VISIBLE);
+            holder.relaReport3.setVisibility(View.VISIBLE);
+            holder.relaReport4.setVisibility(View.VISIBLE);
+            holder.relaReport5.setVisibility(View.VISIBLE);
+            if (position == 0) {
+                holder.imgReport1.setVisibility(View.VISIBLE);
+                holder.imgReport2.setVisibility(View.VISIBLE);
+                holder.imgReport3.setVisibility(View.VISIBLE);
+                holder.imgReport4.setVisibility(View.VISIBLE);
+            } else {
+                holder.imgReport1.setVisibility(View.INVISIBLE);
+                holder.imgReport2.setVisibility(View.INVISIBLE);
+                holder.imgReport3.setVisibility(View.INVISIBLE);
+                holder.imgReport4.setVisibility(View.INVISIBLE);
+            }
             holder.textReport1.setText(contList.get(position).getString(0) != null ?
                     contList.get(position).getString(0) : "--");
             holder.textReport2.setText(contList.get(position).getString(1) != null ?

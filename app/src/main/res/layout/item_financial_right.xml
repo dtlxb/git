@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:paddingBottom="7.5dp"
         android:paddingRight="15dp"
-        android:paddingTop="7.5dp">
+        android:paddingTop="7.5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textReport1"
@@ -43,7 +44,8 @@
         android:layout_height="wrap_content"
         android:paddingBottom="7.5dp"
         android:paddingRight="15dp"
-        android:paddingTop="7.5dp">
+        android:paddingTop="7.5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textReport2"
@@ -73,7 +75,8 @@
         android:layout_height="wrap_content"
         android:paddingBottom="7.5dp"
         android:paddingRight="15dp"
-        android:paddingTop="7.5dp">
+        android:paddingTop="7.5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textReport3"
@@ -103,7 +106,8 @@
         android:layout_height="wrap_content"
         android:paddingBottom="7.5dp"
         android:paddingRight="15dp"
-        android:paddingTop="7.5dp">
+        android:paddingTop="7.5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textReport4"
@@ -133,7 +137,8 @@
         android:layout_height="wrap_content"
         android:paddingBottom="7.5dp"
         android:paddingRight="15dp"
-        android:paddingTop="7.5dp">
+        android:paddingTop="7.5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textReport5"
