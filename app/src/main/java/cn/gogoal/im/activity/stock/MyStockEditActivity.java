@@ -16,7 +16,6 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -73,7 +72,7 @@ public class MyStockEditActivity extends BaseActivity implements View.OnClickLis
      * 得到自选股
      */
     private void getCachedStocks() {
-        List<MyStockData> myStockList = getIntent().getParcelableArrayListExtra("my_stock_edit_list");
+        ArrayList<MyStockData> myStockList = (ArrayList<MyStockData>) getIntent().getSerializableExtra("my_stock_edit_list");
         stocks = JSONArray.parseArray(JSON.toJSONString(myStockList));
         stocklist = new ArrayList<>();
         for (int i = 0; i < stocks.size(); i++) {

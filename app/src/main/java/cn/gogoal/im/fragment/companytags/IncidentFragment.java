@@ -7,12 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +27,7 @@ import cn.gogoal.im.bean.companytags.EventFeetData;
 import cn.gogoal.im.bean.companytags.IncidentData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -98,13 +99,15 @@ public class IncidentFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
                 KLog.e(responseInfo);
-                if (result.getIntValue("code") == 0) {
-                    BaseBeanList<IncidentData> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<IncidentData>>() {
-                            });
+                if (result.get("code").getAsInt() == 0) {
+
+                    Gson gson = new Gson();
+                    BaseBeanList<IncidentData> beanList = gson.fromJson(responseInfo,
+                            new TypeToken<BaseBeanList<IncidentData>>() {
+                            }.getType());
+
                     incidentDatas.addAll(beanList.getData());
                     if (incidentDatas.size() > 0) {
                         layout_incident.setVisibility(View.VISIBLE);
@@ -128,13 +131,15 @@ public class IncidentFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
                 KLog.e(responseInfo);
-                if (result.getIntValue("code") == 0) {
-                    BaseBeanList<EventFeetData> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<EventFeetData>>() {
-                            });
+                if (result.get("code").getAsInt() == 0) {
+
+                    Gson gson = new Gson();
+                    BaseBeanList<EventFeetData> beanList = gson.fromJson(responseInfo,
+                            new TypeToken<BaseBeanList<EventFeetData>>() {
+                            }.getType());
+
                     eventFeetDatas.addAll(beanList.getData());
                     eventFeetAdapter.notifyDataSetChanged();
                 }

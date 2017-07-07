@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -460,14 +461,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
-                ((LeftShareViewHolder) holder).tv_share.setText(String.valueOf(shareMap.get("content")));
+                ((LeftShareViewHolder) holder).tv_share.setText(Html.fromHtml(String.valueOf(shareMap.get("content"))));
                 ((LeftShareViewHolder) holder).tv_from.setText("朝阳永续");
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((LeftShareViewHolder) holder).iv_share);
             } else if (shareMap.get("toolType").equals("2")) {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).tv_share_title.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
-                ((LeftShareViewHolder) holder).tv_live_share.setText(String.valueOf(shareMap.get("content")));
+                ((LeftShareViewHolder) holder).tv_live_share.setText(Html.fromHtml(String.valueOf(shareMap.get("content"))));
                 ((LeftShareViewHolder) holder).tv_from.setText(String.valueOf(shareMap.get("title")));
                 getImageSize(((LeftShareViewHolder) holder).iv_live_share);
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((LeftShareViewHolder) holder).iv_live_share);
@@ -490,14 +491,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
-                ((RightShareViewHolder) holder).tv_share.setText(String.valueOf(shareMap.get("content")));
+                ((RightShareViewHolder) holder).tv_share.setText(Html.fromHtml(String.valueOf(shareMap.get("content"))));
                 ((RightShareViewHolder) holder).tv_from.setText("朝阳永续");
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((RightShareViewHolder) holder).iv_share);
             } else if (String.valueOf(shareMap.get("toolType")).equals("2")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
                 ((RightShareViewHolder) holder).tv_share_title.setVisibility(View.GONE);
-                ((RightShareViewHolder) holder).tv_live_share.setText(String.valueOf(shareMap.get("content")));
+                ((RightShareViewHolder) holder).tv_live_share.setText(Html.fromHtml(String.valueOf(shareMap.get("content"))));
                 ((RightShareViewHolder) holder).tv_from.setText(String.valueOf(shareMap.get("title")));
                 getImageSize(((RightShareViewHolder) holder).iv_live_share);
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((RightShareViewHolder) holder).iv_live_share);

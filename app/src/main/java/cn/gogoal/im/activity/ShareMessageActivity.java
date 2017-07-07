@@ -189,8 +189,8 @@ public class ShareMessageActivity extends BaseActivity {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (shareEntity==null){
-                                UIHelper.toast(v.getContext(),"分享数据为空");
+                            if (shareEntity == null) {
+                                UIHelper.toast(v.getContext(), "分享数据为空");
                                 return;
                             }
                             switch (position) {

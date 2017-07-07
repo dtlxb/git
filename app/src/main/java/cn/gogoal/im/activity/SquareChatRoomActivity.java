@@ -65,13 +65,6 @@ public class SquareChatRoomActivity extends BaseActivity {
 
     private void initTitle(final String squareName, final String conversation_id) {
         xTitle = setMyTitle(squareName, true);
-        /*xTitle.setLeftClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SquareChatRoomActivity.this, MessageHolderActivity.class);
-                startActivity(intent);
-            }
-        });*/
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SquareChatRoomActivity.this, R.mipmap.chat_person)) {
             @Override

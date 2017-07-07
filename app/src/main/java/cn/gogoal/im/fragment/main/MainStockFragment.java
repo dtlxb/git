@@ -16,7 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.socks.library.KLog;
+
 import org.simple.eventbus.Subscriber;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,11 +30,13 @@ import cn.gogoal.im.activity.Test2Activity;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.MarketFragment2;
 import cn.gogoal.im.fragment.stock.MyStockFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;

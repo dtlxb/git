@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.BarView;
 
@@ -70,15 +71,15 @@ public class TurnoverRateFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                JSONArray array = result.getJSONArray("data");
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
+                JsonArray array = result.get("data").getAsJsonArray();
 
-                if (result.getIntValue("code") == 0) {
+                if (result.get("code").getAsInt() == 0) {
                     chartBeanList.clear();
                     for (int i = 0; i < array.size(); i++) {
-                        JSONObject chartObject = (JSONObject) array.get(i);
-                        chartBeanList.add(new ChartBean(chartObject.getFloatValue("turnover"),
-                                chartObject.getString("date").substring(5, 10)));
+                        JsonObject chartObject = array.get(i).getAsJsonObject();
+                        chartBeanList.add(new ChartBean(chartObject.get("turnover").getAsFloat(),
+                                chartObject.get("date").getAsString().substring(5, 10)));
                     }
                     KLog.e(chartBeanList);
                     if (chartBeanList.size() > 0) {

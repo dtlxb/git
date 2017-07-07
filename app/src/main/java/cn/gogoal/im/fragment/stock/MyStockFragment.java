@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -42,7 +41,6 @@ import cn.gogoal.im.bean.stock.MyStockBean;
 import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.bean.stock.StockTag;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.JsonUtils;
@@ -94,6 +92,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
+    private ArrayList<MyStockData> cloneDatas;
 
     @Override
     public int bindLayout() {
@@ -195,12 +194,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
-        params.put("rows", "500");
+        params.put("rows", "200");
         params.put("token", UserUtils.getToken());
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
 
@@ -242,6 +242,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                 }
                             }
                             refreshComplate();
+                            cloneDatas = (ArrayList<MyStockData>) myStockDatas.clone();
                             myStockAdapter.notifyDataSetChanged();
                         }
 
@@ -263,7 +264,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     noData(true);
                 } else {
                     refreshComplate();
-                    UIHelper.toastResponseError(getActivity(), responseInfo);
                     editEnable(false);
                 }
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
@@ -272,7 +272,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             @Override
             public void onFailure(String msg) {
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
-                UIHelper.toastError(getActivity(), msg);
                 editEnable(false);
                 refreshComplate();
             }
@@ -298,9 +297,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), EditMyStockActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("my_stock_edit_list", myStockDatas);
-                    intent.putExtras(bundle);
+                    intent.putExtra("my_stock_edit_list", myStockDatas);
                     startActivity(intent);
                 }
             });
@@ -347,12 +344,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return Double.compare(o1.getPrice(), o2.getPrice());
                     } else {
-                        try {
-                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
-                        } catch (Exception e) {
-                            getMyStockData(AppConst.REFRESH_TYPE_FIRST);
-                            return 0;
-                        }
+                        return sortReset();
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
@@ -362,14 +354,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return StringUtils.parseStringDouble(o1.getChange_rate()).compareTo(StringUtils.parseStringDouble(o2.getChange_rate()));
                     } else {
-                        try {
-                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
-                        } catch (Exception e) {
-                            getMyStockData(AppConst.REFRESH_TYPE_FIRST);
-                            return 0;
-                        }
+                        return sortReset();
                     }
-                }else if (view.getId() == R.id.tv_mystock_rag) {
+                } else if (view.getId() == R.id.tv_mystock_rag) {
                     tvMystockPrice.setViewStateNormal();
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
@@ -377,13 +364,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return compareLong(o1.getTag().getType(),o2.getTag().getType());
                     } else {
-                        try {
-                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),
-                                    CalendarUtils.parseString2Long(o1.getInsertdate()));
-                        } catch (Exception e) {
-                            getMyStockData(AppConst.REFRESH_TYPE_FIRST);
-                            return 0;
-                        }
+                        return sortReset();
                     }
                 }
                 return 0;
@@ -397,8 +378,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 
-    private void sortReset(){
-
+    private int sortReset(){
+        myStockDatas.clear();
+        myStockDatas.addAll(cloneDatas);
+        return 0;
     }
 
     /**

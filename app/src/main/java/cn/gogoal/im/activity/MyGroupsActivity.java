@@ -16,6 +16,7 @@ import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.AppConst;
@@ -33,7 +35,6 @@ import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.JsonUtils;
@@ -127,13 +128,13 @@ public class MyGroupsActivity extends BaseActivity {
     public void getGroupList(final int type) {
         UserUtils.getMyGroupList(new Impl<String>() {
             @Override
-            public void response(int code, String jsondata) {
+            public void response(int code, String jsonData) {
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
                         dataBeans.clear();
 
                         List<GroupData> data =
-                                JsonUtils.parseJsonArray(jsondata,GroupData.class);
+                                JsonUtils.parseJsonArray(jsonData, GroupData.class);
 
 //                                Arrays.asList(new Gson().fromJson(jsondata, GroupData[].class));
 
@@ -152,7 +153,7 @@ public class MyGroupsActivity extends BaseActivity {
                         break;
                     case Impl.RESPON_DATA_ERROR:
                         xLayout.setStatus(XLayout.Error);
-                        UIHelper.toastError(getActivity(), jsondata, xLayout);
+                        UIHelper.toastError(getActivity(), jsonData, xLayout);
                         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                             @Override
                             public void onReload(View v) {
@@ -220,8 +221,9 @@ public class MyGroupsActivity extends BaseActivity {
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
-                        ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity,
-                                MessageListUtils.getIMMessageBeanById(data.getConv_id()));
+                        IMMessageBean imMessageBean = new IMMessageBean(data.getConv_id(), AppConst.IM_CHAT_TYPE_SQUARE, new Date().getTime(), "0",
+                                data.getName(), "", "", "");
+                        ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity, imMessageBean);
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
                 }

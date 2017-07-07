@@ -176,11 +176,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     groupObject.put("name", squareName);
                     groupObject.put("m_size", groupMembers.size() + "");
 
-                    attrObject.put("intro", "股市行情，畅所欲言");
-                    attrObject.put("notice", "股票有大涨趋势");
+                    attrObject.put("intro", "");
+                    attrObject.put("notice", "");
                     groupObject.put("attr", attrObject);
-
-                    groupsArray.add(groupObject);
+                    if (null != groupsArray) {
+                        groupsArray.add(groupObject);
+                    }
                     ChatGroupHelper.collectGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
@@ -193,7 +194,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         }
                     });
                 } else {
-                    groupsArray.remove(finalThisGroup);
+                    if (null != groupsArray) {
+                        groupsArray.remove(finalThisGroup);
+                    }
                     ChatGroupHelper.deleteGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {

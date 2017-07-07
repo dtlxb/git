@@ -14,12 +14,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +30,13 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
+import cn.gogoal.im.bean.companytags.CompanyTagData;
 import cn.gogoal.im.bean.companytags.HistoryData;
 import cn.gogoal.im.bean.companytags.IndustryData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 
@@ -111,12 +113,14 @@ public class HistoryFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                if (result.getIntValue("code") == 0) {
-                    BaseBeanList<HistoryData> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<HistoryData>>() {
-                            });
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
+                if (result.get("code").getAsInt() == 0) {
+
+                    Gson gson = new Gson();
+                    BaseBeanList<HistoryData> beanList = gson.fromJson(responseInfo,
+                            new TypeToken<BaseBeanList<HistoryData>>() {
+                            }.getType());
+
                     historyDatas.addAll(beanList.getData());
                     if (historyDatas.size() > 0) {
                         fragment_layout_history.setVisibility(View.VISIBLE);
@@ -142,13 +146,14 @@ public class HistoryFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(responseInfo);
-                if (result.getIntValue("code") == 0) {
-                    BaseBeanList<IndustryData> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<IndustryData>>() {
-                            });
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
+                if (result.get("code").getAsInt() == 0) {
+
+                    Gson gson = new Gson();
+                    BaseBeanList<IndustryData> beanList = gson.fromJson(responseInfo,
+                            new TypeToken<BaseBeanList<IndustryData>>() {
+                            }.getType());
+
                     industryDatas.addAll(beanList.getData());
                     if (industryDatas.size() > 0) {
                         fragment_layout_history.setVisibility(View.VISIBLE);

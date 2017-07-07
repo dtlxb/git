@@ -1,6 +1,7 @@
 package cn.gogoal.im.common.IMHelpers;
 
 import android.content.ContentValues;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 

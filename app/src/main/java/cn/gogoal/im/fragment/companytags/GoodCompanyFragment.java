@@ -8,12 +8,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -28,9 +28,8 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.companytags.CompanyTagData;
-import cn.gogoal.im.bean.companytags.HistoryData;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -88,13 +87,15 @@ public class GoodCompanyFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
+                JsonObject result = JsonUtils.parseJsonObject(responseInfo);
                 KLog.e(responseInfo);
-                if (result.getIntValue("code") == 0) {
-                    BaseBeanList<CompanyTagData> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<CompanyTagData>>() {
-                            });
+                if (result.get("code").getAsInt() == 0) {
+
+                    Gson gson = new Gson();
+                    BaseBeanList<CompanyTagData> beanList = gson.fromJson(responseInfo,
+                            new TypeToken<BaseBeanList<CompanyTagData>>() {
+                            }.getType());
+
                     companyTagDatas.addAll(beanList.getData());
                     if (companyTagDatas.size() > 0) {
                         layout_goodCompany.setVisibility(View.VISIBLE);

@@ -2,6 +2,8 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +17,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.AVFile;
 import com.bumptech.glide.Glide;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
@@ -41,12 +45,16 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ICheckItemListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.IMHelpers.GGImageMessage;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -287,7 +295,7 @@ public class ChooseContactActivity extends BaseActivity {
                 waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
                 waitDialog.show(getSupportFragmentManager());
 
-                for (ContactBean contactBean : result.values()) {
+                for (final ContactBean contactBean : result.values()) {
                     if (entity.getShareType().equalsIgnoreCase(GGShareEntity.SHARE_TYPE_IMAGE)) {//分享图片
                         ChatGroupHelper.sendImageMessage(
                                 contactBean.getConv_id(),
@@ -296,6 +304,14 @@ public class ChooseContactActivity extends BaseActivity {
                                     @Override
                                     public void sendSuccess() {
                                         UIHelper.toast(getActivity(), "分享成功!");
+                                        //头像暂时未保存
+                                        IMMessageBean imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
+                                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
+                                                String.valueOf(contactBean.getAvatar()), JSON.toJSONString(ChatGroupHelper.getImageMessage(entity)));
+                                        MessageListUtils.saveMessageInfo(imMessageBean);
+                                        //通知服务器重新获取
+                                        AppManager.getInstance().sendMessage("Cache_change");
+
                                     }
 
                                     @Override

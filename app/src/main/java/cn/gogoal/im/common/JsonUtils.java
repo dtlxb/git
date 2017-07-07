@@ -1,6 +1,7 @@
 package cn.gogoal.im.common;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -33,9 +34,6 @@ public class JsonUtils {
 
     /**
      * 解析json成实体类
-     *
-     * @param jsonString json串
-     * @param cls        类型
      */
     public static <T> T parseJsonObject(@NonNull String jsonString, @NonNull Class<T> cls) {
         if (gson == null) {
@@ -46,33 +44,9 @@ public class JsonUtils {
 
     /**
      * 解析json成JsonObject
-     *
-     * @param jsonString json串
      */
     public static JsonObject parseJsonObject(@NonNull String jsonString) {
         return new JsonParser().parse(jsonString).getAsJsonObject();//fastJson == JSONObject.parseObject(jsonString,cls);
-    }
-
-    /**
-     * 实体类转json
-     *
-     * @param cls 需要转换的类
-     */
-    public static <T> String toJsonString(@NonNull T cls) {
-        if (gson == null) {
-            gson = new Gson();
-        }
-        return gson.toJson(cls);//fastJson == JSONObject.toJSONString(cls)
-    }
-
-    /**
-     * 字段key是否存在
-     *
-     * @param key key
-     */
-    public static boolean containsKey(@NonNull String jsonString, @NonNull String key) {
-        JsonObject object = new JsonParser().parse(jsonString).getAsJsonObject();
-        return object.has(key);//fastJson == JSONObject.parseObject(jsonString).containsKey(key)
     }
 
     public static Map<String, String> toMap(@NonNull String jsonString) {
@@ -85,11 +59,26 @@ public class JsonUtils {
 
     //=====json array
     public static JsonArray getJsonArray(@NonNull JsonObject jsonObject, @NonNull String key) {
+        if (!jsonObject.has(key)) {
+            return null;
+        }
         return jsonObject.getAsJsonArray(key);
     }
 
     public static JsonArray getJsonArray(@NonNull String jsonString, @NonNull String key) {
         return parseJsonObject(jsonString).getAsJsonArray(key);
+    }
+
+    //=====json object
+    public static JsonObject getJsonObject(@NonNull JsonObject jsonObject, @NonNull String key) {
+        if (!jsonObject.has(key)) {
+            return null;
+        }
+        return jsonObject.get(key).getAsJsonObject();
+    }
+
+    public static JsonObject getJsonObject(@NonNull String jsonString, @NonNull String key) {
+        return parseJsonObject(jsonString).getAsJsonObject(key);
     }
 
     //===== int value
@@ -98,20 +87,17 @@ public class JsonUtils {
     }
 
     public static int getIntValue(@NonNull JsonObject jsonObject, @NonNull String key) {
+        if (!jsonObject.has(key)) {
+            return 0;
+        }
         return jsonObject.get(key).getAsInt();
-    }
-
-    //===== int value
-    public static long getLongValue(@NonNull String jsonString, @NonNull String key) {
-        return parseJsonObject(jsonString).get(key).getAsLong();
-    }
-
-    public static long getLongValue(@NonNull JsonObject jsonObject, @NonNull String key) {
-        return jsonObject.get(key).getAsLong();
     }
 
     //======String
     public static String getString(@NonNull JsonObject jsonObject, @NonNull String key) {
+        if (!jsonObject.has(key)) {
+            return null;
+        }
         return jsonObject.get(key).getAsString();
     }
 
@@ -128,8 +114,44 @@ public class JsonUtils {
         return parseJsonObject(jsonString).get(key).getAsBoolean();
     }
 
+    //==========Float
+    public static float getFloatValue(@NonNull JsonObject jsonObject, @NonNull String key) {
+        if (!jsonObject.has(key)) {
+            return 0.0f;
+        }
+        return jsonObject.get(key).getAsFloat();
+    }
+
+    public static float getFloatValue(@NonNull String jsonString, @NonNull String key) {
+        return parseJsonObject(jsonString).get(key).getAsFloat();
+    }
+
+    //==========Double
+    public static double getDoubleValue(@NonNull JsonObject jsonObject, @NonNull String key) {
+        if (!jsonObject.has(key)) {
+            return 0.0d;
+        }
+        return jsonObject.get(key).getAsDouble();
+    }
+
+    public static double getDoubleValue(@NonNull String jsonString, @NonNull String key) {
+        return parseJsonObject(jsonString).get(key).getAsDouble();
+    }
+
+    //==========Long
+    public static long getLongValue(@NonNull JsonObject jsonObject, @NonNull String key) {
+        if (!jsonObject.has(key)) {
+            return 0L;
+        }
+        return jsonObject.get(key).getAsLong();
+    }
+
+    public static long getLongValue(@NonNull String jsonString, @NonNull String key) {
+        return parseJsonObject(jsonString).get(key).getAsLong();
+    }
+
     public static <T> ArrayList<T> parseJsonArray(String json, Class<T> cls) {
-        ArrayList<T> mList = new ArrayList<T>();
+        ArrayList<T> mList = new ArrayList<>();
         JsonArray array = new JsonParser().parse(json).getAsJsonArray();
         if (gson == null) {
             gson = new Gson();
@@ -140,8 +162,37 @@ public class JsonUtils {
         return mList;
     }
 
-    public static JsonArray parseJsonArray(String json) {
-        return new JsonParser().parse(json).getAsJsonArray();
+    /**
+     * 实体类转json
+     */
+    public static String toJsonString(@NonNull Object object) {
+        if (gson == null) {
+            gson = new Gson();
+        }
+        return gson.toJson(object);//fastJson == JSONObject.toJSONString(cls)
     }
 
+    /**
+     * 字符串类转jsonObject
+     */
+    public static JsonObject toJsonObject(@NonNull String jsonString) {
+        return new JsonParser().parse(jsonString).getAsJsonObject();//fastJson == JSONObject.parseObject(jsonString)
+    }
+
+    /**
+     * 字符串类转jsonArray
+     */
+    public static JsonArray toJsonArray(@NonNull String jsonString) {
+        return new JsonParser().parse(jsonString).getAsJsonArray();//fastJson == JSONArray.parseArray(jsonString)
+    }
+
+    /**
+     * 解析jsonElement成实体类
+     */
+    public static <T> T parseJsonObject(@NonNull JsonElement element, @NonNull Class<T> cls) {
+        if (gson == null) {
+            gson = new Gson();
+        }
+        return gson.fromJson(element, cls);//fastJson == JSONObject.parseObject(jsonString,cls);
+    }
 }

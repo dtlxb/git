@@ -92,16 +92,14 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //建立数据库
+        LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
         unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge.setBadgeNumber(unReadCount);
     }
 
     @Override
     public void doBusiness(Context mContext) {
-
-        //建立数据库
-        LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
-
         //开启接收消息服务
         startService(new Intent(MainActivity.this, MessageSaveService.class));
 
