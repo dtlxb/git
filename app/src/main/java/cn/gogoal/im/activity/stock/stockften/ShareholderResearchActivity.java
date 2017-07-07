@@ -103,23 +103,23 @@ public class ShareholderResearchActivity extends BaseActivity {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
-
-                    ArrayList<TenHolderData> HoldingList = new ArrayList<>();
-                    for (int i = 0; i < data.size(); i++) {
-                        HoldingList.add(new TenHolderData(
-                                data.getJSONObject(i).getString("stock_holder_ratio"),
-                                data.getJSONObject(i).getString("stock_holding_quantity"),
-                                data.getJSONObject(i).getString("stock_holder_name")));
+                    if (data.size() != 0) {
+                        ArrayList<TenHolderData> HoldingList = new ArrayList<>();
+                        for (int i = 0; i < data.size(); i++) {
+                            HoldingList.add(new TenHolderData(
+                                    data.getJSONObject(i).getString("stock_holder_ratio"),
+                                    data.getJSONObject(i).getString("stock_holding_quantity"),
+                                    data.getJSONObject(i).getString("stock_holder_name")));
+                        }
+                        adapters.add(new TenHolderAdapter(getActivity(), HoldingList, screenWidth,
+                                data.getJSONObject(0).getDoubleValue("stock_holder_ratio")));
                     }
-                    adapters.add(new TenHolderAdapter(getActivity(), HoldingList, screenWidth,
-                            data.getJSONObject(0).getDoubleValue("stock_holder_ratio")));
-
-                    getTenTradableHolderData();
                 }
+
+                getTenTradableHolderData();
             }
 
             @Override
@@ -147,19 +147,21 @@ public class ShareholderResearchActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
-
-                    ArrayList<TenTradableHolderData> HolderList = new ArrayList<>();
-                    for (int i = 0; i < data.size(); i++) {
-                        HolderList.add(new TenTradableHolderData(
-                                data.getJSONObject(i).getString("stock_holder_name"),
-                                data.getJSONObject(i).getString("stock_holding_quantity"),
-                                data.getJSONObject(i).getString("stock_holder_ratio")));
+                    KLog.e(data);
+                    if (data.size() != 0) {
+                        ArrayList<TenTradableHolderData> HolderList = new ArrayList<>();
+                        for (int i = 0; i < data.size(); i++) {
+                            HolderList.add(new TenTradableHolderData(
+                                    data.getJSONObject(i).getString("stock_holder_name"),
+                                    data.getJSONObject(i).getString("stock_holding_quantity"),
+                                    data.getJSONObject(i).getString("stock_holder_ratio")));
+                        }
+                        adapters.add(new TenTradableHolderAdapter(getActivity(), HolderList, screenWidth,
+                                data.getJSONObject(0).getDoubleValue("stock_holder_ratio")));
                     }
-                    adapters.add(new TenTradableHolderAdapter(getActivity(), HolderList, screenWidth,
-                            data.getJSONObject(0).getDoubleValue("stock_holder_ratio")));
-
-                    getFundHolderData();
                 }
+
+                getFundHolderData();
             }
 
             @Override
@@ -187,23 +189,32 @@ public class ShareholderResearchActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
-
-                    ArrayList<FundHolderData> fundList = new ArrayList<>();
-                    fundList.add(new FundHolderData("基金名称", "基金代码", "持股(万股)"));
-                    for (int i = data.size() - 1; i >= (data.size() > 20 ? data.size() - 20 : 0); i--) {
-                        fundList.add(new FundHolderData(
-                                data.getJSONObject(i).getString("fund_name"),
-                                data.getJSONObject(i).getString("fund_code"),
-                                data.getJSONObject(i).getString("stock_holding_quantity")));
+                    if (data.size() != 0) {
+                        ArrayList<FundHolderData> fundList = new ArrayList<>();
+                        fundList.add(new FundHolderData("基金名称", "基金代码", "持股(万股)"));
+                        for (int i = data.size() - 1; i >= (data.size() > 20 ? data.size() - 20 : 0); i--) {
+                            fundList.add(new FundHolderData(
+                                    data.getJSONObject(i).getString("fund_name"),
+                                    data.getJSONObject(i).getString("fund_code"),
+                                    data.getJSONObject(i).getString("stock_holding_quantity")));
+                        }
+                        adapters.add(new FundHolderAdapter(getActivity(), fundList));
                     }
-                    adapters.add(new FundHolderAdapter(getActivity(), fundList));
+                }
 
-                    delegateAdapter.setAdapters(adapters);
+                delegateAdapter.setAdapters(adapters);
 
-                    if (genre == 2) {
+                if (genre == 2) {
+                    if (delegateAdapter.getItemCount() >= 12) {
                         rv_research.scrollToPosition(12);
-                    } else if (genre == 3) {
+                    } else {
+                        rv_research.scrollToPosition(delegateAdapter.getItemCount());
+                    }
+                } else if (genre == 3) {
+                    if (delegateAdapter.getItemCount() >= 23) {
                         rv_research.scrollToPosition(23);
+                    } else {
+                        rv_research.scrollToPosition(delegateAdapter.getItemCount());
                     }
                 }
             }
