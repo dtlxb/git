@@ -379,6 +379,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 return 0;
             }
         });
+        for (MyStockData data:myStockDatas){
+            KLog.e("name="+data.getStock_name()+"；type="+data.getTag().getType()+"；inserttime="+data.getInsertdate());
+        }
+
         myStockAdapter.notifyDataSetChanged();
     }
 
