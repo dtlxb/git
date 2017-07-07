@@ -94,6 +94,11 @@ public class MyStockReportFragment extends BaseFragment {
                 getReportDatas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.refreshComplete();
             }
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !recyclerView.canScrollVertically(-1);
+            }
         });
 
         reportAdapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {

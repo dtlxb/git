@@ -14,7 +14,7 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,19 +32,19 @@ public class StockUtils {
      * 传入任意类型的array,只要每个object里含有字段stock_code
      */
     public static void saveMyStock(JSONArray array) {
-        Set<String> set = new HashSet<>();
+        LinkedHashSet<String> set = new LinkedHashSet<>();
         for (int i = 0; i < array.size(); i++) {
             JSONObject object = (JSONObject) array.get(i);
             set.add(object.getString("stock_code"));
         }
-        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", set);
+        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", set);
     }
 
     /**
      * 获取本地自选股集合
      */
     public static Set<String> getMyStockSet() {
-        return SPTools.getSetData(UserUtils.getMyAccountId() + "_my_stock_set", new HashSet<String>());
+        return SPTools.getSetData(UserUtils.getMyAccountId()+"_my_stock_set", new LinkedHashSet<String>());
     }
 
     public static String getStockCodes(@NonNull JSONArray array) {
@@ -53,6 +53,7 @@ public class StockUtils {
         if (array.isEmpty()) {
             return null;
         }
+
         for (int i = 0; i < array.size(); i++) {
             JSONObject object = (JSONObject) array.get(i);
             if (!StringUtils.isActuallyEmpty(object.getString("stock_code"))) {
@@ -91,9 +92,9 @@ public class StockUtils {
         if (stockCode == null) {
             return;
         }
-        Set<String> myStockSet = getMyStockSet();
+        LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockSet());
         myStockSet.add(stockCode);
-        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
+        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", myStockSet);
     }
 
     /**
@@ -108,10 +109,10 @@ public class StockUtils {
      */
     public static void removeStock(String stockCode) {
 
-        Set<String> myStockSet = getMyStockSet();
+        LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockSet());
 
         if (myStockSet.remove(stockCode)) {
-            SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
+            SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", myStockSet);
         } else {
             myStockSet.remove(stockCode.substring(2));
         }
@@ -121,7 +122,7 @@ public class StockUtils {
      * 清除自选股
      */
     public static void clearLocalMyStock() {
-        SPTools.clearItem(UserUtils.getMyAccountId() + "_my_stock_set");
+        SPTools.clearItem(UserUtils.getMyAccountId()+"_my_stock_set");
     }
 
     //数据处理，1保存两位，2.正数补+，

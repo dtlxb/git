@@ -124,6 +124,11 @@ public class InfomationTabFragment extends BaseFragment {
                 getInfomation(AppConst.REFRESH_TYPE_SWIPEREFRESH, tabType);
                 refreshlayout.refreshComplete();
             }
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !mRvInfomation.canScrollVertically(-1);
+            }
         });
 
         adapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {

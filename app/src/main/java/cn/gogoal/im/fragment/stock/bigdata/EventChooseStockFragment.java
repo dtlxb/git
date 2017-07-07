@@ -78,7 +78,8 @@ public class EventChooseStockFragment extends BaseFragment {
             }
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return ((LinearLayoutManager) rvEventList.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0;
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !rvEventList.canScrollVertically(-1);
             }
         });
 

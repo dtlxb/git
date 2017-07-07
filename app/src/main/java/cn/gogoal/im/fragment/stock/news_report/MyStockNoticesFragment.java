@@ -90,6 +90,11 @@ public class MyStockNoticesFragment extends BaseFragment {
                 getStockNews(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.refreshComplete();
             }
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !rvNotices.canScrollVertically(-1);
+            }
         });
 
         noticeAdapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {

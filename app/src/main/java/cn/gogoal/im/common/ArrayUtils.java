@@ -1,6 +1,9 @@
 package cn.gogoal.im.common;
 
+import android.support.annotation.NonNull;
+
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,18 +54,6 @@ public class ArrayUtils {
         return new ArrayList<>();
     }
 
-
-    /**
-     * 获取搜索记录
-     */
-    public static JSONArray getSearchList() {
-        JSONArray historyArray = SPTools.getJsonArray("search_history", new JSONArray());
-        if (isEmpty(historyArray)) {
-            return new JSONArray();
-        }
-        return historyArray;
-    }
-
     /**
      * 集合拼Srtring
      */
@@ -77,6 +68,20 @@ public class ArrayUtils {
         } else {
             return "";
         }
+    }
+
+    /**
+     * JsonArray中字段拼接Srtring
+     */
+    public static String mosaicArrayElement(@NonNull JSONArray array,@NonNull String key) {
+        String stocks = "";
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject stock = (JSONObject) array.get(i);
+            stocks += stock.get(key);
+            stocks += ";";
+        }
+        stocks = stocks.substring(0, stocks.length() - 1);
+        return stocks;
     }
 
     public static boolean isEmpty(Collection c) {
