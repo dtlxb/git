@@ -1,0 +1,380 @@
+package com.example.li.gd_test_01;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.LocationSource;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.Circle;
+import com.amap.api.maps2d.model.CircleOptions;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.maps2d.model.Polyline;
+import com.amap.api.maps2d.model.PolylineOptions;
+import com.example.li.gd_test_01.location.LocationMarkerActivity;
+import com.example.li.gd_test_01.model.Route;
+import com.example.li.gd_test_01.util.SensorEventHelper;
+
+public class RouteActivity extends AppCompatActivity implements LocationSource,
+        AMapLocationListener {
+    private AMap aMap;
+    private MapView mapView;
+    private LocationSource.OnLocationChangedListener mListener;
+    private AMapLocationClient mlocationClient;
+    private AMapLocationClientOption mLocationOption;
+
+    //记录上次定位的位置，在用户点击复位按钮时移到这里
+    private LatLng last_location = null;
+
+    //各个按钮
+    private Button mButton_locate;
+    private Button mButton_pause;
+    private Button mButton_resume;
+    private Button mButton_stop;
+    private Button mButton_posto;
+
+    //这次route所形成的Route对象
+    private Route route = null;
+
+    //信号值，只有在该值为true的时候才会记录位置。用户通过操作ui可以进行开|关。
+    private boolean is_locating = true;
+
+    private TextView mLocationErrText;
+    private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
+    private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
+    private boolean mFirstFix = false;
+    private Marker mLocMarker;
+    private SensorEventHelper mSensorHelper;
+    private Circle mCircle;
+    public static final String LOCATION_MARKER_FLAG = "mylocation";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
+        setContentView(R.layout.activity_route);
+        mapView = (MapView) findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);// 此方法必须重写
+        init();
+        Log.d("LocationActivity","OnCreate successes.");//在日志里找不到这句。Log方法有问题？
+
+        //my codes
+        //初始化按钮
+        initButtons();
+
+        //初始化Route对象
+        if (route==null){
+            route = new Route();
+
+            //要在这里初始化Route的start（开始时间）。
+            //
+
+            //测试用：为route插入初始值
+            route.location_list.add(new LatLng(31.03,121.43));
+            route.location_list.add(new LatLng(31.03,121.45));
+
+        }
+
+        //保持高亮，禁止锁屏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+    }
+
+    /**、
+     * 初始化地图
+     */
+    private void init() {
+        if (aMap == null) {
+            aMap = mapView.getMap();
+            setUpMap();
+        }
+        mSensorHelper = new SensorEventHelper(this);
+        if (mSensorHelper != null) {
+            mSensorHelper.registerSensorListener();
+        }
+        mLocationErrText = (TextView)findViewById(R.id.location_errInfo_text);
+        mLocationErrText.setVisibility(View.GONE);
+    }
+
+    /**
+     * 设置一些amap的属性
+     */
+    private void setUpMap() {
+        aMap.setLocationSource(this);// 设置定位监听
+        //aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+        aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+
+        //my codes
+        //显示比例尺
+        aMap.getUiSettings().setScaleControlsEnabled(true);
+        //去掉缩放按钮
+        aMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    //初始化所有按钮
+    private void initButtons(){
+
+        //LOCATE:把地图归位到用户当前定位的位置。
+        mButton_locate = (Button) findViewById(R.id.button_locate);
+        mButton_locate.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if (last_location!=null){
+                    //按下按钮时，把camera移到上次定位的位置。
+                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(last_location));
+                }
+            }
+        });
+
+        //PAUSE:暂停记录路线
+        mButton_pause = (Button) findViewById(R.id.button_route_pause);
+        mButton_pause.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                is_locating = false;
+            }
+        });
+
+        //RESUME:恢复记录路线（在暂停之后）
+        mButton_resume = (Button) findViewById(R.id.button_route_resume);
+        mButton_resume.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                is_locating = true;
+            }
+        });
+
+        //STOP:停止记录路线，并跳转到确认&编辑&保存&分享界面
+        mButton_stop = (Button) findViewById(R.id.button_route_stop);
+        mButton_stop.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                //停止记录
+                is_locating = false;
+
+                //在这里设置结束时间（route.end）
+                //
+
+                //Route对象在这里传到下个Activity，并在那里设置comment和name
+                // （name是不是要在一开始的时候先设置一下？）
+                //
+
+            }
+        });
+
+
+        //执行扩展流：转到posto功能。该posto对象与本次route将存在对应关系（relation）。
+        mButton_posto = (Button) findViewById(R.id.button_route_posto);
+        mButton_posto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+            }
+        });
+
+    }
+
+
+    /**
+     * 每次定位成功后的回调函数
+     * 实现核心功能，不要随便改！！！！
+     */
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+            if (mListener != null && amapLocation != null) {
+            if (amapLocation != null
+                    && amapLocation.getErrorCode() == 0) {
+                mLocationErrText.setVisibility(View.GONE);
+                LatLng location = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude());
+                if (!mFirstFix) {
+                    mFirstFix = true;
+                    addCircle(location, amapLocation.getAccuracy());//添加定位精度圆
+                    addMarker(location);//添加定位图标
+                    mSensorHelper.setCurrentMarker(mLocMarker);//定位图标旋转
+
+                    //因为是第一次定位，所以把camera已过去
+                    aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
+                } else {
+                    mCircle.setCenter(location);
+                    mCircle.setRadius(amapLocation.getAccuracy());
+                    mLocMarker.setPosition(location);
+                }
+                //每次定位都会把地图Camera移到定位点所在的位置。若注释掉下面这一行，用户就可以自己拖拽控制Camera
+                //aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
+
+                //my codes
+                //取而代之的是在Activity中记录location，在另外的控制流中使用它定位camera.
+                last_location = location;
+
+                //当定位没有被暂停的时候
+                if (is_locating) {
+                    //把当前location加入List<Latlng>
+                    route.location_list.add(location);
+
+                    //在地图上更新route的绘制
+                    Polyline polyline = aMap.addPolyline(new PolylineOptions().
+                            addAll(route.location_list).width(10).color(Color.argb(100, 1, 80, 255)));
+                }
+
+                //测试用：显示当前的list<position>的大小
+                TextView v = (TextView) findViewById(R.id.aalert);
+                v.setText(Integer.toString(route.location_list.size()));
+
+            } else {
+                String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
+                Log.e("AmapErr",errText);
+                mLocationErrText.setVisibility(View.VISIBLE);
+                mLocationErrText.setText(errText);
+            }
+        }
+    }
+
+
+    /**
+     * 激活定位并进行相关设置（不要改！！
+     */
+    @Override
+    public void activate(LocationSource.OnLocationChangedListener listener) {
+        mListener = listener;
+        if (mlocationClient == null) {
+            mlocationClient = new AMapLocationClient(this);
+            mLocationOption = new AMapLocationClientOption();
+            //设置定位监听
+            mlocationClient.setLocationListener(this);
+            //设置为高精度定位模式
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+
+            //在route功能中，定位间隔时间要较长。
+            mLocationOption.setInterval(2000);
+
+            //设置定位参数
+            mlocationClient.setLocationOption(mLocationOption);
+            // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+            // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+            // 在定位结束后，在合适的生命周期调用onDestroy()方法
+            // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+            mlocationClient.startLocation();
+        }
+    }
+
+
+    /**
+     * 停止定位（不要改！！！
+     */
+    @Override
+    public void deactivate() {
+        mListener = null;
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+            mlocationClient.onDestroy();
+        }
+        mlocationClient = null;
+    }
+
+    private void addCircle(LatLng latlng, double radius) {
+        CircleOptions options = new CircleOptions();
+        options.strokeWidth(1f);
+        options.fillColor(FILL_COLOR);
+        options.strokeColor(STROKE_COLOR);
+        options.center(latlng);
+        options.radius(radius);
+        mCircle = aMap.addCircle(options);
+    }
+    private void addMarker(LatLng latlng) {
+        if (mLocMarker != null) {
+            return;
+        }
+        Bitmap bMap = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.navi_map_gps_locked);
+        BitmapDescriptor des = BitmapDescriptorFactory.fromBitmap(bMap);
+
+//		BitmapDescriptor des = BitmapDescriptorFactory.fromResource(R.drawable.navi_map_gps_locked);
+        MarkerOptions options = new MarkerOptions();
+        options.icon(des);
+        options.anchor(0.5f, 0.5f);
+        options.position(latlng);
+        mLocMarker = aMap.addMarker(options);
+        mLocMarker.setTitle(LOCATION_MARKER_FLAG);
+    }
+
+
+    /**
+     * Activity生命周期相关方法必须重写
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+        if (mSensorHelper != null) {
+            mSensorHelper.registerSensorListener();
+        }
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mSensorHelper != null) {
+            mSensorHelper.unRegisterSensorListener();
+            mSensorHelper.setCurrentMarker(null);
+            mSensorHelper = null;
+        }
+        mapView.onPause();
+        mFirstFix = false;
+
+        //pause时不停止定位
+        //deactivate();
+
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+        if(null != mlocationClient){
+            mlocationClient.onDestroy();
+        }
+    }
+
+}
