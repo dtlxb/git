@@ -90,7 +90,7 @@ public class AnalysisRightAdapter extends MyBaseAdapter {
             holder.linearAnalysis.setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_2));
         }
 
-        if (contList.get(position).size() == 0) {
+        if (contList.get(position) == null || contList.get(position).size() == 0) {
             holder.textReport1.setText("--");
             holder.textReport2.setText("--");
             holder.textReport3.setText("--");
