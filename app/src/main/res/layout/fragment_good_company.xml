@@ -26,12 +26,14 @@
         android:textSize="13sp" />
 
     <TextView
+        android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="好公司评价体系"
         android:textColor="@color/textColor_333333"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,16 +49,19 @@
         android:layout_marginTop="5dp">
 
         <TextView
+            android:id="@+id/tv_good_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="好公司:"
+            android:text="\u3000\u3000好公司:"
             android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@+id/tv_good_company"
             android:text="表示这家公司近两年业绩兑现度高，是符合预期或者超出预期的"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
@@ -69,16 +74,19 @@
         android:layout_marginTop="5dp">
 
         <TextView
+            android:id="@+id/tv_star_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="希望之星:"
+            android:text="\u3000\u3000希望之星:"
             android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@+id/tv_star_company"
             android:text="表示这家公司近期业绩兑现度比较高"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
@@ -91,16 +99,19 @@
         android:layout_marginTop="5dp">
 
         <TextView
+            android:id="@+id/tv_history_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="历史好公司:"
+            android:text="\u3000\u3000历史好公司:"
             android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/tv_history_company"
             android:text="表示这家公司过去业绩兑现度高"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
@@ -113,16 +124,19 @@
         android:layout_marginTop="5dp">
 
         <TextView
+            android:id="@+id/tv_normal_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="平凡:"
+            android:text="\u3000\u3000平凡:"
             android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@+id/tv_normal_company"
             android:text="表示这家公司业绩兑现度一般"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
