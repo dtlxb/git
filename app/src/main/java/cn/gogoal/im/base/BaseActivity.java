@@ -73,7 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-        if (isFullScreem()) {
+        if (isFullScreen()) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
@@ -127,7 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    public boolean isFullScreem() {
+    public boolean isFullScreen() {
         return false;
     }
 

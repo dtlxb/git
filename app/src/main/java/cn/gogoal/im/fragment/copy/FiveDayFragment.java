@@ -61,7 +61,7 @@ public class FiveDayFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.from(getActivity()).inflate(R.layout.fragment_fivedaybitmap, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_fivedaybitmap, container, false);
         ButterKnife.bind(this, view);
         refreshtime = SPTools.getInt("refreshtime", 15000);
         getFiveData(true);

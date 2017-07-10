@@ -164,7 +164,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     }
 
     @Override
-    public boolean isFullScreem() {
+    public boolean isFullScreen() {
         return true;
     }
 
@@ -196,7 +196,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             handler.removeCallbacks(runnable);
             handler.postDelayed(runnable, SPTools.getLong("interval_time", 15000));
         }
-        setEnvents();
+        setEvents();
 
         //获取个股信息
         initGetData();
@@ -238,7 +238,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
 
     }
 
-    private void setEnvents() {
+    private void setEvents() {
         btn_close.setOnClickListener(this);
         no_authority.setOnClickListener(this);
         before_authority.setOnClickListener(this);
