@@ -122,7 +122,7 @@ public class InfomationFragment extends BaseFragment {
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(10, 7, true);
+        badge.setGravityOffset(7, 7, true);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(8, true);

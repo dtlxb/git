@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="75dp"
             android:text="通过近2年财报业绩判断该公司业绩兑现度较高"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="75dp"
             android:text="近期业绩兑现度高未来有可能成为好公司"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
@@ -84,7 +84,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="75dp"
             android:text="曾经业绩兑现度高的好公司"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
@@ -106,7 +106,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
+            android:layout_marginStart="75dp"
             android:text="历史上业绩兑现度一般的公司"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />

@@ -10,9 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:paddingLeft="14dp"
+        android:paddingStart="14dp"
         android:paddingTop="15dp"
         android:text="@string/default_rehabilitation_choose"
+        android:background="@color/radio_group"
         android:textColor="@color/textColor_999999"
         android:textSize="12sp" />
 

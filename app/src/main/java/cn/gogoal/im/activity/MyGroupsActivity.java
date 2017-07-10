@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
@@ -31,6 +32,7 @@ import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -181,7 +183,6 @@ public class MyGroupsActivity extends BaseActivity {
 //            final Bitmap[] groupAvatar = new Bitmap[1];
 
             final String groupUrl = data.getAttr().getAvatar();
-
             if (!TextUtils.isEmpty(groupUrl)) {//
                 ImageDisplay.loadRoundedRectangleImage(getActivity(), groupUrl, imgAvatar);
                 groupAvatar = groupUrl;
@@ -204,8 +205,8 @@ public class MyGroupsActivity extends BaseActivity {
 
             }
 
-            holder.setText(R.id.tv_my_group_name, StringUtils.getNotNullString(data.getName()));
             holder.setText(R.id.tv_my_group_name_member_count, "(" + data.getM().size() + ")");
+            holder.setText(R.id.tv_my_group_name, StringUtils.getNotNullString(data.getName()));
             holder.setText(R.id.tv_my_group_intro, StringUtils.getNotNullString(data.getAttr().getIntro()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

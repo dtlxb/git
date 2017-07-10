@@ -174,7 +174,7 @@ public class GoodCompanyFragment extends BaseFragment {
                 text = "希望之星";
                 break;
             default:
-                text = "--";
+                text = "未出报表";
                 break;
         }
         SpannableStringBuilder sb = new SpannableStringBuilder(text); // 包装字体内容
