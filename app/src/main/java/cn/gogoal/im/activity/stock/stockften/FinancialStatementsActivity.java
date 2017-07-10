@@ -7,7 +7,6 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +52,8 @@ public class FinancialStatementsActivity extends BaseActivity {
     private String stockName;
     private int genre;
     private String stock_finance_type;
+
+    private JSONObject financialData;
 
     private String season = "0";
     private String stype = "1";
@@ -162,7 +163,11 @@ public class FinancialStatementsActivity extends BaseActivity {
         param.put("season", season);
         param.put("stock_finance_type", stock_finance_type);
         param.put("page", "1");
-        param.put("stype", stype);
+        if (season.equals("0")) {
+            param.put("stype", "1");
+        } else {
+            param.put("stype", "0");
+        }
 
         if (genre != GENRE_BALANCE_SHEET) {
             param.put("report_stype", "1");
@@ -171,11 +176,11 @@ public class FinancialStatementsActivity extends BaseActivity {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
+                //KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    JSONObject data = object.getJSONObject("data");
-                    setRightListData(data, stype);
+                    financialData = object.getJSONObject("data");
+                    setRightListData(financialData, stype);
                 }
             }
 
@@ -260,10 +265,10 @@ public class FinancialStatementsActivity extends BaseActivity {
             case R.id.checkFrom:
                 if (checkFrom.isChecked()) {
                     stype = "0";
-                    getStatementsData(season, stype);
+                    setRightListData(financialData, stype);
                 } else {
                     stype = "1";
-                    getStatementsData(season, stype);
+                    setRightListData(financialData, stype);
                 }
                 break;
             case R.id.radioBtn0:

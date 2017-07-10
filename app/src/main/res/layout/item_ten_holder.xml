@@ -118,6 +118,6 @@
         android:singleLine="true"
         android:text="@string/default_char"
         android:textColor="@color/textColor_333333"
-        android:textSize="14dp" />
+        android:textSize="12dp" />
 
 </LinearLayout>

@@ -267,3 +267,12 @@
 -keep class com.autonavi.aps.amapapi.model.**{*;}
 -keep class com.wang.avi.** { *; }
 -keep class com.wang.avi.indicators.** { *; }
+
+#==============================数据库========================#
+-keep class org.litepal.** {
+    *;
+}
+
+-keep class * extends org.litepal.crud.DataSupport {
+    *;
+}

@@ -71,22 +71,12 @@ public class FinancialStatementsRightAdapter extends MyBaseAdapter {
         }
 
         if (position == 0) {
-            holder.imgReport1.setVisibility(View.VISIBLE);
-            holder.imgReport2.setVisibility(View.VISIBLE);
-            holder.imgReport3.setVisibility(View.VISIBLE);
-            holder.imgReport4.setVisibility(View.VISIBLE);
-
             holder.textReport1.setLines(1);
             holder.textReport2.setLines(1);
             holder.textReport3.setLines(1);
             holder.textReport4.setLines(1);
             holder.textReport5.setLines(1);
         } else {
-            holder.imgReport1.setVisibility(View.INVISIBLE);
-            holder.imgReport2.setVisibility(View.INVISIBLE);
-            holder.imgReport3.setVisibility(View.INVISIBLE);
-            holder.imgReport4.setVisibility(View.INVISIBLE);
-
             holder.textReport1.setLines(2);
             holder.textReport2.setLines(2);
             holder.textReport3.setLines(2);
@@ -111,33 +101,105 @@ public class FinancialStatementsRightAdapter extends MyBaseAdapter {
         if (position == 0) {
             JSONArray title = contList.get(position).getJSONArray("title");
             if (title.size() == 0) {
+                holder.relaReport1.setVisibility(View.VISIBLE);
                 holder.textReport1.setText("--");
-                holder.textReport2.setText("--");
-                holder.textReport3.setText("--");
-                holder.textReport4.setText("--");
-                holder.textReport5.setText("--");
-            } else {
-                holder.textReport1.setText(title.getString(0) != null ?
-                        title.getString(0) : "--");
-                holder.textReport2.setText(title.getString(1) != null ?
-                        title.getString(1) : "--");
-                holder.textReport3.setText(title.getString(2) != null ?
-                        title.getString(2) : "--");
-                holder.textReport4.setText(title.getString(3) != null ?
-                        title.getString(3) : "--");
-                holder.textReport5.setText(title.getString(4) != null ?
-                        title.getString(4) : "--");
+            } else if (title.size() == 1) {
+                holder.relaReport1.setVisibility(View.VISIBLE);
+                holder.textReport1.setText(title.getString(0) != null ? title.getString(0) : "--");
+            } else if (title.size() == 2) {
+                holder.relaReport1.setVisibility(View.VISIBLE);
+                holder.relaReport2.setVisibility(View.VISIBLE);
+                holder.imgReport1.setVisibility(View.VISIBLE);
+                holder.textReport1.setText(title.getString(0) != null ? title.getString(0) : "--");
+                holder.textReport2.setText(title.getString(1) != null ? title.getString(1) : "--");
+            } else if (title.size() == 3) {
+                holder.relaReport1.setVisibility(View.VISIBLE);
+                holder.relaReport2.setVisibility(View.VISIBLE);
+                holder.relaReport3.setVisibility(View.VISIBLE);
+                holder.imgReport1.setVisibility(View.VISIBLE);
+                holder.imgReport2.setVisibility(View.VISIBLE);
+                holder.textReport1.setText(title.getString(0) != null ? title.getString(0) : "--");
+                holder.textReport2.setText(title.getString(1) != null ? title.getString(1) : "--");
+                holder.textReport3.setText(title.getString(2) != null ? title.getString(2) : "--");
+            } else if (title.size() == 4) {
+                holder.relaReport1.setVisibility(View.VISIBLE);
+                holder.relaReport2.setVisibility(View.VISIBLE);
+                holder.relaReport3.setVisibility(View.VISIBLE);
+                holder.relaReport4.setVisibility(View.VISIBLE);
+                holder.imgReport1.setVisibility(View.VISIBLE);
+                holder.imgReport2.setVisibility(View.VISIBLE);
+                holder.imgReport3.setVisibility(View.VISIBLE);
+                holder.textReport1.setText(title.getString(0) != null ? title.getString(0) : "--");
+                holder.textReport2.setText(title.getString(1) != null ? title.getString(1) : "--");
+                holder.textReport3.setText(title.getString(2) != null ? title.getString(2) : "--");
+                holder.textReport4.setText(title.getString(3) != null ? title.getString(3) : "--");
+            } else if (title.size() == 5) {
+                holder.relaReport1.setVisibility(View.VISIBLE);
+                holder.relaReport2.setVisibility(View.VISIBLE);
+                holder.relaReport3.setVisibility(View.VISIBLE);
+                holder.relaReport4.setVisibility(View.VISIBLE);
+                holder.relaReport5.setVisibility(View.VISIBLE);
+                holder.imgReport1.setVisibility(View.VISIBLE);
+                holder.imgReport2.setVisibility(View.VISIBLE);
+                holder.imgReport3.setVisibility(View.VISIBLE);
+                holder.imgReport4.setVisibility(View.VISIBLE);
+                holder.textReport1.setText(title.getString(0) != null ? title.getString(0) : "--");
+                holder.textReport2.setText(title.getString(1) != null ? title.getString(1) : "--");
+                holder.textReport3.setText(title.getString(2) != null ? title.getString(2) : "--");
+                holder.textReport4.setText(title.getString(3) != null ? title.getString(3) : "--");
+                holder.textReport5.setText(title.getString(4) != null ? title.getString(4) : "--");
             }
         } else {
+            holder.imgReport1.setVisibility(View.INVISIBLE);
+            holder.imgReport2.setVisibility(View.INVISIBLE);
+            holder.imgReport3.setVisibility(View.INVISIBLE);
+            holder.imgReport4.setVisibility(View.INVISIBLE);
             JSONArray original_data = contList.get(position).getJSONArray("original_data");
+            JSONArray rate_data = contList.get(position).getJSONArray("rate_data");
             if (stype.equals("1")) {
                 if (original_data.size() == 0) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
                     holder.textReport1.setText("--");
-                    holder.textReport2.setText("--");
-                    holder.textReport3.setText("--");
-                    holder.textReport4.setText("--");
-                    holder.textReport5.setText("--");
-                } else {
+                } else if (original_data.size() == 1) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.textReport1.setText(original_data.getString(0) != null ?
+                            original_data.getString(0) : "--");
+                } else if (original_data.size() == 2) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    holder.textReport1.setText(original_data.getString(0) != null ?
+                            original_data.getString(0) : "--");
+                    holder.textReport2.setText(original_data.getString(1) != null ?
+                            original_data.getString(1) : "--");
+                } else if (original_data.size() == 3) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    holder.relaReport3.setVisibility(View.VISIBLE);
+                    holder.textReport1.setText(original_data.getString(0) != null ?
+                            original_data.getString(0) : "--");
+                    holder.textReport2.setText(original_data.getString(1) != null ?
+                            original_data.getString(1) : "--");
+                    holder.textReport3.setText(original_data.getString(2) != null ?
+                            original_data.getString(2) : "--");
+                } else if (original_data.size() == 4) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    holder.relaReport3.setVisibility(View.VISIBLE);
+                    holder.relaReport4.setVisibility(View.VISIBLE);
+                    holder.textReport1.setText(original_data.getString(0) != null ?
+                            original_data.getString(0) : "--");
+                    holder.textReport2.setText(original_data.getString(1) != null ?
+                            original_data.getString(1) : "--");
+                    holder.textReport3.setText(original_data.getString(2) != null ?
+                            original_data.getString(2) : "--");
+                    holder.textReport4.setText(original_data.getString(3) != null ?
+                            original_data.getString(3) : "--");
+                } else if (original_data.size() == 5) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    holder.relaReport3.setVisibility(View.VISIBLE);
+                    holder.relaReport4.setVisibility(View.VISIBLE);
+                    holder.relaReport5.setVisibility(View.VISIBLE);
                     holder.textReport1.setText(original_data.getString(0) != null ?
                             original_data.getString(0) : "--");
                     holder.textReport2.setText(original_data.getString(1) != null ?
@@ -150,183 +212,278 @@ public class FinancialStatementsRightAdapter extends MyBaseAdapter {
                             original_data.getString(4) : "--");
                 }
             } else {
-                JSONArray rate_data = contList.get(position).getJSONArray("rate_data");
                 if (original_data.size() == 0) {
-                    if (rate_data.size() == 0) {
-                        holder.textReport1.setText("--\n--");
-                        holder.textReport2.setText("--\n--");
-                        holder.textReport3.setText("--\n--");
-                        holder.textReport4.setText("--\n--");
-                        holder.textReport5.setText("--\n--");
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.textReport1.setText("--\n--");
+                } else if (original_data.size() == 1) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    if (rate_data.getDoubleValue(0) > 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(0) < 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.stock_green).fillColor().getResult());
                     } else {
-                        if (rate_data.getDoubleValue(0) > 0) {
-                            holder.textReport1.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(0)), setRateData(rate_data.getString(0)),
-                                    R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(0) < 0) {
-                            holder.textReport1.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(0)), setRateData(rate_data.getString(0)),
-                                    R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport1.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(0)), setRateData(rate_data.getString(0)),
-                                    R.color.textColor_333333).fillColor().getResult());
-                        }
-
-                        if (rate_data.getDoubleValue(1) > 0) {
-                            holder.textReport2.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(1)), setRateData(rate_data.getString(1)),
-                                    R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(1) < 0) {
-                            holder.textReport2.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(1)), setRateData(rate_data.getString(1)),
-                                    R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport2.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(1)), setRateData(rate_data.getString(1)),
-                                    R.color.textColor_333333).fillColor().getResult());
-                        }
-
-                        if (rate_data.getDoubleValue(2) > 0) {
-                            holder.textReport3.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(2)), setRateData(rate_data.getString(2)),
-                                    R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(2) < 0) {
-                            holder.textReport3.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(2)), setRateData(rate_data.getString(2)),
-                                    R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport3.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(2)), setRateData(rate_data.getString(2)),
-                                    R.color.textColor_333333).fillColor().getResult());
-                        }
-
-                        if (rate_data.getDoubleValue(3) > 0) {
-                            holder.textReport4.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(3)), setRateData(rate_data.getString(3)),
-                                    R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(3) < 0) {
-                            holder.textReport4.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(3)), setRateData(rate_data.getString(3)),
-                                    R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport4.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(3)), setRateData(rate_data.getString(3)),
-                                    R.color.textColor_333333).fillColor().getResult());
-                        }
-
-                        if (rate_data.getDoubleValue(4) > 0) {
-                            holder.textReport5.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(4)), setRateData(rate_data.getString(4)),
-                                    R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(4) < 0) {
-                            holder.textReport5.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(4)), setRateData(rate_data.getString(4)),
-                                    R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport5.setText(new StringFormatUtil(context, "--\n"
-                                    + setRateData(rate_data.getString(4)), setRateData(rate_data.getString(4)),
-                                    R.color.textColor_333333).fillColor().getResult());
-                        }
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.textColor_333333).fillColor().getResult());
+                    }
+                } else if (original_data.size() == 2) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    if (rate_data.getDoubleValue(0) > 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(0) < 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.textColor_333333).fillColor().getResult());
                     }
 
-                } else {
-                    if (rate_data.size() == 0) {
-                        holder.textReport1.setText(original_data.getString(0) != null ?
-                                original_data.getString(0) : "--" + "\n--");
-                        holder.textReport2.setText(original_data.getString(1) != null ?
-                                original_data.getString(1) : "--" + "\n--");
-                        holder.textReport3.setText(original_data.getString(2) != null ?
-                                original_data.getString(2) : "--" + "\n--");
-                        holder.textReport4.setText(original_data.getString(3) != null ?
-                                original_data.getString(3) : "--" + "\n--");
-                        holder.textReport5.setText(original_data.getString(4) != null ?
-                                original_data.getString(4) : "--" + "\n--");
+                    if (rate_data.getDoubleValue(1) > 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(1) < 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.stock_green).fillColor().getResult());
                     } else {
-                        if (rate_data.getDoubleValue(0) > 0) {
-                            holder.textReport1.setText(new StringFormatUtil(context,
-                                    (original_data.getString(0) != null ? original_data.getString(0) : "--")
-                                            + "\n" + setRateData(rate_data.getString(0)),
-                                    setRateData(rate_data.getString(0)), R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(0) < 0) {
-                            holder.textReport1.setText(new StringFormatUtil(context,
-                                    (original_data.getString(0) != null ? original_data.getString(0) : "--")
-                                            + "\n" + setRateData(rate_data.getString(0)),
-                                    setRateData(rate_data.getString(0)), R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport1.setText(new StringFormatUtil(context,
-                                    (original_data.getString(0) != null ? original_data.getString(0) : "--")
-                                            + "\n" + setRateData(rate_data.getString(0)),
-                                    setRateData(rate_data.getString(0)), R.color.textColor_333333).fillColor().getResult());
-                        }
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.textColor_333333).fillColor().getResult());
+                    }
+                } else if (original_data.size() == 3) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    holder.relaReport3.setVisibility(View.VISIBLE);
+                    if (rate_data.getDoubleValue(0) > 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(0) < 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.textColor_333333).fillColor().getResult());
+                    }
 
-                        if (rate_data.getDoubleValue(1) > 0) {
-                            holder.textReport2.setText(new StringFormatUtil(context,
-                                    (original_data.getString(1) != null ? original_data.getString(1) : "--")
-                                            + "\n" + setRateData(rate_data.getString(1)),
-                                    setRateData(rate_data.getString(1)), R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(1) < 0) {
-                            holder.textReport2.setText(new StringFormatUtil(context,
-                                    (original_data.getString(1) != null ? original_data.getString(1) : "--")
-                                            + "\n" + setRateData(rate_data.getString(1)),
-                                    setRateData(rate_data.getString(1)), R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport2.setText(new StringFormatUtil(context,
-                                    (original_data.getString(1) != null ? original_data.getString(1) : "--")
-                                            + "\n" + setRateData(rate_data.getString(1)),
-                                    setRateData(rate_data.getString(1)), R.color.textColor_333333).fillColor().getResult());
-                        }
+                    if (rate_data.getDoubleValue(1) > 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(1) < 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.textColor_333333).fillColor().getResult());
+                    }
 
-                        if (rate_data.getDoubleValue(2) > 0) {
-                            holder.textReport3.setText(new StringFormatUtil(context,
-                                    (original_data.getString(2) != null ? original_data.getString(2) : "--")
-                                            + "\n" + setRateData(rate_data.getString(2)),
-                                    setRateData(rate_data.getString(2)), R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(2) < 0) {
-                            holder.textReport3.setText(new StringFormatUtil(context,
-                                    (original_data.getString(2) != null ? original_data.getString(2) : "--")
-                                            + "\n" + setRateData(rate_data.getString(2)),
-                                    setRateData(rate_data.getString(2)), R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport3.setText(new StringFormatUtil(context,
-                                    (original_data.getString(2) != null ? original_data.getString(2) : "--")
-                                            + "\n" + setRateData(rate_data.getString(2)),
-                                    setRateData(rate_data.getString(2)), R.color.textColor_333333).fillColor().getResult());
-                        }
+                    if (rate_data.getDoubleValue(2) > 0) {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(2) < 0) {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.textColor_333333).fillColor().getResult());
+                    }
+                } else if (original_data.size() == 4) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    holder.relaReport3.setVisibility(View.VISIBLE);
+                    holder.relaReport4.setVisibility(View.VISIBLE);
+                    if (rate_data.getDoubleValue(0) > 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(0) < 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.textColor_333333).fillColor().getResult());
+                    }
 
-                        if (rate_data.getDoubleValue(3) > 0) {
-                            holder.textReport4.setText(new StringFormatUtil(context,
-                                    (original_data.getString(3) != null ? original_data.getString(3) : "--")
-                                            + "\n" + setRateData(rate_data.getString(3)),
-                                    setRateData(rate_data.getString(3)), R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(3) < 0) {
-                            holder.textReport4.setText(new StringFormatUtil(context,
-                                    (original_data.getString(3) != null ? original_data.getString(3) : "--")
-                                            + "\n" + setRateData(rate_data.getString(3)),
-                                    setRateData(rate_data.getString(3)), R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport4.setText(new StringFormatUtil(context,
-                                    (original_data.getString(3) != null ? original_data.getString(3) : "--")
-                                            + "\n" + setRateData(rate_data.getString(3)),
-                                    setRateData(rate_data.getString(3)), R.color.textColor_333333).fillColor().getResult());
-                        }
+                    if (rate_data.getDoubleValue(1) > 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(1) < 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.textColor_333333).fillColor().getResult());
+                    }
 
-                        if (rate_data.getDoubleValue(4) > 0) {
-                            holder.textReport5.setText(new StringFormatUtil(context,
-                                    (original_data.getString(4) != null ? original_data.getString(4) : "--")
-                                            + "\n" + setRateData(rate_data.getString(4)),
-                                    setRateData(rate_data.getString(4)), R.color.colorPrimary).fillColor().getResult());
-                        } else if (rate_data.getDoubleValue(4) < 0) {
-                            holder.textReport5.setText(new StringFormatUtil(context,
-                                    (original_data.getString(4) != null ? original_data.getString(4) : "--")
-                                            + "\n" + setRateData(rate_data.getString(4)),
-                                    setRateData(rate_data.getString(4)), R.color.stock_green).fillColor().getResult());
-                        } else {
-                            holder.textReport5.setText(new StringFormatUtil(context,
-                                    (original_data.getString(4) != null ? original_data.getString(4) : "--")
-                                            + "\n" + setRateData(rate_data.getString(4)),
-                                    setRateData(rate_data.getString(4)), R.color.textColor_333333).fillColor().getResult());
-                        }
+                    if (rate_data.getDoubleValue(2) > 0) {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(2) < 0) {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.textColor_333333).fillColor().getResult());
+                    }
+
+                    if (rate_data.getDoubleValue(3) > 0) {
+                        holder.textReport4.setText(new StringFormatUtil(context,
+                                (original_data.getString(3) != null ? original_data.getString(3) : "--")
+                                        + "\n" + setRateData(rate_data.getString(3)),
+                                setRateData(rate_data.getString(3)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(3) < 0) {
+                        holder.textReport4.setText(new StringFormatUtil(context,
+                                (original_data.getString(3) != null ? original_data.getString(3) : "--")
+                                        + "\n" + setRateData(rate_data.getString(3)),
+                                setRateData(rate_data.getString(3)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport4.setText(new StringFormatUtil(context,
+                                (original_data.getString(3) != null ? original_data.getString(3) : "--")
+                                        + "\n" + setRateData(rate_data.getString(3)),
+                                setRateData(rate_data.getString(3)), R.color.textColor_333333).fillColor().getResult());
+                    }
+                } else if (original_data.size() == 5) {
+                    holder.relaReport1.setVisibility(View.VISIBLE);
+                    holder.relaReport2.setVisibility(View.VISIBLE);
+                    holder.relaReport3.setVisibility(View.VISIBLE);
+                    holder.relaReport4.setVisibility(View.VISIBLE);
+                    holder.relaReport5.setVisibility(View.VISIBLE);
+                    if (rate_data.getDoubleValue(0) > 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(0) < 0) {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport1.setText(new StringFormatUtil(context,
+                                (original_data.getString(0) != null ? original_data.getString(0) : "--")
+                                        + "\n" + setRateData(rate_data.getString(0)),
+                                setRateData(rate_data.getString(0)), R.color.textColor_333333).fillColor().getResult());
+                    }
+
+                    if (rate_data.getDoubleValue(1) > 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(1) < 0) {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport2.setText(new StringFormatUtil(context,
+                                (original_data.getString(1) != null ? original_data.getString(1) : "--")
+                                        + "\n" + setRateData(rate_data.getString(1)),
+                                setRateData(rate_data.getString(1)), R.color.textColor_333333).fillColor().getResult());
+                    }
+
+                    if (rate_data.getDoubleValue(2) > 0) {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(2) < 0) {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport3.setText(new StringFormatUtil(context,
+                                (original_data.getString(2) != null ? original_data.getString(2) : "--")
+                                        + "\n" + setRateData(rate_data.getString(2)),
+                                setRateData(rate_data.getString(2)), R.color.textColor_333333).fillColor().getResult());
+                    }
+
+                    if (rate_data.getDoubleValue(3) > 0) {
+                        holder.textReport4.setText(new StringFormatUtil(context,
+                                (original_data.getString(3) != null ? original_data.getString(3) : "--")
+                                        + "\n" + setRateData(rate_data.getString(3)),
+                                setRateData(rate_data.getString(3)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(3) < 0) {
+                        holder.textReport4.setText(new StringFormatUtil(context,
+                                (original_data.getString(3) != null ? original_data.getString(3) : "--")
+                                        + "\n" + setRateData(rate_data.getString(3)),
+                                setRateData(rate_data.getString(3)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport4.setText(new StringFormatUtil(context,
+                                (original_data.getString(3) != null ? original_data.getString(3) : "--")
+                                        + "\n" + setRateData(rate_data.getString(3)),
+                                setRateData(rate_data.getString(3)), R.color.textColor_333333).fillColor().getResult());
+                    }
+
+                    if (rate_data.getDoubleValue(4) > 0) {
+                        holder.textReport5.setText(new StringFormatUtil(context,
+                                (original_data.getString(4) != null ? original_data.getString(4) : "--")
+                                        + "\n" + setRateData(rate_data.getString(4)),
+                                setRateData(rate_data.getString(4)), R.color.colorPrimary).fillColor().getResult());
+                    } else if (rate_data.getDoubleValue(4) < 0) {
+                        holder.textReport5.setText(new StringFormatUtil(context,
+                                (original_data.getString(4) != null ? original_data.getString(4) : "--")
+                                        + "\n" + setRateData(rate_data.getString(4)),
+                                setRateData(rate_data.getString(4)), R.color.stock_green).fillColor().getResult());
+                    } else {
+                        holder.textReport5.setText(new StringFormatUtil(context,
+                                (original_data.getString(4) != null ? original_data.getString(4) : "--")
+                                        + "\n" + setRateData(rate_data.getString(4)),
+                                setRateData(rate_data.getString(4)), R.color.textColor_333333).fillColor().getResult());
                     }
                 }
             }
