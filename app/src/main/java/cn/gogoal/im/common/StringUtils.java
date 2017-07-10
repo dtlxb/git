@@ -582,8 +582,7 @@ public class StringUtils {
 
     //获取涨跌显示状态
     public static boolean getHighsAndLows() {
-        boolean change = SPTools.getBoolean("stock_unNormal_show", true);
-        return change;
+        return !SPTools.getBoolean("stock_unNormal_show", false);
     }
 
 }
