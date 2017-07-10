@@ -54,7 +54,7 @@ public class OverYearEquityRightAdapter extends MyBaseAdapter {
             holder.linearEquity.setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_2));
         }
 
-        if (contList.get(position).size() == 0) {
+        if (contList.get(position) == null || contList.get(position).size() == 0) {
             holder.textReport1.setVisibility(View.VISIBLE);
 
             holder.textReport1.setText("--");

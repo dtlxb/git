@@ -92,7 +92,7 @@ public class FinancialAnalysisRightAdapter extends MyBaseAdapter {
             holder.linearAnalysis.setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_2));
         }
 
-        if (contList.get(position).size() == 0) {
+        if (contList.get(position) == null || contList.get(position).size() == 0) {
             holder.relaReport1.setVisibility(View.VISIBLE);
             holder.textReport1.setText("--");
         } else if (contList.get(position).size() == 1) {

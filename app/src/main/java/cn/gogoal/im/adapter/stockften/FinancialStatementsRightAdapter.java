@@ -100,7 +100,7 @@ public class FinancialStatementsRightAdapter extends MyBaseAdapter {
 
         if (position == 0) {
             JSONArray title = contList.get(position).getJSONArray("title");
-            if (title.size() == 0) {
+            if (title == null || title.size() == 0) {
                 holder.relaReport1.setVisibility(View.VISIBLE);
                 holder.textReport1.setText("--");
             } else if (title.size() == 1) {
@@ -157,7 +157,7 @@ public class FinancialStatementsRightAdapter extends MyBaseAdapter {
             JSONArray original_data = contList.get(position).getJSONArray("original_data");
             JSONArray rate_data = contList.get(position).getJSONArray("rate_data");
             if (stype.equals("1")) {
-                if (original_data.size() == 0) {
+                if (original_data == null || original_data.size() == 0) {
                     holder.relaReport1.setVisibility(View.VISIBLE);
                     holder.textReport1.setText("--");
                 } else if (original_data.size() == 1) {
@@ -212,7 +212,7 @@ public class FinancialStatementsRightAdapter extends MyBaseAdapter {
                             original_data.getString(4) : "--");
                 }
             } else {
-                if (original_data.size() == 0) {
+                if (original_data == null || original_data.size() == 0) {
                     holder.relaReport1.setVisibility(View.VISIBLE);
                     holder.textReport1.setText("--\n--");
                 } else if (original_data.size() == 1) {
