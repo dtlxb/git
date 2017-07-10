@@ -234,7 +234,7 @@ public class StockDetailActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 getStockHeadInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                AppManager.getInstance().sendMessage("refresh_stock_news");//发个消息刷新新闻
+                AppManager.getInstance().sendMessage("refresh_stock_data");//发个消息刷新新闻
                 swiperefreshlayout.setRefreshing(false);
             }
         });
@@ -534,8 +534,10 @@ public class StockDetailActivity extends BaseActivity {
                     stock_status_type = treatData.getStock_type();
                     closePrice = StringUtils.parseStringDouble(treatData.getClose_price());
 
-                    setChart(treatData.getStock_type(), treatData.getClose_price(), treatData.getPrice(),
-                            treatData.getVolume(), treatData.getUpdate_time());//设置表格
+                    if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
+                        setChart(treatData.getStock_type(), treatData.getClose_price(), treatData.getPrice(),
+                                treatData.getVolume(), treatData.getUpdate_time());//设置表格
+                    }
 
                     setStockHeadColor(treatData.getChange_rate());//设置颜色
                     //设置标题、副标题
@@ -643,7 +645,7 @@ public class StockDetailActivity extends BaseActivity {
 
     }
 
-    private int currentPostion = 0;
+    private int currentPosition = 0;
 
     private void showFragment(int position) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -653,9 +655,9 @@ public class StockDetailActivity extends BaseActivity {
             transaction.add(R.id.layout_news_content, showFragment);
         }
         transaction.show(showFragment);
-        transaction.hide(newsFragments.get(currentPostion));
+        transaction.hide(newsFragments.get(currentPosition));
         transaction.commit();
-        currentPostion = position;
+        currentPosition = position;
     }
 
 

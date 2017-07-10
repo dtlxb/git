@@ -25,6 +25,22 @@
         android:textColor="@color/textColor_666666"
         android:textSize="13sp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="好公司评价体系"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="\u3000\u3000好公司是朝阳永续根据价值投资的核心算法评选出的公司评级"
+        android:textColor="@color/textColor_333333"
+        android:textSize="13sp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
-            android:text="通过近2年财报业绩判断该公司业绩兑现度较高"
+            android:text="表示这家公司近两年业绩兑现度高，是符合预期或者超出预期的"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
 
@@ -63,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
-            android:text="近期业绩兑现度高未来有可能成为好公司"
+            android:text="表示这家公司近期业绩兑现度比较高"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
 
@@ -85,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
-            android:text="曾经业绩兑现度高的好公司"
+            android:text="表示这家公司过去业绩兑现度高"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
 
@@ -107,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
-            android:text="历史上业绩兑现度一般的公司"
+            android:text="表示这家公司业绩兑现度一般"
             android:textColor="@color/textColor_333333"
             android:textSize="13sp" />
 

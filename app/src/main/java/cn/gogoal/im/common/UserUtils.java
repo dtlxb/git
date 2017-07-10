@@ -447,8 +447,7 @@ public class UserUtils {
 
         //获取我的conversationId群中的全部用户
         List<ContactBean> list = getAllFriendsInTeam(conversationId);
-
-        list.retainAll(contacts);
+        contacts.retainAll(list);
 
         return list;
     }

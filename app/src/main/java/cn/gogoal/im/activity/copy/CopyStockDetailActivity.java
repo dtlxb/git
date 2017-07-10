@@ -52,20 +52,17 @@
 //import butterknife.OnClick;
 //import cn.gogoal.im.R;
 //import cn.gogoal.im.activity.MessageHolderActivity;
-//import cn.gogoal.im.activity.ShareMessageActivity;
 //import cn.gogoal.im.activity.SquareChatRoomActivity;
 //import cn.gogoal.im.activity.ToolsSettingActivity;
 //import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
 //import cn.gogoal.im.adapter.TreatAdapter;
 //import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
-//import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 //import cn.gogoal.im.base.AppManager;
 //import cn.gogoal.im.base.BaseActivity;
 //import cn.gogoal.im.bean.BaseMessage;
 //import cn.gogoal.im.bean.ToolData;
 //import cn.gogoal.im.bean.stock.Stock;
 //import cn.gogoal.im.bean.stock.StockDetail;
-//import cn.gogoal.im.bean.stock.StockDialogInfo;
 //import cn.gogoal.im.bean.stock.TreatData;
 //import cn.gogoal.im.common.AnimationUtils;
 //import cn.gogoal.im.common.AppConst;
@@ -325,11 +322,6 @@
 //
 //    private void setNewsTab() {
 //        final List<Fragment> fragments = new ArrayList<>();
-//
-//         * stockCode 股票代码
-//         * stockName 股票代码
-//         * position 第几个tab
-//         *
 //
 //        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 0));
 //        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
@@ -896,12 +888,6 @@
 //            timer.cancel();
 //        }
 //    }
-//
-//
-//
-//     * 初始化数据
-//     *
-//     * @param stockCode;
 //
 //
 //    private void initList(final String stockCode) {
@@ -1854,11 +1840,6 @@
 //            }
 //        });
 //    }
-//
-//
-//
-//     * 诊断工具回调
-//
 //
 //    public interface TakeToolsListener {
 //        void onTakeTools(boolean sueecss, ArrayList<ToolData.Tool> tools);

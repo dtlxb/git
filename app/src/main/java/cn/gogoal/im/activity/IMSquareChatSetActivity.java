@@ -294,8 +294,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         PersonContactBeans.addAll(contactBeans);
         contactBeans.clear();
         contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
-        KLog.e(contactBeans);
-        Log.e("+++++contactBeans", contactBeans.toString());
         mPersonInfoAdapter.notifyDataSetChanged();
     }
 

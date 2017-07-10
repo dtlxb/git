@@ -10,8 +10,6 @@ import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.support.v4.content.ContextCompat;
 
-import com.socks.library.KLog;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -638,7 +636,6 @@ public class TimesFivesBitmap {
                 String today = m + "-" + day;
                 dateList.add(today);
             }
-            KLog.e(timesOrFivesList);
             if (timesOrFivesList != null && timesOrFivesList.size() > 0) {
                 StockMinuteData fiveDayData = timesOrFivesList.get(0);
                 //分时和五日数据处理
