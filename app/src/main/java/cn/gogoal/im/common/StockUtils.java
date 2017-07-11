@@ -3,7 +3,6 @@ package cn.gogoal.im.common;
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
@@ -16,12 +15,15 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
 /**
@@ -32,6 +34,7 @@ public class StockUtils {
 
     /**
      * 传入任意类型的array,只要每个object里含有字段stock_code
+     * 仅保存stock_code
      */
     public static void saveMyStock(JSONArray array) {
         LinkedHashSet<String> set = new LinkedHashSet<>();
@@ -39,14 +42,45 @@ public class StockUtils {
             JSONObject object = (JSONObject) array.get(i);
             set.add(object.getString("stock_code"));
         }
-        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", set);
+        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", set);
+    }
+
+    /**
+     * 存储股票文件流☆☆☆
+     */
+    public static void saveMyStock(ArrayList<MyStockData> array) {
+        SPTools.saveSPObject(UserUtils.getMyAccountId() + "_my_stock_set_object", array);
+    }
+
+    /**
+     * 获取本地自选股集合——文件流
+     */
+    public static ArrayList<MyStockData> getMyStock() {
+        return (ArrayList<MyStockData>) SPTools.getSPObject(UserUtils.getMyAccountId() + "_my_stock_set_object");
+    }
+
+    /**
+     * 获取本地自选股code集合
+     */
+    public static Set<String> getMyStockCodes() {
+        return SPTools.getSetData(UserUtils.getMyAccountId() + "_my_stock_set", new HashSet<String>());
     }
 
     /**
      * 获取本地自选股集合
      */
-    public static Set<String> getMyStockSet() {
-        return SPTools.getSetData(UserUtils.getMyAccountId()+"_my_stock_set", new LinkedHashSet<String>());
+    public static ArrayList<String> getMyStockCodeList() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        ArrayList<MyStockData> myStocks = getMyStock();
+        if (ArrayUtils.isEmpty(myStocks)){
+            return new ArrayList<>();
+        }else {
+            for (MyStockData data : myStocks) {
+                if (!arrayList.contains(data.getStock_code()))
+                    arrayList.add(data.getStock_code());
+            }
+            return arrayList;
+        }
     }
 
     public static String getStockCodes(@NonNull JsonArray array) {
@@ -81,29 +115,22 @@ public class StockUtils {
     }
 
     /**
-     * 获取本地自选股缓存
-     */
-    public static String getMyStockString() {
-        return ArrayUtils.mosaicListElement(getMyStockSet());
-    }
-
-    /**
      * 添加单个股票到自选股
      */
     public static void addStock2MyStock(String stockCode) {
         if (stockCode == null) {
             return;
         }
-        LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockSet());
+        LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockCodeList());
         myStockSet.add(stockCode);
-        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", myStockSet);
+        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
     }
 
     /**
      * 判断股票是否在自选股中
      */
     public static boolean isMyStock(String stockCode) {
-        return getMyStockSet().contains(stockCode);
+        return getMyStockCodeList().contains(stockCode);
     }
 
     /**
@@ -111,10 +138,10 @@ public class StockUtils {
      */
     public static void removeStock(String stockCode) {
 
-        LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockSet());
+        LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockCodeList());
 
         if (myStockSet.remove(stockCode)) {
-            SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", myStockSet);
+            SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
         } else {
             myStockSet.remove(stockCode.substring(2));
         }
@@ -124,7 +151,8 @@ public class StockUtils {
      * 清除自选股
      */
     public static void clearLocalMyStock() {
-        SPTools.clearItem(UserUtils.getMyAccountId()+"_my_stock_set");
+        SPTools.clearItem(UserUtils.getMyAccountId() + "_my_stock_set");
+        SPTools.clearItem(UserUtils.getMyAccountId() + "_my_stock_set_object");
     }
 
     //数据处理，1保存两位，2.正数补+，
@@ -202,13 +230,7 @@ public class StockUtils {
     public static
     @ColorRes
     int getStockRateColor(String rateOrPriceString) {
-        if (TextUtils.isEmpty(rateOrPriceString) || rateOrPriceString.equals("null")) {
-            return R.color.stock_gray;
-        }
-        double rateOrPrice = Double.parseDouble(rateOrPriceString);
-
-        return rateOrPrice == Double.NaN ? R.color.stock_gray : (rateOrPrice > 0 ? R.color.stock_red : (rateOrPrice == 0 ? R.color.stock_gray :
-                R.color.stock_green));
+        return getStockRateColor(StringUtils.parseStringDouble(rateOrPriceString));
     }
 
     /**
@@ -216,27 +238,17 @@ public class StockUtils {
      */
     public static
     @ColorRes
-    int getStockRateColor(double rateOrPriceString) {
-        return rateOrPriceString == Double.NaN ?
-                R.color.stock_gray :
-                (rateOrPriceString > 0 ?
-                        R.color.stock_red : (rateOrPriceString == 0 ? R.color.stock_gray :
-                        R.color.stock_green));
+    int getStockRateColor(double rateOrPrice) {
+        return rateOrPrice == Double.NaN ? R.color.stock_gray :
+                (rateOrPrice > 0 ? (getStockSettingColor() ? R.color.stock_red : R.color.stock_green) : (rateOrPrice == 0 ? R.color.stock_gray :
+                        (getStockSettingColor() ? R.color.stock_green : R.color.stock_red)));
     }
 
     /**
      * 根据判断的依据字段，返回股票颜色
      */
     public static int getStockRateBackgroundRes(String rateOrPriceString) {
-        if (TextUtils.isEmpty(rateOrPriceString) || rateOrPriceString.equals("null")) {
-            return R.drawable.shape_my_stock_price_gray;
-        }
-        double rateOrPrice = Double.parseDouble(rateOrPriceString);
-
-        return rateOrPrice == Double.NaN ? R.drawable.shape_my_stock_price_gray :
-                (rateOrPrice > 0 ? R.drawable.shape_my_stock_price_red :
-                        (rateOrPrice == 0 ? R.drawable.shape_my_stock_price_gray :
-                                R.drawable.shape_my_stock_price_green));
+        return getStockRateBackgroundRes(StringUtils.parseStringDouble(rateOrPriceString));
     }
 
     /**
@@ -244,11 +256,15 @@ public class StockUtils {
      */
     public static int getStockRateBackgroundRes(double rateOrPriceString) {
         return rateOrPriceString == Double.NaN ? R.drawable.shape_my_stock_price_gray :
-                (rateOrPriceString > 0 ? R.drawable.shape_my_stock_price_red :
+                (rateOrPriceString > 0 ? (getStockSettingColor() ? R.drawable.shape_my_stock_price_red : R.drawable.shape_my_stock_price_green) :
                         (rateOrPriceString == 0 ? R.drawable.shape_my_stock_price_gray :
-                                R.drawable.shape_my_stock_price_green));
+                                ((getStockSettingColor() ? R.drawable.shape_my_stock_price_green : R.drawable.shape_my_stock_price_red))));
     }
 
+    //获取绿涨红跌还是红涨绿跌
+    public static boolean getStockSettingColor() {
+        return !SPTools.getBoolean("stock_unNormal_show", false);
+    }
 
     /**
      * 是否是交易时间
@@ -411,6 +427,10 @@ public class StockUtils {
      * 添加自选股
      */
     public static void addMyStock(final String stock_code, final Impl<Boolean> callback) {
+        if (stock_code==null){
+            UIHelper.toast(MyApp.getAppContext(),"股票内容为空");
+            return;
+        }
         final Map<String, String> param = new HashMap<String, String>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -564,5 +584,23 @@ public class StockUtils {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
+    }
+
+    public static void stockSort(int fromIndex, int toIndex, Impl<String> callback) {
+        HashMap<String, String> tokenParams = UserUtils.getTokenParams();
+        tokenParams.put("fromIndex", String.valueOf(fromIndex));
+        tokenParams.put("toIndex", String.valueOf(toIndex));
+
+        new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        }).startGet();
     }
 }

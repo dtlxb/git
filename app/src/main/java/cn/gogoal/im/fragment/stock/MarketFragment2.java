@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.alilayout.DelegateAdapter;
 import com.hply.alilayout.VirtualLayoutManager;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,6 +77,7 @@ public class MarketFragment2 extends BaseFragment {
         rvMarket.setLayoutManager(layoutManager);
         layoutManager.setAutoMeasureEnabled(true);
 
+//        不同子adapter之间的类型不共享
         delegateAdapter = new DelegateAdapter(layoutManager, false);
         adapters = new LinkedList<>();
 
@@ -92,6 +94,13 @@ public class MarketFragment2 extends BaseFragment {
                 refreshLayout.refreshComplete();
             }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMarketInformation(AppConst.REFRESH_TYPE_RESUME);
     }
 
     /**
@@ -127,6 +136,8 @@ public class MarketFragment2 extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
+                KLog.e(msg);
+
                 UIHelper.toastError(getActivity(), msg, xLayout);
 
                 if (xLayout != null) {
@@ -186,7 +197,10 @@ public class MarketFragment2 extends BaseFragment {
 
         //热门行业
         adapters.add(new TitleAdapter(getContext(), TitleAdapter.RANK_LIST_TITLE_HOT_INDUSTRY));
-        adapters.add(new HostIndustryGridAdapter(marketData.getHostIndustrylist()));
+        HostIndustryGridAdapter hostIndustryGridAdapter = new
+                HostIndustryGridAdapter(getContext(), marketData.getHostIndustrylist());
+        adapters.add(hostIndustryGridAdapter);
+        hostIndustryGridAdapter.notifyDataSetChanged();
 
         //大数据选股
         adapters.add(new TitleAdapter(getContext(), TitleAdapter.RANK_LIST_TITLE_BIG_DATA_CHOOSE_STOCK));
@@ -194,8 +208,10 @@ public class MarketFragment2 extends BaseFragment {
 
         //涨
         adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_INCREASE_LIST));
-        adapters.add(new RankListAdapter(marketData.getStockRanklist().getIncrease_list(),
-                RankListAdapter.RANK_TYPE_INCREASE_LIST));
+        RankListAdapter rankListAdapter0 = new RankListAdapter(marketData.getStockRanklist().getIncrease_list(),
+                RankListAdapter.RANK_TYPE_INCREASE_LIST);
+        adapters.add(rankListAdapter0);
+        rankListAdapter0.notifyDataSetChanged();
 
         //跌
         adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_DOWN_LIST));

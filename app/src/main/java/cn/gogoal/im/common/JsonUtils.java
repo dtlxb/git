@@ -1,8 +1,8 @@
 package cn.gogoal.im.common;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -50,11 +50,7 @@ public class JsonUtils {
     }
 
     public static Map<String, String> toMap(@NonNull String jsonString) {
-        if (gson == null) {
-            gson = new Gson();
-        }
-        return gson.fromJson(jsonString, new TypeToken<Map<String, String>>() {
-        }.getType());
+        return JSONObject.parseObject(jsonString,new TypeToken<Map<String,String>>(){}.getType());
     }
 
     //=====json array

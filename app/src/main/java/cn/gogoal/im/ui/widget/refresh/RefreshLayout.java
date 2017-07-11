@@ -42,5 +42,8 @@ public class RefreshLayout extends PtrFrameLayout {
         setHeaderView(mHeaderView);
         setRatioOfHeaderHeightToRefresh(0.8f);
         addPtrUIHandler(mHeaderView);
+//        resistance
+        setResistance(2.5f);
     }
+
 }

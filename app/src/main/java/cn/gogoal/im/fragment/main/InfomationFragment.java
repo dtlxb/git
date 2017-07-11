@@ -75,8 +75,8 @@ public class InfomationFragment extends BaseFragment {
 
         final int[] tabTypes = {
 //                InfomationTabFragment.INFOMATION_TYPE_GET_ASK_NEWS,
-                InfomationTabFragment.INFOMATION_TYPE_SUN_BUSINESS,
                 InfomationTabFragment.INFOMATION_TYPE_PRIVATE_VIEW_POINT,
+                InfomationTabFragment.INFOMATION_TYPE_SUN_BUSINESS,
                 InfomationTabFragment.INFOMATION_TYPE_SKY_VIEW_POINT,
                 InfomationTabFragment.INFOMATION_TYPE_POLICY_DYNAMICS};
 

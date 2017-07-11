@@ -261,6 +261,11 @@
     *;
 }
 
+-keepattributes InnerClasses
+-keep class com.hply.alilayout.ExposeLinearLayoutManagerEx {
+    *;
+}
+
 #==============================高德定位========================#
 -keep class com.amap.api.location.**{*;}
 -keep class com.amap.api.fence.**{*;}

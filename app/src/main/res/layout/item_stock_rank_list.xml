@@ -71,7 +71,7 @@
             android:paddingBottom="1.5dp"
             android:layout_centerInParent="true"
             android:text="@string/default_char"
-            android:textSize="14sp"/>
+            android:textSize="12sp"/>
 
     </RelativeLayout>
 

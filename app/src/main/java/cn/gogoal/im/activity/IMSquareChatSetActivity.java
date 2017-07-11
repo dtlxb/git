@@ -185,7 +185,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     ChatGroupHelper.collectGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
-                            UIHelper.toast(IMSquareChatSetActivity.this, "群收藏成功!!!");
+                            UIHelper.toast(IMSquareChatSetActivity.this, "群收藏成功");
                         }
 
                         @Override
@@ -197,10 +197,11 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     if (null != groupsArray) {
                         groupsArray.remove(finalThisGroup);
                     }
+
                     ChatGroupHelper.deleteGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
-                            UIHelper.toast(IMSquareChatSetActivity.this, "群已取消收藏!!!");
+                            UIHelper.toast(IMSquareChatSetActivity.this, "群已取消收藏");
                         }
 
                         @Override

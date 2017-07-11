@@ -3,7 +3,8 @@ package cn.gogoal.im.ui.widget;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
+import com.socks.library.KLog;
 
 /**
  * Author wangjd on 2017/7/7 0007.
@@ -27,7 +28,7 @@ public class CatchLayoutManager extends LinearLayoutManager {
         try {
             super.onLayoutChildren(recycler, state);
         } catch (IndexOutOfBoundsException e) {
-            Log.e("probe", "meet a IOOBE in RecyclerView");
+            KLog.e("probe", "meet a IOOBE in RecyclerView");
         }
     }
 }

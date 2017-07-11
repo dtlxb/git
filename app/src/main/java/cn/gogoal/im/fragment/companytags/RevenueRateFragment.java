@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +25,6 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.PieBean;
-import cn.gogoal.im.bean.companytags.IncidentData;
 import cn.gogoal.im.bean.companytags.PieData;
 import cn.gogoal.im.bean.companytags.RevenueData;
 import cn.gogoal.im.common.AppDevice;
@@ -95,7 +93,6 @@ public class RevenueRateFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JsonObject result = JsonUtils.toJsonObject(responseInfo);
                 if (result.get("code").getAsInt() == 0) {
 
@@ -123,7 +120,6 @@ public class RevenueRateFragment extends BaseFragment {
                         }
                         //排序
                         Collections.sort(pieDatas);
-                        KLog.e(pieDatas);
                         revenueAdapter.notifyDataSetChanged();
                     }
                 }
