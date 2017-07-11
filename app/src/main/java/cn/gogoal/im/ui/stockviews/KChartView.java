@@ -25,6 +25,7 @@ import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.bean.MALineBean;

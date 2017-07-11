@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alibaba.fastjson.JSONObject;
-
 import org.simple.eventbus.Subscriber;
 
 import java.util.HashMap;
@@ -19,13 +17,11 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.ui.stockviews.LandScapeChartView;
@@ -61,7 +57,7 @@ public class FiveDayFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.from(getActivity()).inflate(R.layout.fragment_fivedaybitmap, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_fivedaybitmap, container, false);
         ButterKnife.bind(this, view);
         refreshtime = SPTools.getInt("refreshtime", 15000);
         getFiveData(true);
@@ -84,8 +80,7 @@ public class FiveDayFragment extends Fragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                bean = JSONObject.parseObject(responseInfo, StockMinuteBean.class);
-
+                bean = JsonUtils.parseJsonObject(responseInfo, StockMinuteBean.class);
                 if (bean.getCode() == 0) {
                     new BitmapTask().execute();
                     //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, AppConst.DISS_PROGRESSBAR, 0);

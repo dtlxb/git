@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 
-import com.alibaba.fastjson.JSONObject;
-
 import org.simple.eventbus.Subscriber;
 
 import java.util.HashMap;
@@ -23,6 +21,7 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -125,7 +124,7 @@ public class TimesFragment extends BaseFragment {
                 } else if (stockType == StockDetailChartsActivity.STOCK_COMMON) {
                     timesBitmap = new TimesFivesBitmap((int) (0.78 * width), height);
                 }
-                StockMinuteBean bean = JSONObject.parseObject(responseInfo, StockMinuteBean.class);
+                StockMinuteBean bean = JsonUtils.parseJsonObject(responseInfo, StockMinuteBean.class);
                 if (bean.getCode() == 0) {
                     stockMinuteDatas = bean.getData();
                     if (stockMinuteDatas.size() > 0) {

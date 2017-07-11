@@ -281,7 +281,11 @@ public class TimesFivesBitmap {
         if (isTimes && isSuspension) {
             pos_min_price = StringUtils.save2Significand(0.99 * closePrice);
         } else {
-            pos_min_price = StringUtils.save2Significand(initialWeightedIndex - uperHalfHigh);
+            if (initialWeightedIndex == 0.0d) {
+                pos_min_price = "0.00";
+            } else {
+                pos_min_price = StringUtils.save2Significand(initialWeightedIndex - uperHalfHigh);
+            }
         }
 
         if (isFromDetail) {
@@ -299,7 +303,11 @@ public class TimesFivesBitmap {
         if (isTimes && isSuspension) {
             pos_max_rate = StringUtils.save2Significand(1.00) + "%";
         } else {
-            pos_max_rate = StringUtils.save2Significand(uperHalfHigh / initialWeightedIndex * 100) + "%";
+            if (initialWeightedIndex == 0.0d) {
+                pos_max_rate = "0.00%";
+            } else {
+                pos_max_rate = StringUtils.save2Significand(uperHalfHigh / initialWeightedIndex * 100) + "%";
+            }
         }
 
         String close_rate = StringUtils.save2Significand(0.00) + "%";
@@ -308,7 +316,11 @@ public class TimesFivesBitmap {
         if (isTimes && isSuspension) {
             pos_min_rate = StringUtils.save2Significand(-1.00) + "%";
         } else {
-            pos_min_rate = StringUtils.save2Significand(uperHalfHigh / initialWeightedIndex * 100) + "%";
+            if (initialWeightedIndex == 0.0d) {
+                pos_min_rate = "0.00%";
+            } else {
+                pos_min_rate = StringUtils.save2Significand(-uperHalfHigh / initialWeightedIndex * 100) + "%";
+            }
         }
 
         fontHeight = r.height();
@@ -629,8 +641,13 @@ public class TimesFivesBitmap {
                 //分时和五日数据处理
                 double weightedIndex;
                 double nonWeightedIndex;
-                this.closePrice = StringUtils.getDouble(fiveDayData.getPrice()) / (1 + (StringUtils.getDouble(fiveDayData.getPrice_change_rate()) / 100.00f));
-                initialWeightedIndex = StringUtils.getDouble(fiveDayData.getPrice()) / (1 + (StringUtils.getDouble(fiveDayData.getPrice_change_rate()) / 100.00f));
+                if (StringUtils.getDouble(fiveDayData.getPrice_change_rate()) == -100.0d) {
+                    initialWeightedIndex = 0.0d;
+                    this.closePrice = 0.0d;
+                } else {
+                    this.closePrice = StringUtils.getDouble(fiveDayData.getPrice()) / (1 + (StringUtils.getDouble(fiveDayData.getPrice_change_rate()) / 100.00f));
+                    initialWeightedIndex = StringUtils.getDouble(fiveDayData.getPrice()) / (1 + (StringUtils.getDouble(fiveDayData.getPrice_change_rate()) / 100.00f));
+                }
                 for (int i = 1; i < timesOrFivesList.size(); i++) {
                     fiveDayData = timesOrFivesList.get(i);
                     weightedIndex = StringUtils.getDouble(fiveDayData.getPrice());

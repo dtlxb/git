@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -69,7 +70,7 @@ public class ContactsFragment extends BaseFragment {
     TextView tvConstactsFlag;
 
     @BindView(R.id.iv_go_back)
-    ImageView ivGoBack;
+    RelativeLayout ivGoBack;
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tvSearch;

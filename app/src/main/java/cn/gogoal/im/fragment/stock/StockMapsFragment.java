@@ -12,8 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.simple.eventbus.Subscriber;
 
@@ -170,7 +171,7 @@ public class StockMapsFragment extends BaseFragment {
 
         //初始化图表
         showItem = SPTools.getInt("showItem", 0);
-        onShow(showItem);
+        onShow(showItem, true);
         //添加图表头部
         for (int i = 0; i < 5; i++) {
             tabChartsTitles.addTab(tabChartsTitles.newTab().setText(stockDetailChartTitles[i]));
@@ -289,8 +290,8 @@ public class StockMapsFragment extends BaseFragment {
     }
 
     //图表展示
-    private void onShow(int item) {
-        needShowLoading(true);
+    private void onShow(int item, boolean showLoading) {
+        needShowLoading(showLoading);
         switch (item) {
             case 0://分时
                 GetMinLineData();
@@ -345,7 +346,7 @@ public class StockMapsFragment extends BaseFragment {
                 if (textLayout.getVisibility() == View.VISIBLE) {
                     textLayout.setVisibility(View.GONE);
                 }
-                timesBean = JSONObject.parseObject(responseInfo, StockMinuteBean.class);
+                timesBean = JsonUtils.parseJsonObject(responseInfo, StockMinuteBean.class);
                 new BitmapTask().execute("0");
             }
 
@@ -382,8 +383,8 @@ public class StockMapsFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
 
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                int code = result.getInteger("code");
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
+                int code = JsonUtils.getIntValue(result, "code");
                 if (code == 0) {
                     new BitmapTask().execute("1", responseInfo);
                 } else {
@@ -446,8 +447,8 @@ public class StockMapsFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
 
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                int code = result.getInteger("code");
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
+                int code = JsonUtils.getIntValue(result, "code");
                 if (code == 0) {
                     new BitmapTask().execute(String.valueOf(displayIndex + 2), responseInfo);
                 } else {
@@ -492,7 +493,6 @@ public class StockMapsFragment extends BaseFragment {
                     break;
                 case "1":
                     if (params.length > 1) {
-                        //StockMinuteBean bean = JSONObject.parseObject(params[1], StockMinuteBean.class);
                         StockMinuteBean bean = JsonUtils.parseJsonObject(params[1], StockMinuteBean.class);
                         fiveDayBitmap = new TimesFivesBitmap(width, height);
                         fiveDayBitmap.setShowDetail(false);
@@ -638,45 +638,45 @@ public class StockMapsFragment extends BaseFragment {
     }
 
     private void parseObjects(String params) {
-        JSONObject result = JSONObject.parseObject(params);
+        JsonObject result = JsonUtils.toJsonObject(params);
         if (result != null) {
-            JSONArray data_array = (JSONArray) result.get("data");
-            if ((int) result.get("code") == 0) {
+            JsonArray data_array = JsonUtils.getJsonArray(result, "data");
+            if (result.get("code").getAsInt() == 0) {
                 handleData(data_array);
             }
         }
     }
 
-    private void handleData(JSONArray data) {
+    private void handleData(JsonArray data) {
         for (int i = 0; i < data.size(); i++) {
-            com.alibaba.fastjson.JSONObject singleData = (com.alibaba.fastjson.JSONObject) data.get(i);
-            Map<String, Object> itemData = new HashMap<String, Object>();
-            itemData.put("amplitude", singleData.getFloat("amplitude"));
-            itemData.put("avg_price_" + dayK1, ParseNum(singleData.getString("avg_price_" + dayK1)));
-            itemData.put("avg_price_" + dayK2, ParseNum(singleData.getString("avg_price_" + dayK2)));
-            itemData.put("avg_price_" + dayK3, ParseNum(singleData.getString("avg_price_" + dayK3)));
-            itemData.put("avg_price_" + dayK4, ParseNum(singleData.getString("avg_price_" + dayK4)));
-            itemData.put("close_price", ParseNum(singleData.getString("close_price")));
-            itemData.put("date", singleData.getString("date"));
-            itemData.put("high_price", ParseNum(singleData.getString("high_price")));
-            itemData.put("low_price", ParseNum(singleData.getString("low_price")));
-            itemData.put("open_price", ParseNum(singleData.getString("open_price")));
-            itemData.put("price_change", ParseNum(singleData.getString("price_change")));
-            itemData.put("price_change_rate", ParseNum(singleData.getString("price_change_rate")));
-            itemData.put("rightValue", ParseNum(singleData.getString("rightValue")));
-            itemData.put("turnover", ParseNum(singleData.getString("turnover")));
-            itemData.put("turnover_rate", ParseNum(singleData.getString("turnover_rate")));
-            itemData.put("volume", ParseNum(singleData.getString("volume")));
+            JsonObject singleData = (JsonObject) data.get(i);
+            Map<String, Object> itemData = new HashMap<>();
+            itemData.put("amplitude", singleData.get("amplitude").getAsFloat());
+            itemData.put("avg_price_" + dayK1, ParseNum(singleData.get("avg_price_" + dayK1)));
+            itemData.put("avg_price_" + dayK2, ParseNum(singleData.get("avg_price_" + dayK2)));
+            itemData.put("avg_price_" + dayK3, ParseNum(singleData.get("avg_price_" + dayK3)));
+            itemData.put("avg_price_" + dayK4, ParseNum(singleData.get("avg_price_" + dayK4)));
+            itemData.put("close_price", ParseNum(singleData.get("close_price")));
+            itemData.put("date", singleData.get("date").getAsString());
+            itemData.put("high_price", ParseNum(singleData.get("high_price")));
+            itemData.put("low_price", ParseNum(singleData.get("low_price")));
+            itemData.put("open_price", ParseNum(singleData.get("open_price")));
+            itemData.put("price_change", ParseNum(singleData.get("price_change")));
+            itemData.put("price_change_rate", ParseNum(singleData.get("price_change_rate")));
+            itemData.put("rightValue", ParseNum(singleData.get("rightValue")));
+            itemData.put("turnover", ParseNum(singleData.get("turnover")));
+            itemData.put("turnover_rate", ParseNum(singleData.get("turnover_rate")));
+            itemData.put("volume", ParseNum(singleData.get("volume")));
             mOHLCData.add(itemData);
         }
     }
 
-    private float ParseNum(String s) {
+    private float ParseNum(JsonElement element) {
         float avg_price;
-        if (s == null) {
+        if (element == null || element.isJsonNull()) {
             avg_price = 0.0f;
         } else {
-            avg_price = Float.parseFloat(s);
+            avg_price = Float.parseFloat(element.getAsString());
         }
         return avg_price;
     }
@@ -684,7 +684,7 @@ public class StockMapsFragment extends BaseFragment {
     //定时刷新
     @Subscriber(tag = "refresh_stock_data")
     public void updateMapData(String msg) {
-        onShow(showItem);
+        onShow(showItem, false);
     }
 
 }

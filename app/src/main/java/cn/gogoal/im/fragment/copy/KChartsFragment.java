@@ -5,10 +5,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 
-import org.simple.eventbus.EventBus;
+import com.alibaba.fastjson.JSONArray;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -18,15 +20,14 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.stockviews.KChartView;
@@ -127,10 +128,10 @@ public class KChartsFragment extends BaseFragment {
                 FileUtil.writeRequestResponse(responseInfo, "GetKLineDataPage");
                 if (KChartsFragment.this.isVisible()) {
                     if (is_authroity) mOHLCData.clear();
-                    JSONObject result = JSONObject.parseObject(responseInfo);
+                    JsonObject result = JsonUtils.toJsonObject(responseInfo);
                     if (result != null) {
-                        JSONArray data_array = (JSONArray) result.get("data");
-                        if ((int) result.get("code") == 0) {
+                        JsonArray data_array = JsonUtils.getJsonArray(result, "data");
+                        if (result.get("code").getAsInt() == 0) {
                             handleData(data_array);
                             if (page == 1) {
                                 mGridChart = new KLineGridChart(width, height);
@@ -178,36 +179,36 @@ public class KChartsFragment extends BaseFragment {
         }
     }
 
-    private void handleData(JSONArray data) {
+    private void handleData(JsonArray data) {
         for (int i = 0; i < data.size(); i++) {
-            com.alibaba.fastjson.JSONObject singleData = (com.alibaba.fastjson.JSONObject) data.get(i);
-            Map<String, Object> itemData = new HashMap<String, Object>();
-            itemData.put("amplitude", singleData.getFloat("amplitude"));
-            itemData.put("avg_price_" + dayK1, ParseNum(singleData.getString("avg_price_" + dayK1)));
-            itemData.put("avg_price_" + dayK2, ParseNum(singleData.getString("avg_price_" + dayK2)));
-            itemData.put("avg_price_" + dayK3, ParseNum(singleData.getString("avg_price_" + dayK3)));
-            itemData.put("avg_price_" + dayK4, ParseNum(singleData.getString("avg_price_" + dayK4)));
-            itemData.put("close_price", ParseNum(singleData.getString("close_price")));
-            itemData.put("date", singleData.getString("date"));
-            itemData.put("high_price", ParseNum(singleData.getString("high_price")));
-            itemData.put("low_price", ParseNum(singleData.getString("low_price")));
-            itemData.put("open_price", ParseNum(singleData.getString("open_price")));
-            itemData.put("price_change", ParseNum(singleData.getString("price_change")));
-            itemData.put("price_change_rate", ParseNum(singleData.getString("price_change_rate")));
-            itemData.put("rightValue", ParseNum(singleData.getString("rightValue")));
-            itemData.put("turnover", ParseNum(singleData.getString("turnover")));
-            itemData.put("turnover_rate", ParseNum(singleData.getString("turnover_rate")));
-            itemData.put("volume", ParseNum(singleData.getString("volume")));
+            JsonObject singleData = (JsonObject) data.get(i);
+            Map<String, Object> itemData = new HashMap<>();
+            itemData.put("amplitude", singleData.get("amplitude").getAsFloat());
+            itemData.put("avg_price_" + dayK1, ParseNum(singleData.get("avg_price_" + dayK1)));
+            itemData.put("avg_price_" + dayK2, ParseNum(singleData.get("avg_price_" + dayK2)));
+            itemData.put("avg_price_" + dayK3, ParseNum(singleData.get("avg_price_" + dayK3)));
+            itemData.put("avg_price_" + dayK4, ParseNum(singleData.get("avg_price_" + dayK4)));
+            itemData.put("close_price", ParseNum(singleData.get("close_price")));
+            itemData.put("date", singleData.get("date").getAsString());
+            itemData.put("high_price", ParseNum(singleData.get("high_price")));
+            itemData.put("low_price", ParseNum(singleData.get("low_price")));
+            itemData.put("open_price", ParseNum(singleData.get("open_price")));
+            itemData.put("price_change", ParseNum(singleData.get("price_change")));
+            itemData.put("price_change_rate", ParseNum(singleData.get("price_change_rate")));
+            itemData.put("rightValue", ParseNum(singleData.get("rightValue")));
+            itemData.put("turnover", ParseNum(singleData.get("turnover")));
+            itemData.put("turnover_rate", ParseNum(singleData.get("turnover_rate")));
+            itemData.put("volume", ParseNum(singleData.get("volume")));
             mOHLCData.add(itemData);
         }
     }
 
-    private float ParseNum(String s) {
+    private float ParseNum(JsonElement element) {
         float avg_price;
-        if (s == null) {
+        if (element == null || element.isJsonNull()) {
             avg_price = 0.0f;
         } else {
-            avg_price = Float.parseFloat(s);
+            avg_price = Float.parseFloat(element.getAsString());
         }
         return avg_price;
     }

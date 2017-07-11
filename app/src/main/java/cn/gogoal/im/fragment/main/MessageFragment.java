@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -90,7 +91,7 @@ public class MessageFragment extends BaseFragment {
     TextView xTitle;
 
     @BindView(R.id.iv_go_back)
-    ImageView ivGoBack;
+    RelativeLayout ivGoBack;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;

@@ -174,7 +174,7 @@ public class TreatFragment extends BaseFragment {
         });
     }
 
-    @Subscriber(tag = "refresh_stock_news")
+    @Subscriber(tag = "refresh_stock_data")
     void updateTreatData(String msg) {
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
             needAnim = false;

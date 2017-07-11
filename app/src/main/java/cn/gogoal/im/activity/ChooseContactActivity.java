@@ -2,8 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.AVFile;
 import com.bumptech.glide.Glide;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
@@ -49,11 +46,9 @@ import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
-import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ICheckItemListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.GGImageMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
@@ -502,9 +497,9 @@ public class ChooseContactActivity extends BaseActivity {
         @Override
         protected void convert(final BaseViewHolder holder, final ContactBean data, final int position) {
 
-            RoundedImageView imagAvatar = holder.getView(R.id.item_contacts_iv_icon);
+            RoundedImageView imageAvatar = holder.getView(R.id.item_contacts_iv_icon);
             holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
-            Glide.with(ChooseContactActivity.this).load((String) data.getAvatar()).into(imagAvatar);
+            Glide.with(ChooseContactActivity.this).load(data.getAvatar()).into(imageAvatar);
 
             //设置Tag
             holder.itemView.setTag(position);
