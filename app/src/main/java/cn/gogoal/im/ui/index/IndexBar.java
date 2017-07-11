@@ -23,12 +23,11 @@ import cn.gogoal.im.R;
 public class IndexBar extends View {
 
     //#在最后面（默认的数据源）
-    public static String[] INDEX_STRING = {"↑","A", "B", "C", "D", "E", "F", "G", "H", "I",
+    public static String[] INDEX_STRING = {"↑", "A", "B", "C", "D", "E", "F", "G", "H", "I",
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
             "W", "X", "Y", "Z", "#"};
 
-    //是否需要根据实际的数据来生成索引数据源（例如 只有 A B C 三种tag，那么索引栏就 A B C 三项）
-    private boolean isNeedRealIndex;
+    private boolean isNeedRealIndex = true;
 
     //索引数据源
     private List<String> mIndexDatas;
@@ -118,7 +117,7 @@ public class IndexBar extends View {
         indexBounds = new Rect();//存放每个绘制的index的Rect区域
 
         int textSize = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics());//默认的TextSize
+                TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics());//默认的TextSize
         mPressedBackground = Color.parseColor("#33000000");//默认按下是纯黑色
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.IndexBar, defStyleAttr, 0);
         int n = typedArray.getIndexCount();
@@ -218,13 +217,17 @@ public class IndexBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int t = getPaddingTop();//top的基准点(支持padding)
+        int t = getPaddingTop() + (getHeight() - mGapHeight * mIndexDatas.size())/2;//top的基准点(支持padding)
         String index;//每个要绘制的index内容
         for (int i = 0; i < mIndexDatas.size(); i++) {
             index = mIndexDatas.get(i);
-            Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();//获得画笔的FontMetrics，用来计算baseLine。因为drawText的y坐标，代表的是绘制的文字的baseLine的位置
+            //获得画笔的FontMetrics，用来计算baseLine。因为drawText的y坐标，代表的是绘制的文字的baseLine的位置
+            Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
             int baseline = (int) ((mGapHeight - fontMetrics.bottom - fontMetrics.top) / 2);//计算出在每格index区域，竖直居中的baseLine值
-            canvas.drawText(index, mWidth / 2 - mPaint.measureText(index) / 2, t + mGapHeight * i + baseline, mPaint);//调用drawText，居中显示绘制index
+            canvas.drawText(index,
+                    mWidth / 2 - mPaint.measureText(index) / 2,
+                    t + mGapHeight * i + baseline,
+                    mPaint);//调用drawText，居中显示绘制index
         }
     }
 
@@ -369,7 +372,9 @@ public class IndexBar extends View {
      * 计算gapHeight
      */
     private void computeGapHeight() {
-        mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
+//        mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
+//        mGapHeight = AppDevice.dp2px(getContext(),18);
+        mGapHeight = (int) mPaint.getTextSize() + 1;
     }
 
     /**

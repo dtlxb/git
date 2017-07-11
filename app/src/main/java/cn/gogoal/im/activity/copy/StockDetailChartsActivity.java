@@ -204,10 +204,9 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         fragmentList = new ArrayList<>();
 
         //将碎片加入碎片集合
-        KLog.e(getIntent().getIntExtra("fromtype", 0));
         timesFragment = new TimesFragment();
         fiveDayFragment = new FiveDayFragment();
-
+        KLog.e(stockType);
         if (stockType == STOCK_MARKE_INDEX) {
             authority_blog.setVisibility(View.GONE);
         }
@@ -293,7 +292,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             monthKBundle.putInt("stockType", STOCK_COMMON);
         }
         timesBundle.putInt("stock_charge_type", stock_charge_type);
-        timesBundle.putInt("treat_from",getIntent().getIntExtra("fromtype",0));
+        timesBundle.putInt("treat_from", getIntent().getIntExtra("fromtype", 0));
         fiveDayBundle.putInt("stock_charge_type", stock_charge_type);
         timesBundle.putDouble("closePrice", closePrice);
         putInBundle(timesBundle);
