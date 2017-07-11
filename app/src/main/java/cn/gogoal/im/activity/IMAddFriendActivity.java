@@ -72,8 +72,6 @@ public class IMAddFriendActivity extends BaseActivity {
         params.put("friend_id", userId);
         params.put("text", editYourMessage.getQuery().toString());
 
-        KLog.e(cn.gogoal.im.common.StringUtils.map2ggParameter(params));
-
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
