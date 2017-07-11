@@ -29,7 +29,7 @@ import cn.gogoal.im.common.AppDevice;
  * phone 18930640263
  * description :添加朋友
  */
-public class AddFraendListActivity extends BaseActivity {
+public class AddFriendListActivity extends BaseActivity {
 
     @BindArray(R.array.addFriendArray)
     String[] addFriendArray;

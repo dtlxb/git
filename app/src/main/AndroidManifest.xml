@@ -175,7 +175,7 @@
         <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
-        <activity android:name=".activity.AddFraendListActivity" />
+        <activity android:name=".activity.AddFriendListActivity" />
 
         <uses-library
             android:name="com.google.android.maps"

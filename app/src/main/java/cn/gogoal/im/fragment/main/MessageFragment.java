@@ -37,7 +37,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.AddFraendListActivity;
+import cn.gogoal.im.activity.AddFriendListActivity;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.Face2FaceActivity;
 import cn.gogoal.im.activity.IMNewFriendActivity;
@@ -256,7 +256,7 @@ public class MessageFragment extends BaseFragment {
                                 startActivity(new Intent(clickView.getContext(), QrcodeProcessActivity.class));
                                 break;
                             case 1://找人
-                                intent = new Intent(getContext(), AddFraendListActivity.class);
+                                intent = new Intent(getContext(), AddFriendListActivity.class);
 //                                intent.putExtra("search_index", 0);
                                 startActivity(intent);
                                 break;

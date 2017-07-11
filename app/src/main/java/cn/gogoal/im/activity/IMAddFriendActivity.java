@@ -28,7 +28,7 @@ public class IMAddFriendActivity extends BaseActivity {
     XTitle titleBar;
     @BindView(R.id.edit_your_message)
     SearchView editYourMessage;
-    private int userId = -1;
+    private String userId;
 
     @Override
     public int bindLayout() {
@@ -48,7 +48,7 @@ public class IMAddFriendActivity extends BaseActivity {
             }
         });*/
 
-        userId = getIntent().getIntExtra("user_id", -1);
+        userId = getIntent().getStringExtra("user_id");
 
         titleBar.setLeftText(R.string.tv_cancle);
 
@@ -64,12 +64,12 @@ public class IMAddFriendActivity extends BaseActivity {
         titleBar.addAction(sendAction);
     }
 
-    public void addFriend(int userId) {
+    public void addFriend(String userId) {
         final WaitDialog waitDialog = WaitDialog.getInstance("请求发送中...", R.mipmap.login_loading, true);
         waitDialog.show(getSupportFragmentManager());
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
-        params.put("friend_id", String.valueOf(userId));
+        params.put("friend_id", userId);
         params.put("text", editYourMessage.getQuery().toString());
 
         KLog.e(cn.gogoal.im.common.StringUtils.map2ggParameter(params));
