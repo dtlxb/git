@@ -39,7 +39,12 @@ android {
     productFlavors {
         //通用包
         general {
-            manifestPlaceholders = [CHANNEL_NAME: "ng-tongyong"]
+            manifestPlaceholders = [CHANNEL_NAME: "gg-tongyong"]
+            proguardFile 'proguard-rules.pro'
+        }
+        //腾讯应用宝
+        yinyongbao {
+            manifestPlaceholders = [CHANNEL_NAME: "gg-yinyongbao"]
             proguardFile 'proguard-rules.pro'
         }
     }
