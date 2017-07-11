@@ -217,14 +217,17 @@ public class IndexBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int t = getPaddingTop();//top的基准点(支持padding)
+        int t = getPaddingTop() + (getHeight() - mGapHeight * mIndexDatas.size())/2;//top的基准点(支持padding)
         String index;//每个要绘制的index内容
         for (int i = 0; i < mIndexDatas.size(); i++) {
             index = mIndexDatas.get(i);
             //获得画笔的FontMetrics，用来计算baseLine。因为drawText的y坐标，代表的是绘制的文字的baseLine的位置
             Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
             int baseline = (int) ((mGapHeight - fontMetrics.bottom - fontMetrics.top) / 2);//计算出在每格index区域，竖直居中的baseLine值
-            canvas.drawText(index, mWidth / 2 - mPaint.measureText(index) / 2, t + mGapHeight * i + baseline, mPaint);//调用drawText，居中显示绘制index
+            canvas.drawText(index,
+                    mWidth / 2 - mPaint.measureText(index) / 2,
+                    t + mGapHeight * i + baseline,
+                    mPaint);//调用drawText，居中显示绘制index
         }
     }
 

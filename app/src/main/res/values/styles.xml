@@ -29,15 +29,6 @@
 
     <style name="DialogEditText" parent="Widget.AppCompat.EditText" />
 
-    <style name="RadioTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@android:color/transparent</item>
-        <item name="tabIndicatorHeight">0dp</item>
-        <item name="tabPaddingStart">0dp</item>
-        <item name="tabPaddingEnd">0dp</item>
-        <item name="tabTextAppearance">@style/MainTabItem</item>
-        <item name="tabSelectedTextColor">@color/colorPrimary</item>
-    </style>
-
     <style name="NormalTabItem">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/textColor_333333</item>
@@ -390,5 +381,8 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-
+    <style name="InfomationTabTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
 </resources>

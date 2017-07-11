@@ -4,13 +4,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.simple.eventbus.Subscriber;
 
@@ -21,14 +21,13 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MessageHolderActivity;
+import cn.gogoal.im.adapter.InfoTabAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.fragment.infomation.FocusNewsFragment;
 import cn.gogoal.im.fragment.infomation.InfomationTabFragment;
-import cn.gogoal.im.fragment.infomation.SevenBy24Fragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 /**
@@ -54,6 +53,7 @@ public class InfomationFragment extends BaseFragment {
     @BindView(R.id.iv_message)
     ImageView ivMessageTag;
 
+    private InfoTabAdapter infoTabAdapter;
     //消息
     private BadgeView badge;
     private int unReadCount;
@@ -71,7 +71,7 @@ public class InfomationFragment extends BaseFragment {
     }
 
     @Override
-    public void doBusiness(Context mContext) {
+    public void doBusiness(final Context mContext) {
 
         final int[] tabTypes = {
 //                InfomationTabFragment.INFOMATION_TYPE_GET_ASK_NEWS,
@@ -80,34 +80,28 @@ public class InfomationFragment extends BaseFragment {
                 InfomationTabFragment.INFOMATION_TYPE_SKY_VIEW_POINT,
                 InfomationTabFragment.INFOMATION_TYPE_POLICY_DYNAMICS};
 
+        infoTabAdapter = new InfoTabAdapter(getChildFragmentManager(),
+                mContext,
+                tabTypes,
+                infoArrays);
 
-        vpInfomation.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
-
-            @Override
-            public Fragment getItem(int position) {
-                return (position == 0 ? new SevenBy24Fragment() : (
-                        position == 1 ? new FocusNewsFragment() :
-                                InfomationTabFragment.newInstance(tabTypes[position - 2])));
-            }
-
-            @Override
-            public int getCount() {
-                return infoArrays.length;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return infoArrays[position];
-            }
-        });
+        vpInfomation.setAdapter(infoTabAdapter);
 
         tabInfomation.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 ivCalendar.setVisibility(tab.getPosition() == 1 ? View.VISIBLE : View.GONE);
+                TextView tabTextView = (TextView) tab.getCustomView();
+                if (tabTextView!=null){
+                    tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+                }
             }
 
             public void onTabUnselected(TabLayout.Tab tab) {
+                TextView tabTextView = (TextView) tab.getCustomView();
+                if (tabTextView!=null){
+                    tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+                }
             }
 
             public void onTabReselected(TabLayout.Tab tab) {
@@ -115,6 +109,14 @@ public class InfomationFragment extends BaseFragment {
         });
 
         tabInfomation.setupWithViewPager(vpInfomation);
+
+        for (int i=0;i<infoArrays.length;i++){
+            TabLayout.Tab tab = tabInfomation.getTabAt(i);
+            if (tab != null) {
+                tab.setCustomView(infoTabAdapter.getTabView(i));
+            }
+        }
+
         vpInfomation.setOffscreenPageLimit(7);
 
         badge = new BadgeView(getActivity());
@@ -150,8 +152,8 @@ public class InfomationFragment extends BaseFragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                AppManager.getInstance().sendMessage("focus_news_in_date", year + "-"+
-                        StringUtils.formatInteger(month+1) + "-"+
+                AppManager.getInstance().sendMessage("focus_news_in_date", year + "-" +
+                        StringUtils.formatInteger(month + 1) + "-" +
                         StringUtils.formatInteger(dayOfMonth));
             }
         }, Calendar.getInstance().get(Calendar.YEAR),
