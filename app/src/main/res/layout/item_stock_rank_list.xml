@@ -62,7 +62,7 @@
         android:visibility="gone"
         android:layout_height="wrap_content">
 
-        <hply.com.niugu.autofixtext.AutofitTextView
+        <TextView
             android:id="@+id/tv_mystock_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,9 +74,7 @@
             android:layout_centerInParent="true"
             android:text="@string/default_char"
             android:singleLine="true"
-            android:textSize="12sp"
-            app:minTextSize="8sp"
-            app:sizeToFit="true"/>
+            android:textSize="12sp"/>
 
     </RelativeLayout>
 

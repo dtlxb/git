@@ -90,7 +90,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
-    private ArrayList<MyStockData> cloneDatas;
+    private ArrayList<MyStockData> cloneDatas=new ArrayList<>();
 
     private Map<String, String> tagMap = new HashMap<>();
 
@@ -239,7 +239,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                 tagMap = JsonUtils.toMap(JSONObject.parseObject(responseInfo).getString("data"));
                             }
                             refreshComplate();
-                            cloneDatas = (ArrayList<MyStockData>) myStockDatas.clone();
+                            cloneDatas .addAll(myStockDatas);
                             myStockAdapter.notifyDataSetChanged();
                         }
 
@@ -382,6 +382,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private int sortReset() {
         myStockDatas.clear();
         myStockDatas.addAll(cloneDatas);
+//        myStockAdapter.notifyDataSetChanged();
         return 0;
     }
 
