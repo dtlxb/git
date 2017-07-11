@@ -1,7 +1,5 @@
 package cn.gogoal.im.bean.stock;
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
@@ -41,7 +39,7 @@ public class MyStockData implements Serializable,Cloneable {
 //    private String eps_y1;
 //    private String capitalization;
 //    private String high_price;
-//    private String insertdate;
+    private String insertdate;
     private String source;
 //    private String low_price;
 //    private String turnover_rate;
@@ -150,6 +148,14 @@ public class MyStockData implements Serializable,Cloneable {
 
     public void setSymbol_type(int symbol_type) {
         this.symbol_type = symbol_type;
+    }
+
+    public String getInsertdate() {
+        return insertdate;
+    }
+
+    public void setInsertdate(String insertdate) {
+        this.insertdate = insertdate;
     }
 
     @Override
