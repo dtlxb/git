@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +80,6 @@ public class TurnoverRateFragment extends BaseFragment {
                         chartBeanList.add(new ChartBean(chartObject.get("turnover").getAsFloat(),
                                 chartObject.get("date").getAsString().substring(5, 10)));
                     }
-                    KLog.e(chartBeanList);
                     if (chartBeanList.size() > 0) {
                         turnOver_layout.setVisibility(View.VISIBLE);
                         barView.setTextSize(AppDevice.dp2px(getActivity(), 10));

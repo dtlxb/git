@@ -216,7 +216,7 @@ public class FocusNewsFragment extends BaseFragment {
         protected void convert(BaseViewHolder holder, final InfomationData.Data data, int position) {
             holder.setText(R.id.tv_item_normal_info_title, data.getTitle());
 
-            holder.setText(R.id.tv_item_normal_sub_title,
+            holder.setText(R.id.tv_item_normal_header_title,
                     TextUtils.isEmpty(data.getSummary()) ? "" : data.getSummary());
 
             ImageView newsImage = holder.getView(R.id.iv_news_iamge);

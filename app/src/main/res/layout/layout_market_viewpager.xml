@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.gogoal.im.ui.view.AutoScrollViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="110dp"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
-</cn.gogoal.im.ui.view.AutoScrollViewPager>
+    <cn.gogoal.im.ui.view.AutoScrollViewPager
+        android:id="@+id/vp_market"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
+</FrameLayout>

@@ -216,9 +216,9 @@ public class ExpandableLayout extends LinearLayout implements View.OnClickListen
         ValueAnimator valueAnimator;
         if (mCollapsed) {
 //            mTvContent.setMaxLines(mMaxCollapsedLines);
-            valueAnimator = new ValueAnimator().ofInt(getHeight(), mCollapsedHeight);
+            valueAnimator = ValueAnimator.ofInt(getHeight(), mCollapsedHeight);
         } else {
-            valueAnimator = new ValueAnimator().ofInt(getHeight(), getHeight() +
+            valueAnimator = ValueAnimator.ofInt(getHeight(), getHeight() +
                     mTextHeightWithMaxLines - mTvContent.getHeight());
         }
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
@@ -265,8 +265,8 @@ public class ExpandableLayout extends LinearLayout implements View.OnClickListen
     }
     /**
      * 重新测量
-     * @param widthMeasureSpec
-     * @param heightMeasureSpec
+     * @param widthMeasureSpec;
+     * @param heightMeasureSpec;
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

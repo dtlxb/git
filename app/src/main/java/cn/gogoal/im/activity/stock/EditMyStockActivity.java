@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -20,9 +21,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.StockUtils;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelpCallback;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelper;
@@ -55,7 +54,9 @@ public class EditMyStockActivity extends BaseActivity {
     /**
      * 数据源
      */
-    private List<MyStockData> myStockList = null;
+    private ArrayList<MyStockData> myStockList = null;
+
+    private ArrayList<MyStockData> myStockListNormal = null;
 
     /*
      * 选中结果
@@ -84,7 +85,13 @@ public class EditMyStockActivity extends BaseActivity {
 
         BaseActivity.initRecycleView(rvEditDrag, 0);
 
-        myStockList = (List<MyStockData>) getIntent().getSerializableExtra("my_stock_edit_list");
+        myStockList = StockUtils.getMyStock();
+
+        setData();
+
+        for (MyStockData data : myStockList) {
+            KLog.e("name=" + data.getStock_code() + ";sort=" + data.getStock_sort());
+        }
 
         dragAdapter = new DragAdapter(mContext, myStockList);
         dragAdapter.setOnItemCheckedChangeListener(onCheckedChangeListener);
@@ -105,16 +112,19 @@ public class EditMyStockActivity extends BaseActivity {
             @Override
             public void add(MyStockData data) {
                 result.add(data);
+                KLog.e("添加：" + data.getStock_name());
                 notifCountText(result.size());
             }
 
             @Override
             public void remove(MyStockData data) {
                 result.remove(data);
+                KLog.d("移除：" + data.getStock_name());
                 notifCountText(result.size());
             }
         });
 
+        //全选按钮
         tvDragSelectorAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,23 +151,28 @@ public class EditMyStockActivity extends BaseActivity {
         tvDragDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isSelectedAll(myStockList)){
-                    HashMap<String,String> params=new HashMap<>();
+
+                KLog.e(isSelectedAll(myStockList));
+
+                if (isSelectedAll(myStockList)) {
+                    HashMap<String, String> params = UserUtils.getTokenParams();
                     params.put("clear", "1");
+
                     new GGOKHTTP(params, GGOKHTTP.RESET_MYSTOCKS, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
                             KLog.e(responseInfo);
-                            if (JsonUtils.getIntValue(responseInfo,"code")==0){
-
-                            }
+                            myStockList.clear();
+                            StockUtils.clearLocalMyStock();
+                            dragAdapter.notifyDataSetChanged();
                         }
+
                         @Override
                         public void onFailure(String msg) {
-
+                            KLog.e(msg);
                         }
-                    });
-                }else {
+                    }).startGet();
+                } else {
                     for (MyStockData data : result) {
                         fullCodeDatas.add(data.getSource() + data.getStock_code());
                         dragAdapter.removeItem(data);
@@ -170,6 +185,14 @@ public class EditMyStockActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void setData() {
+        if (myStockListNormal == null) {
+            myStockListNormal = new ArrayList<>();
+        }
+        myStockListNormal.clear();
+        myStockListNormal.addAll(myStockList);
     }
 
     /**
@@ -211,8 +234,6 @@ public class EditMyStockActivity extends BaseActivity {
 
                 @Override
                 public boolean onMove(int srcPosition, int targetPosition) {
-//                    KLog.e("srcPosition="+srcPosition+";targetPosition="+targetPosition);
-
                     if (myStockList != null) {
                         // 更换数据源中的数据Item的位置
                         Collections.swap(myStockList, srcPosition, targetPosition);
@@ -226,16 +247,20 @@ public class EditMyStockActivity extends BaseActivity {
 
                 @Override
                 public void onSelectedChanged(int fromPosition, int toPosition) {
-                    HashMap<String, String> tokenParams = UserUtils.getTokenParams();
-                    tokenParams.put("fromIndex",String.valueOf(fromPosition));
-                    tokenParams.put("toIndex",String.valueOf(toPosition));
+                    KLog.e("fromPosition=" + fromPosition + ";toPosition=" + toPosition);
+                    KLog.e("fromIndex=" + myStockListNormal.get(fromPosition).getStock_sort() +
+                            ";toIndex=" + myStockListNormal.get(toPosition).getStock_sort());
 
-                    KLog.e(StringUtils.map2ggParameter(tokenParams));
+                    HashMap<String, String> tokenParams = UserUtils.getTokenParams();
+                    tokenParams.put("fromIndex", String.valueOf(myStockListNormal.get(fromPosition).getStock_sort()));
+                    tokenParams.put("toIndex", String.valueOf(myStockListNormal.get(toPosition).getStock_sort()));
 
                     new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
                             KLog.e(responseInfo);
+                            dragAdapter.notifyDataSetChanged();
+                            setData();
                         }
 
                         @Override
@@ -266,5 +291,16 @@ public class EditMyStockActivity extends BaseActivity {
         void add(MyStockData data);
 
         void remove(MyStockData data);
+    }
+
+    class SrockAsync extends AsyncTask<MyStockData, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(MyStockData... params) {
+            for (MyStockData data : params) {
+                KLog.e(data.getStock_name() + ";;" + data.getStock_sort());
+            }
+            return null;
+        }
     }
 }

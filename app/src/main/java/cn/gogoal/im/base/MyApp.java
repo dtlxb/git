@@ -129,7 +129,7 @@ public class MyApp extends LitePalApplication {
 
             }
         });
-//        }
+
 
         // leancloud推送注册
         AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {

@@ -16,7 +16,6 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
@@ -31,14 +30,14 @@ import hply.com.niugu.bean.SearchStockData;
  */
 public class SearchStockAdapter extends MyBaseAdapter<SearchStockData> {
 
-    private final Set<String> myStockSet;
+    private final ArrayList<String> myStockSet;
 
     private ArrayList<SearchStockData> list;
     private SearchView editText;
 
     public SearchStockAdapter(ArrayList<SearchStockData> list, SearchView editText) {
         super(list);
-        myStockSet = StockUtils.getMyStockSet();
+        myStockSet = StockUtils.getMyStockCodeList();
         this.list = list;
         this.editText = editText;
     }

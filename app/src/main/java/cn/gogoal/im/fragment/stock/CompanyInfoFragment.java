@@ -436,6 +436,7 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                //KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     peerData = object.getJSONObject("data");
@@ -460,48 +461,54 @@ public class CompanyInfoFragment extends BaseFragment {
         String value = null;
         if (listType == PeerComparisonAdaprer.TYPE_MARKET_CAP) {
             jsonArray = data.getJSONArray("totalValueData");
-            value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getString("top1"));
+            if (jsonArray != null && jsonArray.size() != 0) {
+                value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getString("top1"));
+            }
         } else if (listType == PeerComparisonAdaprer.TYPE_GROSS_INCOME) {
             jsonArray = data.getJSONArray("grossRevenueData");
-            value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top1") / 10000);
+            if (jsonArray != null && jsonArray.size() != 0) {
+                value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top1") / 10000);
+            }
         } else {
             jsonArray = data.getJSONArray("retainedProfitsData");
-            value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top1") / 10000);
+            if (jsonArray != null && jsonArray.size() != 0) {
+                value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top1") / 10000);
+            }
         }
 
-        if (listType == PeerComparisonAdaprer.TYPE_MARKET_CAP) {
-            for (int i = 0; i < jsonArray.size() - 1; i++) {
-                peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
-                        jsonArray.getJSONObject(i).getString("sname"),
-                        StringUtils.save2Significand(jsonArray.getJSONObject(i).getString("tcap"))));
+        if (jsonArray != null && jsonArray.size() != 0) {
+            if (listType == PeerComparisonAdaprer.TYPE_MARKET_CAP) {
+                for (int i = 0; i < jsonArray.size() - 1; i++) {
+                    peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
+                            jsonArray.getJSONObject(i).getString("sname"),
+                            StringUtils.save2Significand(jsonArray.getJSONObject(i).getString("tcap"))));
+                }
+
+                peerLists.add(1, new PeerCompariData(null, "最高值", value));
+                peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
+                        jsonArray.getJSONObject(jsonArray.size() - 1).getString("top6"))));
+
+            } else if (listType == PeerComparisonAdaprer.TYPE_GROSS_INCOME) {
+                for (int i = 0; i < jsonArray.size() - 1; i++) {
+                    peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
+                            jsonArray.getJSONObject(i).getString("sname"), StringUtils.save2Significand(
+                            jsonArray.getJSONObject(i).getDoubleValue("ffs2_01") / 10000)));
+                }
+
+                peerLists.add(1, new PeerCompariData(null, "最高值", value));
+                peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
+                        jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top6") / 10000)));
+            } else {
+                for (int i = 0; i < jsonArray.size() - 1; i++) {
+                    peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
+                            jsonArray.getJSONObject(i).getString("sname"), StringUtils.save2Significand(
+                            jsonArray.getJSONObject(i).getDoubleValue("ffs2_40") / 10000)));
+                }
+
+                peerLists.add(1, new PeerCompariData(null, "最高值", value));
+                peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
+                        jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top6") / 10000)));
             }
-
-            peerLists.add(1, new PeerCompariData(null, "最高值", value));
-            peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
-                    jsonArray.getJSONObject(jsonArray.size() - 1).getString("top6"))));
-
-        } else if (listType == PeerComparisonAdaprer.TYPE_GROSS_INCOME) {
-            for (int i = 0; i < jsonArray.size() - 1; i++) {
-                peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
-                        jsonArray.getJSONObject(i).getString("sname"), StringUtils.save2Significand(
-                        jsonArray.getJSONObject(i).getDoubleValue("ffs2_01") / 10000)));
-            }
-
-            peerLists.add(1, new PeerCompariData(null, "最高值", value));
-            peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
-                    jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top6") / 10000)));
-
-        } else {
-            for (int i = 0; i < jsonArray.size() - 1; i++) {
-                peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
-                        jsonArray.getJSONObject(i).getString("sname"), StringUtils.save2Significand(
-                        jsonArray.getJSONObject(i).getDoubleValue("ffs2_40") / 10000)));
-            }
-
-            peerLists.add(1, new PeerCompariData(null, "最高值", value));
-            peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
-                    jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top6") / 10000)));
-
         }
 
         peerAdapter = new PeerComparisonAdaprer(getActivity(), peerLists, value, screenWidth, listType);

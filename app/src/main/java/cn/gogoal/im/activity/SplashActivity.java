@@ -15,11 +15,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.servise.AppBackServise;
-import cn.gogoal.im.servise.MessageSaveService;
 
 /**
  * author wangjd on 2017/5/16 0016.
@@ -76,7 +74,6 @@ public class SplashActivity extends Activity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 final AppBackServise.AppBackBinder sBinder = (AppBackServise.AppBackBinder) service;
                 sBinder.ggAutoLogin(SplashActivity.this);
-
                 sBinder.initData();
             }
 

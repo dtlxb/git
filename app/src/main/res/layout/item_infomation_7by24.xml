@@ -66,6 +66,7 @@
             app:maxCollapsedLines="3"
             app:collapseExpandTextColor="@android:color/white"
             app:contentTextColor="@color/textColor_333333"
+            app:contentTextSize="16sp"
             app:collapseExpandTextSize="16sp"/>
 
     </LinearLayout>

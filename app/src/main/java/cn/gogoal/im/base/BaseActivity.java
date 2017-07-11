@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -43,8 +44,11 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.catcher.Cockroach;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XTitle;
@@ -78,6 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
+        catcher();
 
         ButterKnife.bind(this);
 
@@ -89,6 +94,17 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         doBusiness(this);
 
+    }
+
+    private void catcher() {
+        Cockroach.install(new Cockroach.ExceptionHandler() {
+            @Override
+            public void handlerException(Thread thread, Throwable throwable) {
+                FileUtil.writeSDcard("thread="+thread.getName()+
+                        "throwable="+throwable.getMessage(),
+                        Environment.getExternalStorageDirectory().getAbsolutePath()+"/gpgoal/log_"+ CalendarUtils.getDataTime()+"_log");
+            }
+        });
     }
 
     private void setTranslucentStatus() {
@@ -341,6 +357,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 //            StatusBarUtil.with(this).destroy();
         } catch (Exception e) {
         }
+        Cockroach.uninstall();
     }
 
     public BaseActivity getActivity() {

@@ -51,7 +51,7 @@ public class MarketViewPaerAdapter extends DelegateAdapter.Adapter<MainViewHolde
 
     @Override
     public void onBindViewHolder(MainViewHolder viewHolder, int parentPosition) {
-        AutoScrollViewPager viewPager = (AutoScrollViewPager) viewHolder.itemView;
+        AutoScrollViewPager viewPager = viewHolder.findView(R.id.vp_market);
         viewPager.stopAutoScroll();
         viewPager.setDotSelectedColor(Color.BLACK);
         viewPager.setAdapter(new PagerAdapter() {

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.Impl;
@@ -20,7 +19,7 @@ import hply.com.niugu.bean.HotSearchStockData;
  */
 public class HotSearchAdapter extends MyBaseAdapter<HotSearchStockData> {
 
-    private Set<String> array;
+    private ArrayList<String> array;
     private ArrayList<HotSearchStockData> list;
     private boolean showAddBtn;
 
@@ -28,7 +27,7 @@ public class HotSearchAdapter extends MyBaseAdapter<HotSearchStockData> {
         super(list);
         this.showAddBtn = showAddBtn;
         this.list = list;
-        array = StockUtils.getMyStockSet();
+        array = StockUtils.getMyStockCodeList();
     }
 
     @Override

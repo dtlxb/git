@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
-import cn.gogoal.im.bean.companytags.RevenueData;
 import cn.gogoal.im.bean.companytags.StockHolderBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -28,7 +26,8 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.LineView;
 
 /**
- * Created by huangxx on 2017/6/30.
+ * Created by huangxx on 2017/6/30.;
+ * 主流机构持仓
  */
 
 public class StockHoldersFragment extends BaseFragment {
@@ -74,7 +73,6 @@ public class StockHoldersFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 JsonObject result = JsonUtils.toJsonObject(responseInfo);
-                KLog.e(responseInfo);
                 if (result.get("code").getAsInt() == 0) {
                     Gson gson = new Gson();
                     BaseBeanList<StockHolderBean> beanList = gson.fromJson(responseInfo,
@@ -91,7 +89,6 @@ public class StockHoldersFragment extends BaseFragment {
                         stockLineView.setMarginBar(AppDevice.dp2px(getActivity(), 3));
                         stockLineView.setLineSize(AppDevice.dp2px(getActivity(), 1));
                         stockLineView.setChartData(stockHolderBeans);
-                        KLog.e(stockHolderBeans);
                     }
                 }
             }
