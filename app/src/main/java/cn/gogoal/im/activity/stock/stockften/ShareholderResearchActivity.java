@@ -212,7 +212,9 @@ public class ShareholderResearchActivity extends BaseActivity {
                     if (delegateAdapter.getItemCount() >= 23) {
                         rv_research.scrollToPosition(23);
                     } else {
-                        rv_research.scrollToPosition(delegateAdapter.getItemCount());
+                        if (delegateAdapter.getItemCount() > 1) {
+                            rv_research.scrollToPosition(delegateAdapter.getItemCount() - 1);
+                        }
                     }
                 }
             }
