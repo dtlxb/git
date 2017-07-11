@@ -12,11 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hply.imagepicker.view.SuperCheckBox;
+import com.socks.library.KLog;
 
+import java.util.HashMap;
 import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.stock.MyStockData;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.UserUtils;
 
 public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentViewHolder> {
 
@@ -61,7 +65,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
     }
 
     @Override
-    public void onBindViewHolder(final MainContentViewHolder holder, int position) {
+    public void onBindViewHolder(final MainContentViewHolder holder, final int position) {
         holder.setData();
         holder.mIv2Top.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +74,8 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
                 notifyDataSetChanged();
                 dataList.add(0,remove);
                 notifyDataSetChanged();
+
+                zhiDing(dataList.get(position).getStock_sort());
             }
         });
     }
@@ -93,6 +99,27 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
 
     public interface OnCheckedChangeListener {
         void onItemCheckedChange(CompoundButton view, int position, boolean checked);
+    }
+
+    private void zhiDing(int stockSort){
+        HashMap<String, String> tokenParams = UserUtils.getTokenParams();
+        tokenParams.put("fromIndex", String.valueOf(stockSort));
+        tokenParams.put("toIndex", String.valueOf(dataList.get(0).getStock_sort()));
+
+        cn.gogoal.im.common.StringUtils.map2ggParameter(tokenParams);
+
+        new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                DragAdapter.this.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        }).startGet();
     }
 
     class MainContentViewHolder extends RecyclerView.ViewHolder{

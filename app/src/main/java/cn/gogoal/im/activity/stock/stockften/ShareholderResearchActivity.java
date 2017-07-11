@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.alilayout.DelegateAdapter;
 import com.hply.alilayout.VirtualLayoutManager;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -147,7 +146,6 @@ public class ShareholderResearchActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
-                    KLog.e(data);
                     if (data.size() != 0) {
                         ArrayList<TenTradableHolderData> HolderList = new ArrayList<>();
                         for (int i = 0; i < data.size(); i++) {

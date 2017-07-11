@@ -340,7 +340,6 @@ public class MessageFragment extends BaseFragment {
             if (messageBean.getLastMessage() != null) {
                 AVIMMessage cacheMessage = JSON.parseObject(messageBean.getLastMessage(), AVIMMessage.class);
                 String content = cacheMessage.getContent();
-                KLog.e(content);
                 JSONObject contentObject = JSON.parseObject(content);
                 JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                 String _lctype = contentObject.getString("_lctype");

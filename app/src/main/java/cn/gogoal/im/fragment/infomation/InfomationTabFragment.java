@@ -5,9 +5,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -124,6 +124,7 @@ public class InfomationTabFragment extends BaseFragment {
                 getInfomation(AppConst.REFRESH_TYPE_SWIPEREFRESH, tabType);
                 refreshlayout.refreshComplete();
             }
+
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
 //                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
@@ -230,12 +231,15 @@ public class InfomationTabFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final InfomationData.Data data, int position) {
-            holder.setText(R.id.tv_item_normal_info_title, data.getTitle());
+            TextView tvTitle = holder.getView(R.id.tv_item_normal_info_title);
 
-            holder.setText(R.id.tv_item_normal_sub_title,
-                    TextUtils.isEmpty(data.getSummary()) ? "" : StringUtils.getNotNullString(data.getSummary()));
+            tvTitle.setText(StringUtils.getNotNullString(
+                    tabType == INFOMATION_TYPE_SKY_VIEW_POINT ? data.getSummary() : data.getTitle()));
 
-            holder.setVisible(R.id.tv_item_normal_sub_title, tabType == INFOMATION_TYPE_SKY_VIEW_POINT);
+
+            holder.setText(R.id.tv_item_normal_header_title, StringUtils.getNotNullString(data.getTitle()));
+
+            holder.setVisible(R.id.tv_item_normal_header_title, tabType == INFOMATION_TYPE_SKY_VIEW_POINT);
 
             holder.setText(R.id.tv_item_normal_info_info,
                     String.format(Locale.getDefault(),

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -39,8 +39,8 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
 import cn.gogoal.im.bean.stock.MyStockData;
-import cn.gogoal.im.bean.stock.StockTag;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.JsonUtils;
@@ -92,7 +92,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
-    private ArrayList<MyStockData> cloneDatas;
+    private ArrayList<MyStockData> cloneDatas=new ArrayList<>();
+
+    private Map<String, String> tagMap = new HashMap<>();
 
     @Override
     public int bindLayout() {
@@ -133,7 +135,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         } catch (Exception e) {
             KLog.e(e.getMessage());
         }
-
     }
 
     public void refreshMyStock(int refreshType) {
@@ -165,11 +166,23 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private void iniMyStockList() {
         myStockAdapter = new MyStockAdapter(myStockDatas);
 
-        rvMyStock.setLayoutManager(new CatchLayoutManager(getContext()));
+        final CatchLayoutManager layoutManager = new CatchLayoutManager(getContext());
+        rvMyStock.setLayoutManager(layoutManager);
         rvMyStock.addItemDecoration(new NormalItemDecoration(getContext()));
 
         rvMyStock.setItemAnimator(new DefaultItemAnimator());
         rvMyStock.setAdapter(myStockAdapter);
+//        rvMyStock.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                refreshLayout.setEnabled(layoutManager.findFirstCompletelyVisibleItemPosition() == 0);
+//            }
+//        });
     }
 
     /**
@@ -214,35 +227,21 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     final ArrayList<MyStockData> parseData = JsonUtils.parseJsonObject(responseInfo, MyStockBean.class).getData();
 
+                    myStockDatas.addAll(parseData);
+
                     String stockCodes =
                             StockUtils.getStockCodes(JsonUtils.parseJsonObject(responseInfo).getAsJsonArray("data"));
-
                     HashMap<String, String> map = new HashMap<>();
                     map.put("codes", stockCodes);
 
                     new GGOKHTTP(map, GGOKHTTP.GET_STOCK_TAG, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
-
                             if (JsonUtils.getIntValue(responseInfo, "code") == 0) {
-                                for (MyStockData data : parseData) {
-                                    StockTag tag = new StockTag();
-                                    JsonObject objectTag = JsonUtils.parseJsonObject(responseInfo).get("data").getAsJsonObject();
-                                    if (data.getStock_code() != null && objectTag.has(data.getStock_code())) {
-                                        tag.setType(
-                                                StringUtils.parseStringDouble(
-                                                        objectTag.get(data.getStock_code()).getAsString()).intValue());
-                                    } else {
-                                        tag.setType(-2);
-                                    }
-                                    data.setTag(tag);
-                                    if (!myStockDatas.contains(data)) {
-                                        myStockDatas.add(data);
-                                    }
-                                }
+                                tagMap = JsonUtils.toMap(JSONObject.parseObject(responseInfo).getString("data"));
                             }
                             refreshComplate();
-                            cloneDatas = (ArrayList<MyStockData>) myStockDatas.clone();
+                            cloneDatas .addAll(myStockDatas);
                             myStockAdapter.notifyDataSetChanged();
                         }
 
@@ -253,8 +252,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         }
                     }).startGet();
 
+                    myStockAdapter.notifyDataSetChanged();
+
                     //缓存自选股
-                    StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
+                    StockUtils.saveMyStock(myStockDatas);
 
                 } else if (code == 1001) {
                     refreshComplate();
@@ -279,8 +280,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         new GGOKHTTP(params, GGOKHTTP.GET_MYSTOCKS, ggHttpInterface).startGet();
     }
 
-    private void refreshComplate(){
-        if (refreshLayout!=null){
+    private void refreshComplate() {
+        if (refreshLayout != null) {
             refreshLayout.refreshComplete();
         }
     }
@@ -288,17 +289,17 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     /**
      * 没有正确加载自选股列表的时候(没网络，请求出错，或者没有自选股)时，不允许编辑
      */
-    void editEnable(boolean enable) {
+    void editEnable(final boolean enable) {
         try {
             final ImageView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
-            tvEditMyStock.setEnabled(enable);
-            tvEditMyStock.setClickable(enable);
             tvEditMyStock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), EditMyStockActivity.class);
-                    intent.putExtra("my_stock_edit_list", myStockDatas);
-                    startActivity(intent);
+                    if (enable) {
+                        startActivity(new Intent(v.getContext(), EditMyStockActivity.class));
+                    } else {
+                        UIHelper.toast(getActivity(), "没有自选股可以编辑");
+                    }
                 }
             });
         } catch (Exception e) {
@@ -344,7 +345,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return Double.compare(o1.getPrice(), o2.getPrice());
                     } else {
-                        return sortReset();
+                        return sortReset(o1,o2);
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
@@ -354,17 +355,19 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return StringUtils.parseStringDouble(o1.getChange_rate()).compareTo(StringUtils.parseStringDouble(o2.getChange_rate()));
                     } else {
-                        return sortReset();
+                        return sortReset(o1,o2);
                     }
                 } else if (view.getId() == R.id.tv_mystock_rag) {
                     tvMystockPrice.setViewStateNormal();
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return compareLong(o2.getTag().getType(),o1.getTag().getType());
+                        return compareLong(Integer.parseInt(tagMap.get(o2.getStock_code())),
+                                Integer.parseInt(tagMap.get(o1.getStock_code())));
                     } else if (sortType == 1) {
-                        return compareLong(o1.getTag().getType(),o2.getTag().getType());
+                        return compareLong(Integer.parseInt(tagMap.get(o1.getStock_code())),
+                                Integer.parseInt(tagMap.get(o2.getStock_code())));
                     } else {
-                        return sortReset();
+                        return sortReset(o1, o2);
                     }
                 }
                 return 0;
@@ -378,10 +381,15 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 
-    private int sortReset(){
-        myStockDatas.clear();
-        myStockDatas.addAll(cloneDatas);
-        return 0;
+    private int sortReset(MyStockData o1,MyStockData o2) {
+        if (Build.VERSION.SDK_INT>24){
+            myStockDatas.clear();
+            myStockDatas.addAll(cloneDatas);
+            return 0;
+        }else {
+            return compareLong(CalendarUtils.parseString2Long(o2.getInsertdate()),
+                    CalendarUtils.parseString2Long(o1.getInsertdate()));
+        }
     }
 
     /**
@@ -389,8 +397,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      */
     private class MyStockAdapter extends CommonAdapter<MyStockData, BaseViewHolder> {
 
+        private List<MyStockData> datas;
+
         private MyStockAdapter(List<MyStockData> datas) {
             super(R.layout.item_stock_rank_list, datas);
+            this.datas = datas;
         }
 
         @Override
@@ -407,16 +418,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
             priceView.setText(StringUtils.saveSignificand(data.getPrice(), 2));
 
-            //标签
+//            //标签
             holder.setVisible(R.id.layout_stock_tag, true);
-            if (data.getTag() == null) {
-                holder.setText(R.id.tv_mystock_tag, "未鉴定");
+
+            TextView tvTag = holder.getView(R.id.tv_mystock_tag);
+            if (tagMap.get(data.getStock_code()) == null) {
+                setStockTag(tvTag, -2);
             } else {
-                setStockTag((TextView) holder.getView(R.id.tv_mystock_tag), data.getTag().getType());
-//                holder.setText(R.id.tv_mystock_tag, data.getTag().getName());
+                setStockTag(tvTag, StringUtils.parseStringDouble(tagMap.get(data.getStock_code())).intValue());
             }
 
-            //自作主张
             TextView typeView = holder.getView(R.id.tv_stock_type);
 
             if (data.getSymbol_type() == 1 || data.getSymbol_type() == 2) {//是否是股票、指数
@@ -525,26 +536,26 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         private void setStockTag(TextView view, int type) {
             switch (type) {
                 case -2:
-                    view.setText("未鉴定");
-                    view.setTextColor(getResColor(R.color.textColor_999999));
-                    view.setBackgroundResource(R.drawable.shape_stock_tag_no_appraisal);
-                    break;
-                case -1:
                     view.setText("平凡");
                     view.setTextColor(getResColor(R.color.textColor_999999));
                     view.setBackgroundResource(R.drawable.shape_stock_tag_no_appraisal);
                     break;
-                case 0:
-                    view.setText("好公司");//历史好公司
+                case -1:
+                    view.setText("未选入");
                     view.setTextColor(getResColor(R.color.textColor_999999));
                     view.setBackgroundResource(R.drawable.shape_stock_tag_no_appraisal);
                     break;
-                case 1:
+                case 0:
+                    view.setText("历史好公司");//历史好公司
+                    view.setTextColor(getResColor(R.color.textColor_999999));
+                    view.setBackgroundResource(R.drawable.shape_stock_tag_no_appraisal);
+                    break;
+                case 2:
                     view.setText("好公司");
                     view.setTextColor(getResColor(R.color.colorPrimary));
                     view.setBackgroundResource(R.drawable.shape_stock_tag_good_company);
                     break;
-                case 2:
+                case 1:
                     view.setText("希望之星");
                     view.setTextColor(0xFFFFA200);
                     view.setBackgroundResource(R.drawable.shape_stock_tag_good_in_future);

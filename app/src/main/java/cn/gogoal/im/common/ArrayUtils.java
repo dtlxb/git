@@ -8,6 +8,8 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +75,7 @@ public class ArrayUtils {
     /**
      * JsonArray中字段拼接Srtring
      */
-    public static String mosaicArrayElement(@NonNull JSONArray array,@NonNull String key) {
+    public static String mosaicArrayElement(@NonNull JSONArray array, @NonNull String key) {
         String stocks = "";
         for (int i = 0; i < array.size(); i++) {
             JSONObject stock = (JSONObject) array.get(i);
@@ -118,5 +120,35 @@ public class ArrayUtils {
             newList.add(list.get(i));
         }
         return newList;
+    }
+
+    /**
+     * @param listMap 排序的集合
+     * @param sortKey:排序的依据关键字
+     *
+     * @see SortType
+     * @param sortType 排序关键字;
+     * */
+    public static void sortUtils(ArrayList<Map<String, String>> listMap, final String sortKey, final SortType sortType) {
+        Collections.sort(listMap, new Comparator<Map<String, String>>() {
+            @Override
+            public int compare(Map<String, String> o1, Map<String, String> o2) {
+                switch (sortType) {
+                    case UP:
+                        return Double.compare(
+                                StringUtils.parseStringDouble(o1.get(sortKey)),
+                                StringUtils.parseStringDouble(o2.get(sortKey)));
+                    case DOWM:
+                        return Double.compare(
+                                StringUtils.parseStringDouble(o2.get(sortKey)),
+                                StringUtils.parseStringDouble(o1.get(sortKey)));
+                    default:return 0;
+                }
+            }
+        });
+    }
+
+    public enum SortType {
+        UP, DOWM, RESET;
     }
 }

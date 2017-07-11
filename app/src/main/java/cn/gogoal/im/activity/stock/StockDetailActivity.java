@@ -746,39 +746,52 @@ public class StockDetailActivity extends BaseActivity {
      */
     private void setDialogInfoData(TreatData info) {
         listTreatPopu.clear();
+
+        treatPopuAdapter.setStockType(info.getStock_type());
         //最高价
         listTreatPopu.add(new StockDetail2Text(treatDescArray[0],
-                StringUtils.parseStringDouble(info.getHigh_price(), 2)));
+                StringUtils.parseStringDouble(info.getHigh_price(), 2),
+                StockUtils.getStockRateColor(
+                        StringUtils.parseStringDouble(info.getHigh_price())-
+                                StringUtils.parseStringDouble(info.getClose_price()))));
 
         //最低价
         listTreatPopu.add(new StockDetail2Text(treatDescArray[1],
-                StringUtils.parseStringDouble(info.getLow_price(), 2)));
+                StringUtils.parseStringDouble(info.getLow_price(), 2),
+                StockUtils.getStockRateColor(
+                        StringUtils.parseStringDouble(info.getLow_price())-
+                                StringUtils.parseStringDouble(info.getClose_price()))));
 
         //涨停
-        listTreatPopu.add(new StockDetail2Text(treatDescArray[2],
+        listTreatPopu.add(new StockDetail2Text(
+                treatDescArray[2],
                 "" + StringUtils.save2Significand(StringUtils.parseStringDouble(info.getClose_price()) * (
                         (stockName.startsWith("*") ||
                                 stockName.contains("ST") ||
-                                stockName.startsWith("N")) ? 1.05 : 1.10))));
+                                stockName.startsWith("N")) ? 1.05 : 1.10)),
+                StockUtils.getStockSettingColor() ? R.color.stock_red : R.color.stock_green));
 
         //跌停
         listTreatPopu.add(new StockDetail2Text(treatDescArray[3],
                 "" + StringUtils.save2Significand(StringUtils.parseStringDouble(info.getClose_price()) * (
                         (stockName.startsWith("*") ||
                                 stockName.contains("ST") ||
-                                stockName.startsWith("N")) ? 0.95 : 0.9))));
+                                stockName.startsWith("N")) ? 0.95 : 0.9)),
+                        StockUtils.getStockSettingColor() ? R.color.stock_green : R.color.stock_red));
 
         //内盘
         listTreatPopu.add(new StockDetail2Text(treatDescArray[4],
                 (StringUtils.isActuallyEmpty(info.getVolume_inner()) || info.getVolume_inner().length() < 3) ? "0手" : (
                         info.getVolume_inner().length() > 6 ? StringUtils.save2Significand((Double.parseDouble(info.getVolume_inner()) / 1000000)) + "万手" :
-                                StringUtils.getIntegerData(String.valueOf((Double.parseDouble(info.getVolume_inner()) / 100))) + "手")));
+                                StringUtils.getIntegerData(String.valueOf((Double.parseDouble(info.getVolume_inner()) / 100))) + "手"),
+                StockUtils.getStockSettingColor() ? R.color.stock_green : R.color.stock_red));
 
         //外盘
         listTreatPopu.add(new StockDetail2Text(treatDescArray[5],
                 (StringUtils.isActuallyEmpty(info.getVolume_outer()) || info.getVolume_outer().length() < 3) ? "0手" : (
                         info.getVolume_outer().length() > 6 ? StringUtils.save2Significand((Double.parseDouble(info.getVolume_outer()) / 1000000)) + "万手" :
-                                StringUtils.getIntegerData(String.valueOf((Double.parseDouble(info.getVolume_outer()) / 100))) + "手")));
+                                StringUtils.getIntegerData(String.valueOf((Double.parseDouble(info.getVolume_outer()) / 100))) + "手"),
+                StockUtils.getStockSettingColor() ? R.color.stock_red : R.color.stock_green));
 
         //成交额
         String turnover = StringUtils.parseStringDouble(info.getTurnover(), 2);
@@ -791,8 +804,10 @@ public class StockDetailActivity extends BaseActivity {
                 StringUtils.parseStringDouble(info.getAmplitude(), 2) + "%"));
 
         //委比
+        String commissionRate = StringUtils.parseStringDouble(info.getCommission_rate(), 2);
         listTreatPopu.add(new StockDetail2Text(treatDescArray[8],
-                StringUtils.parseStringDouble(info.getCommission_rate(), 2) + "%"));
+                commissionRate+ "%",
+                StockUtils.getStockRateColor(commissionRate)));
 
         //量比
         listTreatPopu.add(new StockDetail2Text(treatDescArray[9],
@@ -934,19 +949,13 @@ public class StockDetailActivity extends BaseActivity {
      */
     private class TreatInfoAdapter extends CommonAdapter<StockDetail2Text, BaseViewHolder> {
 
-        private String closePrice;
-
         /**
-         * @serialField StockUtils.getStockStatus();
+         * @see StockUtils#getStockStatus;
          */
         private int stockType;
 
-        public void setStockType(int stockType) {
+        private void setStockType(int stockType) {
             this.stockType = stockType;
-        }
-
-        public void setClosePrice(String closePrice) {
-            this.closePrice = closePrice;
         }
 
         private TreatInfoAdapter(List<StockDetail2Text> data) {
@@ -963,40 +972,43 @@ public class StockDetailActivity extends BaseActivity {
             holder.setText(R.id.tv_item_stock_detail_info_value, (position == 0 || position == 1) ? (
                     realDouble(data.getValue()) == 0 ? "--" : data.getValue()) : data.getValue());
 
-            switch (position) {
-                case 0:
-                case 1:
-                    if (stockType == 1) {
-                        holder.setTextColor(R.id.tv_item_stock_detail_info_value,
-                                realDouble(data.getValue()) == 0 ? Color.BLACK : getResColor(
-                                        StockUtils.getStockRateColor(realDouble(data.getValue()) -
-                                                StringUtils.parseStringDouble(closePrice))));
-                    } else {
-                        holder.setTextColor(R.id.tv_item_stock_detail_info_value, Color.BLACK);
-                    }
-                    break;
-                case 2:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_red));
-                    break;
-                case 3:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_green));
-                    break;
-                case 4:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(
-                            realDouble(data.getValue()) == 0 ? R.color.stock_gray : R.color.stock_green));
-                    break;
-                case 5:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(
-                            realDouble(data.getValue()) == 0 ? R.color.stock_gray : R.color.stock_red));
-                    break;
-                case 8:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value,
-                            getResColor(StockUtils.getStockRateColor(realDouble(data.getValue()))));
-                    break;
-                default:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, Color.BLACK);
-                    break;
-            }
+            holder.setTextColor(R.id.tv_item_stock_detail_info_value,data.getStatusColor()==0? Color.BLACK:
+                    getResColor(data.getStatusColor()));
+
+//            switch (position) {
+//                case 0:
+//                case 1:
+//                    if (stockType == 1) {
+//                        holder.setTextColor(R.id.tv_item_stock_detail_info_value,
+//                                realDouble(data.getValue()) == 0 ? Color.BLACK : getResColor(
+//                                        StockUtils.getStockRateColor(realDouble(data.getValue()) -
+//                                                StringUtils.parseStringDouble(closePrice))));
+//                    } else {
+//                        holder.setTextColor(R.id.tv_item_stock_detail_info_value, Color.BLACK);
+//                    }
+//                    break;
+//                case 2:
+//                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_red));
+//                    break;
+//                case 3:
+//                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_green));
+//                    break;
+//                case 4:
+//                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(
+//                            realDouble(data.getValue()) == 0 ? R.color.stock_gray : R.color.stock_green));
+//                    break;
+//                case 5:
+//                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(
+//                            realDouble(data.getValue()) == 0 ? R.color.stock_gray : R.color.stock_red));
+//                    break;
+//                case 8:
+//                    holder.setTextColor(R.id.tv_item_stock_detail_info_value,
+//                            getResColor(StockUtils.getStockRateColor(realDouble(data.getValue()))));
+//                    break;
+//                default:
+//                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, Color.BLACK);
+//                    break;
+//            }
 
         }
 

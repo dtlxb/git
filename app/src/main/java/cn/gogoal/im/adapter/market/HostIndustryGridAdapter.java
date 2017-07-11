@@ -1,6 +1,8 @@
 package cn.gogoal.im.adapter.market;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +27,18 @@ import cn.gogoal.im.common.StringUtils;
  */
 public class HostIndustryGridAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
 
+    private Context context;
     private List<HostIndustrylistBean> hostIndustrylist;
 
-    public HostIndustryGridAdapter(List<HostIndustrylistBean> hostIndustrylist) {
+    public HostIndustryGridAdapter(Context context,List<HostIndustrylistBean> hostIndustrylist) {
         this.hostIndustrylist = hostIndustrylist;
+        this.context=context;
     }
 
     @Override
     public LayoutHelper onCreateLayoutHelper() {
         GridLayoutHelper layoutHelper = new GridLayoutHelper(3);
+        layoutHelper.setBgColor(ContextCompat.getColor(context,R.color.colorDivider_d9d9d9));
         layoutHelper.setHGap(1);
         return layoutHelper;
     }

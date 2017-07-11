@@ -2,18 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="55dp"
+    android:layout_height="45dp"
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
+    <hply.com.niugu.autofixtext.AutofitTextView
         android:id="@+id/textProName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="5dp"
+        android:singleLine="true"
+        android:layout_marginStart="5dp"
+        android:gravity="center"
+        app:minTextSize="8sp"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        app:sizeToFit="true"/>
 
 </LinearLayout>
