@@ -192,6 +192,7 @@ public class ChatFragment extends BaseFragment {
                                 messageList.addAll(0, list);
                                 imageUrls.addAll(0, getAllImageUrls(list));
                                 imChatAdapter.notifyItemRangeInserted(0, list.size());
+                                dealSquareMessage();
                             }
                             message_swipe.setRefreshing(false);
                         }
@@ -1054,11 +1055,7 @@ public class ChatFragment extends BaseFragment {
         //RecyclerView的滑动状态
         int state = recyclerView.getScrollState();
 
-        if (visibleItemCount > 1 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE) {
-            return true;
-        } else {
-            return false;
-        }
+        return visibleItemCount > 1 && lastVisibleItemPosition == totalItemCount - 1 && state == RecyclerView.SCROLL_STATE_IDLE;
     }
 
     /**
@@ -1079,27 +1076,6 @@ public class ChatFragment extends BaseFragment {
                 if (!message.getMessageId().equals(messageList.get(messageList.size() - 1).getMessageId())) {
                     refreshRecyclerView(message, isVisBottom(message_recycler));
                 }
-                //此处头像，昵称日后有数据再改
-                /*IMMessageBean imMessageBean = null;
-                if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                            "0", userBean.getNickname(), String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
-
-                } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-                    //加人删人逻辑
-                    if (message instanceof GGGroupDelMessage || message instanceof GGGroupAddMessage) {
-                        GGSystemMessage systemMessage = (GGSystemMessage) message;
-                        JSONArray accountArray = (JSONArray) systemMessage.getAttrs().get("accountList");
-                        String _lctext = MessageListUtils.findSquarePeople(accountArray, String.valueOf(systemMessage.getMessageType()));
-                        systemMessage.setText(_lctext);
-                    }
-
-                    //群对象和群头像暂时为空
-                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                            "0", conversation.getName(), "", "", JSON.toJSONString(message));
-                }
-
-                MessageListUtils.saveMessageInfo(imMessageBean);*/
             }
         }
     }
