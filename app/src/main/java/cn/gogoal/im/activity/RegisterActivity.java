@@ -178,7 +178,7 @@ public class RegisterActivity extends BaseActivity {
                 || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RegisterActivity.this)
                 || !codeIsTheSame(editCode.getText().toString().trim(), validEditCode.getText().toString().trim())
                 || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity())
-                || !UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity())){
+                || !UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity())) {
             waitDialog.dismiss();
             return;
         }
@@ -203,16 +203,16 @@ public class RegisterActivity extends BaseActivity {
                         WaitDialog successDialog = WaitDialog.getInstance("密码重置成功,即将跳转登录页面", R.mipmap.login_success, false);
                         successDialog.dismiss(false, true);
                     } else {
-                        showErrorDialog("验证码失效，请重新获取验证码",false);
+                        showErrorDialog("验证码失效，请重新获取验证码", false);
                     }
                 } else {
-                    showErrorDialog("密码重置失败,请重试",false);
+                    showErrorDialog("密码重置失败,请重试", false);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                if (loginLayout!=null) {
+                if (loginLayout != null) {
                     loginLayout.setEnabled(true);
                 }
                 UIHelper.toast(RegisterActivity.this, R.string.net_erro_hint);
@@ -254,28 +254,29 @@ public class RegisterActivity extends BaseActivity {
                         successDialog.dismiss(false, true);
                     } else if (dataCode == 3) {
                         //账号已存在
-                        showErrorDialog("该手机号已注册，请直接登录",true);
+                        showErrorDialog("该手机号已注册，请直接登录", true);
                     } else {
-                        showErrorDialog(getString(R.string.str_rigister_error),false);
+                        showErrorDialog(getString(R.string.str_rigister_error), false);
                     }
                 } else {
-                    showErrorDialog(getString(R.string.str_rigister_error),false);
+                    showErrorDialog(getString(R.string.str_rigister_error), false);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                if (loginLayout!=null)
-                loginLayout.setEnabled(true);
-                showErrorDialog("数据请求出错("+msg+")",false);
+                if (loginLayout != null)
+                    loginLayout.setEnabled(true);
+                showErrorDialog("数据请求出错(" + msg + ")", false);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.USER_REGISTER, ggHttpInterface).startGet();
     }
 
-    private void showErrorDialog(String text,boolean finishSelf){
+    private void showErrorDialog(String text, boolean finishSelf) {
         WaitDialog errorDialog = WaitDialog.getInstance(text, R.mipmap.login_error, false);
-        errorDialog.dismiss(false,finishSelf);
+        errorDialog.show(getSupportFragmentManager());
+        errorDialog.dismiss(false, finishSelf);
     }
 
     private boolean codeIsTheSame(String code1, String code2) {
