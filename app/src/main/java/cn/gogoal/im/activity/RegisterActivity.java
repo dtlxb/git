@@ -257,7 +257,6 @@ public class RegisterActivity extends BaseActivity {
                         successDialog.dismiss(false, true);
                     } else if (dataCode == 3) {
                         //账号已存在
-                        KLog.e("该手机号已注册");
                         showErrorDialog("该手机号已注册，请直接登录", true);
                     } else {
                         showErrorDialog(getString(R.string.str_rigister_error), false);

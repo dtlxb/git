@@ -536,12 +536,12 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         private void setStockTag(TextView view, int type) {
             switch (type) {
                 case -2:
-                    view.setText("平凡");
+                    view.setText("未鉴定");
                     view.setTextColor(getResColor(R.color.textColor_999999));
                     view.setBackgroundResource(R.drawable.shape_stock_tag_no_appraisal);
                     break;
                 case -1:
-                    view.setText("未选入");
+                    view.setText("平凡");
                     view.setTextColor(getResColor(R.color.textColor_999999));
                     view.setBackgroundResource(R.drawable.shape_stock_tag_no_appraisal);
                     break;
