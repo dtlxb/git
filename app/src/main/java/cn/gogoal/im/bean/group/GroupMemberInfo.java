@@ -113,4 +113,11 @@ public class GroupMemberInfo implements Parcelable {
             return new GroupMemberInfo[size];
         }
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof GroupMemberInfo) &&
+                (this.getAccount_id().equalsIgnoreCase(((GroupMemberInfo) obj).getAccount_id()));
+    }
+
 }

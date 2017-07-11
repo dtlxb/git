@@ -241,7 +241,7 @@ public class Face2FaceActivity extends BaseActivity {
 
                     //视图变换
                     changeViewTree();
-                    //添加成员,自己，和拉取到的成员
+                    //添加成员——自己，和拉取到的成员
 
                     final GroupMemberInfo contactMe = new GroupMemberInfo();
                     contactMe.setAccount_id(UserUtils.getMyAccountId());
@@ -251,7 +251,11 @@ public class Face2FaceActivity extends BaseActivity {
                     memberDatas.add(contactMe);
 
                     if (groupData.getM_info() != null) {
-                        memberDatas.addAll(groupData.getM_info());
+                        for (GroupMemberInfo info:groupData.getM_info()){
+                            if (!memberDatas.contains(info)) {
+                                memberDatas.add(info);
+                            }
+                        }
                     }
 
                     memberAdapter.notifyDataSetChanged();
