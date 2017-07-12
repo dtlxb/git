@@ -1,12 +1,7 @@
 package com.example.dell.bzbp_frame.model;
 
-import android.location.Location;
-
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by dell on 2017/7/5.
@@ -26,6 +21,22 @@ public class Route implements Serializable {
     public Route(){
         location_list = new ArrayList<MyLatlng>();
         postos = new ArrayList<Posto>();
+    }
+
+    public int getRid() {
+        return rid;
+    }
+
+    public void setRid(int rid) {
+        this.rid = rid;
+    }
+
+    public ArrayList<MyLatlng> getLocation_list() {
+        return location_list;
+    }
+
+    public void setLocation_list(ArrayList<MyLatlng> location_list) {
+        this.location_list = location_list;
     }
 
     public String getUsername() {

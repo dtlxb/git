@@ -29,10 +29,12 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
+import com.example.dell.bzbp_frame.model.MyLatlng;
+import com.example.dell.bzbp_frame.model.Route;
+import com.example.dell.bzbp_frame.tool.MyThread;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import com.example.dell.bzbp_frame.model.*;
 
 public class RouteActivity extends AppCompatActivity implements LocationSource,
         AMapLocationListener {
@@ -58,7 +60,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
     //信号值，只有在该值为true的时候才会记录位置。用户通过操作ui可以进行开|关。
     private boolean is_locating = true;
-
+    public static String ip="192.168.1.97:8080/BookStore";
     //定位功能所用
     private TextView mLocationErrText;
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
@@ -215,6 +217,19 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 //Route对象在这里传到下个Activity，并在那里设置comment和name
                 // （name是不是要在一开始的时候先设置一下？）
                 //
+              MyThread myThread1 = new MyThread();
+                myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
+                myThread1.setWhat(3);
+                myThread1.setRoute(route);
+                myThread1.start();
+
+                try {
+                    myThread1.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
 
             }
         });
