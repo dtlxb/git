@@ -27,7 +27,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MessageHolderActivity;
-import cn.gogoal.im.activity.Test2Activity;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -132,15 +131,6 @@ public class MainStockFragment extends BaseFragment {
         });
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);
-
-        //test
-        imgMyStockRefresh.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                startActivity(new Intent(mContext, Test2Activity.class));
-                return true;
-            }
-        });
 
         unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(getActivity());
