@@ -1,0 +1,26 @@
+1.	map包里的Latlng对象只支持Parcelable，而迄今的开发，使用了Serializable对象来进行activity间的传输。
+	这样，在routeActivity锁屏或旋转时，就只能putParcelable，而不能像posto一样serializable，因为List<Latlng>是没法s的。
+　　Posto可以持有两个Double代替Latlng，不再依赖Latlng对象。但Route较为复杂。
+　　可以考虑自己实现一个Serializable的Latlng对象，用在Route里？
+　　在这里决定全部使用serializable。
+　　ArrayList<MyLatlng>可以序列化。
+　　
+　　已经实现MyLatlng，可以序列化，因此route在被系统回收之前可以一直记录。
+	同理，这个route应该也可以用http post传递。（现在用的是json）
+
+2.	考虑变更需求。实现一个长时间持续自动定位并记录的Route功能可能比较难，考虑由用户决定定位点，并在用户做这件事的时候进行交互&数据更新，而不是全程自动更新。
+	也可以考虑用alarm功能。还未学习alarm，待定。
+	------看了一下，感觉可能可行。
+	把location service分离出去，完全在后台用alarm实现。并且，每记一个点，就更新一次数据。（到本地？到服务器？考虑本地的安卓数据库）。前台只负责显示当前的数据。
+	具体来说就是：在用户选择“路线开始”的时候，开始一个每隔固定时间（比如1分钟）唤醒系统的alarm。每次执行AlarmActivity的时候，1）用amap.location获得当前位置2）从数据库实例化出当前List 3）List+1，再存进数据库。用户每次打开app，可以看到当前的List在地图上画出的路线；用户选择“路线结束”，就结束该alarm。
+	超复杂！！
+	间隔时间可以不固定，而是进行scheduling。
+
+	已经实现了一个正常的记录方式。可以考虑用黑科技让软件不被系统回收了……
+
+3.	考虑另一种方式：用户点击“开始路线”后，需要手动记录路线中的每一个点。
+
+
+
+
+4.	后台需要自己写model和数据库之间的映射。

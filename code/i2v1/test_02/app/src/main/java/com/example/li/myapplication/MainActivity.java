@@ -1,7 +1,7 @@
-package com.example.li.gd_test_01.location;
-
+package com.example.li.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -9,12 +9,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.amap.api.location.*;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
@@ -27,19 +28,26 @@ import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.example.li.gd_test_01_latest.R;
-import com.example.li.gd_test_01.util.SensorEventHelper;
+import com.amap.api.maps2d.model.MyLocationStyle;
+import com.example.li.myapplication.location.LocationMarkerActivity;
+import com.example.li.myapplication.util.SensorEventHelper;
 
-/**
- * AMapV2地图中介绍自定义可旋转的定位图标
- */
-public class LocationMarkerActivity extends Activity implements LocationSource,
+public class MainActivity extends Activity implements LocationSource,
         AMapLocationListener {
     private AMap aMap;
     private MapView mapView;
-    private OnLocationChangedListener mListener;
+    private Button mButton_posto;
+    private Button mButton_route;
+    private Button mButton_menu;
+
+    private TextView tvResult;
+
+    private LocationSource.OnLocationChangedListener mListener;
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
+
+    //设置定位类型（连续，跟随……）
+    MyLocationStyle mMyLocationStyle;
 
     private TextView mLocationErrText;
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
@@ -58,7 +66,118 @@ public class LocationMarkerActivity extends Activity implements LocationSource,
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         Log.d("LocationActivity","OnCreate successes.");//在日志里找不到这句。Log方法有问题？
+
+        //init Buttons
+        //posto
+        mButton_posto = (Button) findViewById(R.id.button_posto);
+        mButton_posto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent i = new Intent(MainActivity.this, LocationMarkerActivity.class);
+                startActivity(i);
+            }
+        });
+        //route
+        mButton_route = (Button) findViewById(R.id.button_route);
+        mButton_route.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent i = new Intent(MainActivity.this, RouteActivity.class);
+                startActivity(i);
+            }
+        });
+        //menu
+        mButton_menu = (Button) findViewById(R.id.button_menu);
+        mButton_menu.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //声明AMapLocationClient类对象
+                AMapLocationClient mLocationClient = null;
+                //声明定位回调监听器——在外面初始化。无脑拷贝了location demo里的listener.
+
+                //初始化定位
+                mLocationClient = new AMapLocationClient(getApplicationContext());
+                //设置定位回调监听
+                mLocationClient.setLocationListener(locationListener);
+
+                //开始定位
+                //声明AMapLocationClientOption对象
+                AMapLocationClientOption mLocationOption = null;
+                //初始化AMapLocationClientOption对象
+                mLocationOption = new AMapLocationClientOption();
+                //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+                mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+
+
+                //给定位客户端对象设置定位参数
+                mLocationClient.setLocationOption(mLocationOption);
+                //启动定位
+                mLocationClient.startLocation();
+            }
+        });
+
     }
+
+    //下面是从demo拷来的listener构造。
+    AMapLocationListener locationListener = new AMapLocationListener() {
+        @Override
+        public void onLocationChanged(AMapLocation location) {
+
+            //my code: test whether called or not
+            TextView v = findViewById(R.id.alert);
+            v.setText("a!!!!!!!!!!!");
+
+            if (null != location) {
+
+                StringBuffer sb = new StringBuffer();
+                //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+                if(location.getErrorCode() == 0){
+                    sb.append("定位成功" + "\n");
+                    sb.append("定位类型: " + location.getLocationType() + "\n");
+                    sb.append("经    度    : " + location.getLongitude() + "\n");
+                    sb.append("纬    度    : " + location.getLatitude() + "\n");
+                    sb.append("精    度    : " + location.getAccuracy() + "米" + "\n");
+                    sb.append("提供者    : " + location.getProvider() + "\n");
+
+                    sb.append("速    度    : " + location.getSpeed() + "米/秒" + "\n");
+                    sb.append("角    度    : " + location.getBearing() + "\n");
+                    // 获取当前提供定位服务的卫星个数
+                    sb.append("星    数    : " + location.getSatellites() + "\n");
+                    sb.append("国    家    : " + location.getCountry() + "\n");
+                    sb.append("省            : " + location.getProvince() + "\n");
+                    sb.append("市            : " + location.getCity() + "\n");
+                    sb.append("城市编码 : " + location.getCityCode() + "\n");
+                    sb.append("区            : " + location.getDistrict() + "\n");
+                    sb.append("区域 码   : " + location.getAdCode() + "\n");
+                    sb.append("地    址    : " + location.getAddress() + "\n");
+                    sb.append("兴趣点    : " + location.getPoiName() + "\n");
+                    //定位完成的时间
+                    sb.append("定位时间: " + Utils.formatUTC(location.getTime(), "yyyy-MM-dd HH:mm:ss") + "\n");
+                } else {
+                    //定位失败
+                    sb.append("定位失败" + "\n");
+                    sb.append("错误码:" + location.getErrorCode() + "\n");
+                    sb.append("错误信息:" + location.getErrorInfo() + "\n");
+                    sb.append("错误描述:" + location.getLocationDetail() + "\n");
+                }
+                //定位之后的回调时间
+                sb.append("回调时间: " + Utils.formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n");
+
+                //解析定位结果，
+                String result = sb.toString();
+                //tvResult.setText(result);
+
+                //my codes
+                v.setText(result);
+
+            } else {
+                //tvResult.setText("定位失败，loc is null");
+
+                //my <code
+                v.setText("定位失败，loc is null");
+            }
+        }
+    };
 
     /**
      * 初始化
@@ -80,9 +199,17 @@ public class LocationMarkerActivity extends Activity implements LocationSource,
      * 设置一些amap的属性
      */
     private void setUpMap() {
+
+        //设置定位类型
+        //搞不懂。还是不要改了
+        //mMyLocationStyle = new MyLocationStyle();
+        //mMyLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+        //aMap.setMyLocationStyle(mMyLocationStyle);
+
         aMap.setLocationSource(this);// 设置定位监听
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+
     }
 
     /**
@@ -169,7 +296,7 @@ public class LocationMarkerActivity extends Activity implements LocationSource,
      * 激活定位
      */
     @Override
-    public void activate(OnLocationChangedListener listener) {
+    public void activate(LocationSource.OnLocationChangedListener listener) {
         mListener = listener;
         if (mlocationClient == null) {
             mlocationClient = new AMapLocationClient(this);
@@ -177,7 +304,7 @@ public class LocationMarkerActivity extends Activity implements LocationSource,
             //设置定位监听
             mlocationClient.setLocationListener(this);
             //设置为高精度定位模式
-            mLocationOption.setLocationMode(AMapLocationMode.Hight_Accuracy);
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //设置定位参数
             mlocationClient.setLocationOption(mLocationOption);
             // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
@@ -226,5 +353,4 @@ public class LocationMarkerActivity extends Activity implements LocationSource,
         mLocMarker = aMap.addMarker(options);
         mLocMarker.setTitle(LOCATION_MARKER_FLAG);
     }
-
 }

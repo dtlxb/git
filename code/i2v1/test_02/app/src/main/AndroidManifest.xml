@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.li.gd_test_01_latest">
-    //地图包、搜索包需要的基础权限
+
+    package="com.example.li.myapplication">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -39,7 +38,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="f1c011c9b4f8ce3f0e14b4c45da1dc25" />
+            android:value="4e995bd842606cb0eaf559158623f18e" />
 
         <activity
             android:name=".location.LocationMarkerActivity"

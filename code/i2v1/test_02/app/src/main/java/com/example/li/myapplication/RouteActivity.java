@@ -1,19 +1,10 @@
-package com.example.li.gd_test_01;
+package com.example.li.myapplication;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -38,10 +29,10 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
-import com.example.li.gd_test_01.location.LocationMarkerActivity;
-import com.example.li.gd_test_01.model.Route;
-import com.example.li.gd_test_01.util.SensorEventHelper;
-import com.example.li.gd_test_01_latest.R;
+import com.example.li.myapplication.model.*;
+import com.example.li.myapplication.util.SensorEventHelper;
+
+import java.util.ArrayList;
 
 public class RouteActivity extends AppCompatActivity implements LocationSource,
         AMapLocationListener {
@@ -52,7 +43,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     private AMapLocationClientOption mLocationOption;
 
     //记录上次定位的位置，在用户点击复位按钮时移到这里
-    private LatLng last_location = null;
+    private MyLatlng last_location = null;
 
     //各个按钮
     private Button mButton_locate;
@@ -67,6 +58,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     //信号值，只有在该值为true的时候才会记录位置。用户通过操作ui可以进行开|关。
     private boolean is_locating = true;
 
+    //定位功能所用
     private TextView mLocationErrText;
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
@@ -75,21 +67,49 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     private SensorEventHelper mSensorHelper;
     private Circle mCircle;
     public static final String LOCATION_MARKER_FLAG = "mylocation";
+
+    //保存数据（切屏，锁屏，旋转设备时）
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+
+        //route对象
+        outState.putSerializable("route",route);
+        //最后一次定位信息
+        outState.putDouble("latitude",last_location.latitude);
+        outState.putDouble("longitude",last_location.longitude);
+        //暂停/继续的状态
+        outState.putBoolean("is_locating",is_locating);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
         setContentView(R.layout.activity_route);
+
+
+        //继承地图的状态
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
-        init();
-        Log.d("LocationActivity","OnCreate successes.");//在日志里找不到这句。Log方法有问题？
+        init(); //初始化地图
 
-        //my codes
-        //初始化按钮
-        initButtons();
 
-        //初始化Route对象
+        //继承数据。（onpause，切屏，旋转）
+        if (savedInstanceState!=null){
+            //继承最后一次定位的信息
+            last_location = new MyLatlng((Double) savedInstanceState.get("latitude"),
+                    (Double)savedInstanceState.get("longitude"));
+
+            //继承route的状态。
+            route = (Route) savedInstanceState.getSerializable("route");
+
+            is_locating = (boolean) savedInstanceState.getBoolean("is_locating");
+        }
+
+        //若无，则初始化Route对象
         if (route==null){
             route = new Route();
 
@@ -97,12 +117,19 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             //
 
             //测试用：为route插入初始值
-            route.location_list.add(new LatLng(31.03,121.43));
-            route.location_list.add(new LatLng(31.03,121.45));
+            //route.location_list.add(new LatLng(31.03,121.43));
+            route.location_list.add(new MyLatlng(31.03,121.44));
+        }
+        else{//若在bundle里找到了route，则需要重新画一次
 
+            draw();
         }
 
-        //保持高亮，禁止锁屏
+        //my codes
+        //初始化按钮
+        initButtons();
+
+        //保持高亮，禁止自动锁屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
@@ -148,7 +175,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             public void onClick(View v){
                 if (last_location!=null){
                     //按下按钮时，把camera移到上次定位的位置。
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(last_location));
+                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(last_location.toLatlng()));
                 }
             }
         });
@@ -232,16 +259,15 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
                 //my codes
                 //取而代之的是在Activity中记录location，在另外的控制流中使用它定位camera.
-                last_location = location;
+                last_location = new MyLatlng(location.latitude,location.longitude);
 
                 //当定位没有被暂停的时候
                 if (is_locating) {
                     //把当前location加入List<Latlng>
-                    route.location_list.add(location);
+                    route.location_list.add(last_location);
 
                     //在地图上更新route的绘制
-                    Polyline polyline = aMap.addPolyline(new PolylineOptions().
-                            addAll(route.location_list).width(10).color(Color.argb(100, 1, 80, 255)));
+                    draw();
                 }
 
                 //测试用：显示当前的list<position>的大小
@@ -255,6 +281,16 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 mLocationErrText.setText(errText);
             }
         }
+    }
+
+    //在地图上绘制当前route对象的路线
+    public void draw(){
+        ArrayList<LatLng> draw_list = new ArrayList<LatLng>();
+        for (int i = 0;i<route.location_list.size();i++){
+            draw_list.add(route.location_list.get(i).toLatlng());
+        }
+        Polyline polyline = aMap.addPolyline(new PolylineOptions().
+                addAll(draw_list).width(10).color(Color.argb(100, 1, 80, 255)));
     }
 
 
@@ -360,11 +396,9 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     /**
      * 方法必须重写
      */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
+
+    //保存数据
+
 
     /**
      * 方法必须重写

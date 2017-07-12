@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.example.li.gd_test_01.util;
+package com.example.li.myapplication.util;
 
 import android.text.Html;
 import android.text.Spanned;
@@ -13,7 +13,7 @@ import com.amap.api.services.route.BusPath;
 import com.amap.api.services.route.BusStep;
 import com.amap.api.services.route.RouteBusLineItem;
 import com.amap.api.services.route.RouteRailwayItem;
-import com.example.li.gd_test_01_latest.R;
+import com.example.li.myapplication.R;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;

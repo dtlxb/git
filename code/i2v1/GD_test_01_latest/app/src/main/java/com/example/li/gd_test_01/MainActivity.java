@@ -31,6 +31,7 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.example.li.gd_test_01.location.LocationMarkerActivity;
 import com.example.li.gd_test_01.util.SensorEventHelper;
+import com.example.li.gd_test_01_latest.R;
 
 public class MainActivity extends Activity implements LocationSource,
         AMapLocationListener {

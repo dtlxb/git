@@ -1,4 +1,4 @@
-package com.example.li.gd_test_01.location;
+package com.example.li.myapplication.location;
 
 
 import android.app.Activity;
@@ -27,8 +27,8 @@ import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.example.li.gd_test_01_latest.R;
-import com.example.li.gd_test_01.util.SensorEventHelper;
+import com.example.li.myapplication.util.SensorEventHelper;
+import com.example.li.myapplication.R;
 
 /**
  * AMapV2地图中介绍自定义可旋转的定位图标
