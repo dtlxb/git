@@ -96,7 +96,6 @@ public class SquareChatRoomActivity extends BaseActivity {
 
             @Override
             public void joinFail(String error) {
-                UIHelper.toast(SquareChatRoomActivity.this, error);
             }
         });
 
