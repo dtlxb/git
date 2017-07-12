@@ -13,6 +13,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
+import com.socks.library.KLog;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -34,9 +36,10 @@ import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 public class UpdataDialog extends BaseCentDailog {
 
     // 下载包安装路径
-    private static final String savePath = "/sdcard/GoGoalApp/";
+    private String filePath;
+
     // 文件路径
-    private static final String saveFileName = savePath + "GoGoalApp.apk";
+    private static final String saveFileName = "GoGoalApp.apk";
 
     private String newAppUrl;
     private NotificationCompat.Builder mBuilder;
@@ -69,6 +72,17 @@ public class UpdataDialog extends BaseCentDailog {
 
     @Override
     public void bindView(View v) {
+
+        File appFile = v.getContext().getExternalFilesDir("apk");
+
+        if (!appFile.exists()){
+            appFile.mkdirs();
+        }
+
+        filePath = appFile.getAbsolutePath();
+
+        KLog.e(filePath);
+
         Bundle bundle = getArguments();
         if (bundle == null) {
             return;
@@ -105,7 +119,6 @@ public class UpdataDialog extends BaseCentDailog {
             }
         });
 
-
     }
 
     private void initNotify() {
@@ -137,12 +150,12 @@ public class UpdataDialog extends BaseCentDailog {
                 .setAutoCancel(true);
 
         //下载完成自动运行安装
-        installAPK(MyApp.getAppContext(), new File(saveFileName));
+        installAPK(MyApp.getAppContext(), new File(filePath + saveFileName));
 
         Intent apkIntent = new Intent();
         apkIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         apkIntent.setAction(android.content.Intent.ACTION_VIEW);
-        String apk_path = saveFileName;
+        String apk_path = filePath + saveFileName;
         Uri uri = Uri.fromFile(new File(apk_path));
         apkIntent.setDataAndType(uri, "application/vnd.android.package-archive");
         PendingIntent contextIntent = PendingIntent.getActivity(MyApp.getAppContext(), 0, apkIntent, 0);
@@ -164,12 +177,12 @@ public class UpdataDialog extends BaseCentDailog {
 
                 int count = conn.getContentLength(); //文件总大小 字节
                 InputStream is = conn.getInputStream();
-                File file = new File(savePath);
+                File file = new File(filePath);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
-                String apkFile = saveFileName;
-                File ApkFile = new File(apkFile);
+
+                File ApkFile = new File(filePath + saveFileName);
                 FileOutputStream fos = new FileOutputStream(ApkFile);
 
                 int proLength = 0;
