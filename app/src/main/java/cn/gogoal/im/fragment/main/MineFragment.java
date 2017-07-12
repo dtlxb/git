@@ -14,9 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -43,20 +41,16 @@ import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.MineItem;
 import cn.gogoal.im.bean.ToolData;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.GlideUrilUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
-import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -257,7 +251,6 @@ public class MineFragment extends BaseFragment {
 
     @Subscriber(tag = "updata_cache_avatar")
     void updataCacheAvatar(String newAvatarUrl) {
-        KLog.e(newAvatarUrl);
         ImageDisplay.loadCircleImage(getContext(), UserUtils.getUserAvatar(), imageAvatar);
 
     }

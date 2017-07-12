@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +29,6 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
-import cn.gogoal.im.bean.companytags.CompanyTagData;
 import cn.gogoal.im.bean.companytags.HistoryData;
 import cn.gogoal.im.bean.companytags.IndustryData;
 import cn.gogoal.im.common.AppConst;
@@ -276,7 +274,7 @@ public class HistoryFragment extends BaseFragment {
             fcs = new ForegroundColorSpan(getResColor(R.color.textColor_333333));
         }
         sb.setSpan(fcs, 0, report.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        KLog.e(sb);
+//        KLog.e(sb);
         return sb;
     }
 }

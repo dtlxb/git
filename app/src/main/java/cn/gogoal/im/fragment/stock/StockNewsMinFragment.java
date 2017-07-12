@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -267,7 +266,6 @@ public class StockNewsMinFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 UIHelper.toastError(getActivity(), msg, xLayout);
-                KLog.e(msg);
             }
         }).startGet();
     }

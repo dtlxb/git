@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,7 +99,7 @@ public class IncidentFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 JsonObject result = JsonUtils.toJsonObject(responseInfo);
-                KLog.e(responseInfo);
+//                KLog.e(responseInfo);
                 if (result.get("code").getAsInt() == 0) {
 
                     Gson gson = new Gson();
@@ -132,7 +131,7 @@ public class IncidentFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 JsonObject result = JsonUtils.toJsonObject(responseInfo);
-                KLog.e(responseInfo);
+//                KLog.e(responseInfo);
                 if (result.get("code").getAsInt() == 0) {
 
                     Gson gson = new Gson();

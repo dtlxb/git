@@ -13,7 +13,6 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.github.lzyzsd.library.R;
-import com.socks.library.KLog;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -220,7 +219,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             String data = BridgeUtil.getDataFromReturnUrl(url);
             handleMessageList(data);
         } else {
-            KLog.e(String.format("Error Happened %s", url));
+//            Log.e(String.format("Error Happened %s", url));
         }
     }
 
@@ -293,7 +292,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 
     public void evaluateJavascript(String script, ValueCallback<String> callback) {
         if (BridgeUtil.isBlank(script)) {
-            KLog.e("Script is Empty");
+//            KLog.e("Script is Empty");
             return;
         }
         if (BridgeUtil.useEvaluateJS()) {
@@ -302,7 +301,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             try {
                 super.loadUrl(script);
             } catch (Exception e) {
-                KLog.e(e.getMessage());
+//                KLog.e(e.getMessage());
             }
         }
     }

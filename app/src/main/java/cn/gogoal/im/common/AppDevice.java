@@ -51,7 +51,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -1243,8 +1242,6 @@ public class AppDevice {
         new GGOKHTTP(map, GGOKHTTP.GET_ANDROID_VERSIONS_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-                KLog.e(StringUtils.map2ggParameter(map));
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     JSONObject updataObject = JSONObject.parseObject(responseInfo).getJSONObject("data");
                     if (updataObject.getBooleanValue("isUpdate")) {

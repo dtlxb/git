@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hply.imagepicker.view.SuperCheckBox;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -111,7 +110,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
         new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
+//                KLog.e(responseInfo);
                 DragAdapter.this.notifyDataSetChanged();
             }
 

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.webkit.WebView;
 
-import com.socks.library.KLog;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,7 +93,6 @@ class BridgeUtil {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    KLog.e(e.getMessage());
                 }
             }
         }
