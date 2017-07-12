@@ -9,10 +9,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-<<<<<<< HEAD
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-=======
->>>>>>> af8a20b39e1f5f215d9331b9628ed189f167b346
 
 import org.litepal.crud.DataSupport;
 import org.simple.eventbus.EventBus;
