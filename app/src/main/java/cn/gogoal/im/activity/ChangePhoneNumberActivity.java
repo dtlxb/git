@@ -6,7 +6,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +78,6 @@ public class ChangePhoneNumberActivity extends BaseActivity {
                 new GGOKHTTP(map, GGOKHTTP.SEND_CAPTCHA, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.e(responseInfo);
                         int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                         if (code==0){
                             mTimeCount.start();//倒计时
@@ -110,7 +108,6 @@ public class ChangePhoneNumberActivity extends BaseActivity {
                     new GGOKHTTP(map0, GGOKHTTP.BIND_MOBILE, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
-                            KLog.e(responseInfo);
                             int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                             if (code==0){
                                 JSONObject data=JSONObject.parseObject(responseInfo).getJSONObject("data");

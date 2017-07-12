@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 
@@ -71,8 +70,6 @@ public class ChangePasswordActivity extends BaseActivity {
                 new GGOKHTTP(map, GGOKHTTP.RESET_PASSWORD, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.e(responseInfo);
-
                         JSONObject object = JSONObject.parseObject(responseInfo);
                         if (object.getIntValue("code") == 0) {
                             boolean success = object.getJSONObject("data").getBoolean("success");

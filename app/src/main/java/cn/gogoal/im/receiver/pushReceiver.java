@@ -8,7 +8,6 @@ import android.content.Intent;
 
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avospush.notification.NotificationCompat;
-import com.socks.library.KLog;
 
 import org.json.JSONObject;
 
@@ -28,8 +27,6 @@ public class pushReceiver extends BroadcastReceiver {
             String action = intent.getAction();
             String channel = intent.getExtras().getString("com.avos.avoscloud.Channel");
             String data = intent.getExtras().getString("com.avos.avoscloud.Data");
-
-            KLog.e(action + channel + data);
 
             if (action.equals("com.gogoal.action")) {
                 JSONObject json = new JSONObject(data);

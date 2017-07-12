@@ -10,7 +10,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,11 +31,10 @@ public class AppBackServise extends Service {
             GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
                 @Override
                 public void onSuccess(String responseInfo) {
-                    KLog.e(responseInfo);
                     JSONObject result = JSONObject.parseObject(responseInfo);
                     int code = result.getIntValue("code");
                     if (code == 0) {
-                        KLog.e("刷新Token成功");
+//                        KLog.e("刷新Token成功");
                         final JSONObject data = result.getJSONObject("data");
                         UserUtils.saveUserInfo(data);
 
@@ -45,7 +43,7 @@ public class AppBackServise extends Service {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     if (e == null) {
-                                        KLog.e("IM登录成功");
+//                                        KLog.e("IM登录成功");
                                     } else {
                                         UIHelper.toast(activity, "即时通讯登录失败");
                                     }
@@ -75,7 +73,7 @@ public class AppBackServise extends Service {
             try {
                 LaunchRequest.init();//初始化缓存数据
             }catch (Exception e){
-                KLog.e(e.getMessage());
+//                KLog.e(e.getMessage());
             }
         }
     }
