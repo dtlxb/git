@@ -6,6 +6,7 @@ import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMClientOpenOption;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
+import com.avos.avoscloud.im.v2.AVIMConversationsQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
@@ -100,7 +101,10 @@ public class AVIMClientManager {
         if (avimClient == null) {
             return;
         }
-        AVIMConversationQuery conversationQuery = avimClient.getQuery();
+
+        AVIMConversationsQuery conversationQuery = avimClient.getConversationsQuery();
+
+        //AVIMConversationQuery conversationQuery = avimClient.getQuery();
         // 根据conversationId查找房间
         conversationQuery.whereEqualTo("objectId", conversationId);
         //查找策略
@@ -122,8 +126,8 @@ public class AVIMClientManager {
                 } else {
                     if (null != mChatJoinManager) {
                         mChatJoinManager.joinFail(e.getMessage());
-                        KLog.e(e.getMessage());
                     }
+                    KLog.e(e.getMessage());
                 }
             }
         });
