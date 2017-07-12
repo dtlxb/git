@@ -61,6 +61,7 @@ public class HotIndustryBean {
         private String stock_code;
         private String stock_name;
         private int stock_type;
+
         private String industry_code;
         private String industry_name;
 

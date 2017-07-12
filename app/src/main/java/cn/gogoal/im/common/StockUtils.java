@@ -15,14 +15,11 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
@@ -33,8 +30,14 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 public class StockUtils {
 
     /**
+     * 存储股票code set集合
+     * */
+    private static void saveSetData(LinkedHashSet<String> set){
+        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", set);
+    }
+
+    /**
      * 传入任意类型的array,只要每个object里含有字段stock_code
-     * 仅保存stock_code
      */
     public static void saveMyStock(JSONArray array) {
         LinkedHashSet<String> set = new LinkedHashSet<>();
@@ -42,45 +45,23 @@ public class StockUtils {
             JSONObject object = (JSONObject) array.get(i);
             set.add(object.getString("stock_code"));
         }
-        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", set);
+        saveSetData(set);
     }
 
-    /**
-     * 存储股票文件流☆☆☆
-     */
-    public static void saveMyStock(ArrayList<MyStockData> array) {
-        SPTools.saveSPObject(UserUtils.getMyAccountId() + "_my_stock_set_object", array);
+    public static void saveMyStock(List<MyStockData> array) {
+        LinkedHashSet<String> set = new LinkedHashSet<>();
+        for (MyStockData d:array){
+            set.add(d.getStock_code());
+        }
+        saveSetData(set);
     }
 
-    /**
-     * 获取本地自选股集合——文件流
-     */
-    public static ArrayList<MyStockData> getMyStock() {
-        return (ArrayList<MyStockData>) SPTools.getSPObject(UserUtils.getMyAccountId() + "_my_stock_set_object");
-    }
-
-    /**
-     * 获取本地自选股code集合
-     */
-    public static Set<String> getMyStockCodes() {
-        return SPTools.getSetData(UserUtils.getMyAccountId() + "_my_stock_set", new HashSet<String>());
-    }
 
     /**
      * 获取本地自选股集合
      */
-    public static ArrayList<String> getMyStockCodeList() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        ArrayList<MyStockData> myStocks = getMyStock();
-        if (ArrayUtils.isEmpty(myStocks)){
-            return new ArrayList<>();
-        }else {
-            for (MyStockData data : myStocks) {
-                if (!arrayList.contains(data.getStock_code()))
-                    arrayList.add(data.getStock_code());
-            }
-            return arrayList;
-        }
+    public static LinkedHashSet<String> getMyStockCodeList() {
+        return SPTools.getSetData(UserUtils.getMyAccountId()+"_my_stock_set", new LinkedHashSet<String>());
     }
 
     public static String getStockCodes(@NonNull JsonArray array) {
@@ -115,6 +96,13 @@ public class StockUtils {
     }
 
     /**
+     * 获取本地自选股缓存
+     */
+    public static String getMyStockString() {
+        return ArrayUtils.mosaicListElement(getMyStockCodeList());
+    }
+
+    /**
      * 添加单个股票到自选股
      */
     public static void addStock2MyStock(String stockCode) {
@@ -123,7 +111,7 @@ public class StockUtils {
         }
         LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockCodeList());
         myStockSet.add(stockCode);
-        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
+        saveSetData(myStockSet);
     }
 
     /**
@@ -141,8 +129,8 @@ public class StockUtils {
         LinkedHashSet<String> myStockSet = new LinkedHashSet<>(getMyStockCodeList());
 
         if (myStockSet.remove(stockCode)) {
-            SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
-        } else {
+            saveSetData(myStockSet);
+        } else {//fullcode
             myStockSet.remove(stockCode.substring(2));
         }
     }
@@ -151,8 +139,7 @@ public class StockUtils {
      * 清除自选股
      */
     public static void clearLocalMyStock() {
-        SPTools.clearItem(UserUtils.getMyAccountId() + "_my_stock_set");
-        SPTools.clearItem(UserUtils.getMyAccountId() + "_my_stock_set_object");
+        SPTools.clearItem(UserUtils.getMyAccountId()+"_my_stock_set");
     }
 
     //数据处理，1保存两位，2.正数补+，
@@ -265,6 +252,7 @@ public class StockUtils {
     public static boolean getStockSettingColor() {
         return !SPTools.getBoolean("stock_unNormal_show", false);
     }
+
 
     /**
      * 是否是交易时间
@@ -427,10 +415,6 @@ public class StockUtils {
      * 添加自选股
      */
     public static void addMyStock(final String stock_code, final Impl<Boolean> callback) {
-        if (stock_code==null){
-            UIHelper.toast(MyApp.getAppContext(),"股票内容为空");
-            return;
-        }
         final Map<String, String> param = new HashMap<String, String>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -586,10 +570,10 @@ public class StockUtils {
         new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
     }
 
-    public static void stockSort(int fromIndex, int toIndex, Impl<String> callback) {
+    public static void stockSort(int fromIndex,int toIndex,Impl<String> callback){
         HashMap<String, String> tokenParams = UserUtils.getTokenParams();
-        tokenParams.put("fromIndex", String.valueOf(fromIndex));
-        tokenParams.put("toIndex", String.valueOf(toIndex));
+        tokenParams.put("fromIndex",String.valueOf(fromIndex));
+        tokenParams.put("toIndex",String.valueOf(toIndex));
 
         new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
             @Override

@@ -53,8 +53,12 @@ public class AutoScrollViewPager extends ViewPager {
     private OnPageClickListener onPageClickListener;
 
     private Paint paint;
-    private @ColorInt int dotSelectedColor = 0xffFF8200;
-    private @ColorInt int dotUnSelectedColor = 0xFFD9D9D9;
+    private
+    @ColorInt
+    int dotSelectedColor = 0xff000000;
+    private
+    @ColorInt
+    int dotUnSelectedColor = 0xFFD9D9D9;
     private float dotPadding = 1.2f;
 
 
@@ -236,10 +240,17 @@ public class AutoScrollViewPager extends ViewPager {
         this.onPageClickListener = onPageClickListener;
     }
 
+    private boolean isTouchBanner;
+
+    public boolean isTouchBanner() {
+        return isTouchBanner;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         switch (MotionEventCompat.getActionMasked(ev)) {
             case MotionEvent.ACTION_DOWN:
+                isTouchBanner = true;
                 if (getCurrentItemOfWrapper() + 1 == getCountOfWrapper()) {
                     setCurrentItem(0, false);
                 } else if (getCurrentItemOfWrapper() == 0) {
@@ -258,6 +269,8 @@ public class AutoScrollViewPager extends ViewPager {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                isTouchBanner = false;
+
                 if (autoScroll) {
                     startAutoScroll();
                 }

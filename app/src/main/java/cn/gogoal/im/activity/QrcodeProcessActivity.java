@@ -129,9 +129,6 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
                     try {
                         final JSONObject scanBody = JSONObject.parseObject(codeBody);
 
-//                        KLog.e(scanBody.getString("qrType"));
-//                        KLog.e(scanBody.getString("account_id"));
-
                         if (scanBody.getIntValue("qrType") == 0) {
                             //TODO 跳转个人详情
                             NormalIntentUtils.go2PersionDetail(getActivity(),

@@ -167,4 +167,10 @@ public class MyStockData implements Serializable,Cloneable {
             return null;
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MyStockData && this.getStock_code().equalsIgnoreCase(((MyStockData) obj).getStock_code()) &&
+                this.getStock_name().equalsIgnoreCase(((MyStockData) obj).getStock_name());
+    }
 }

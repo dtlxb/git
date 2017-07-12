@@ -163,7 +163,7 @@ public class CountDownTimerView extends LinearLayout {
         //这里的天数不写也行，我写365
         if (day >= 365 || hour >= 24 || min >= 60 || sec >= 60 || day < 0
                 || hour < 0 || min < 0 || sec < 0) {
-            throw new RuntimeException("Time format is error,please check out your code");
+            throw new RuntimeException("Time format is error,please checkUpdata out your code");
         }
         // day 的十位数
         day_decade = day / 10;

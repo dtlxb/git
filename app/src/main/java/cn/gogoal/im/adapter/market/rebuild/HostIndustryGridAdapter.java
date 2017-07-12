@@ -1,60 +1,32 @@
-package cn.gogoal.im.adapter.market;
+package cn.gogoal.im.adapter.market.rebuild;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import com.hply.alilayout.DelegateAdapter;
-import com.hply.alilayout.LayoutHelper;
-import com.hply.alilayout.layout.GridLayoutHelper;
 
 import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.RankListDetialActivity;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.stock.HostIndustrylistBean;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 
 /**
- * author wangjd on 2017/6/15 0015.
+ * author wangjd on 2017/7/11 0011.
  * Staff_id 1375
  * phone 18930640263
  * description :${annotated}.
  */
-public class HostIndustryGridAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
+public class HostIndustryGridAdapter extends CommonAdapter<HostIndustrylistBean, BaseViewHolder> {
 
-    private Context context;
-    private List<HostIndustrylistBean> hostIndustrylist;
-
-    public HostIndustryGridAdapter(Context context,List<HostIndustrylistBean> hostIndustrylist) {
-        this.hostIndustrylist = hostIndustrylist;
-        this.context=context;
+    public HostIndustryGridAdapter(List<HostIndustrylistBean> data) {
+        super(R.layout.item_stock_hotindustry, data);
     }
 
     @Override
-    public LayoutHelper onCreateLayoutHelper() {
-        GridLayoutHelper layoutHelper = new GridLayoutHelper(3);
-        layoutHelper.setBgColor(ContextCompat.getColor(context,R.color.colorDivider_d9d9d9));
-        layoutHelper.setHGap(1);
-        return layoutHelper;
-    }
-
-    @Override
-    public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MainViewHolder(
-                LayoutInflater.from(
-                        parent.getContext())
-                        .inflate(R.layout.item_stock_hotindustry, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(MainViewHolder holder, int position) {
-        final HostIndustrylistBean hotData = hostIndustrylist.get(position);
-
+    protected void convert(BaseViewHolder holder, final HostIndustrylistBean hotData, int position) {
         holder.setText(R.id.tv_hot_industry_name, hotData.getIndustry_name());
         holder.setText(R.id.tv_hot_industry_rate, StockUtils.plusMinus(hotData.getIndustry_rate(), true));
 
@@ -80,10 +52,5 @@ public class HostIndustryGridAdapter extends DelegateAdapter.Adapter<MainViewHol
                 v.getContext().startActivity(intent);
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return 6;
     }
 }

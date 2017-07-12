@@ -3,6 +3,7 @@ package cn.gogoal.im.common.ImageUtils;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -569,14 +571,14 @@ public class ImageUtils {
      * 让Gallery上能马上看到该图片
      */
     private static void scanPhoto(Context ctx, File imgFile) {
-//        try {
-//            MediaStore.Images.Media.insertImage(ctx.getContentResolver(),
-//                    imgFile.getAbsolutePath(), imgFile.getName(), null);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-//                Uri.parse("file://" + imgFile.getAbsolutePath())));
+        try {
+            MediaStore.Images.Media.insertImage(ctx.getContentResolver(),
+                    imgFile.getAbsolutePath(), imgFile.getName(), null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.parse("file://" + imgFile.getAbsolutePath())));
     }
 
     /**

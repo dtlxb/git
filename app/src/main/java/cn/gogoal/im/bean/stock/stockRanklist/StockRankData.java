@@ -6,7 +6,7 @@ package cn.gogoal.im.bean.stock.stockRanklist;
  * phone 18930640263
  * description :${annotated}.
  */
-public class StockRankBean {
+public class StockRankData {
     /**
      * rate : 44.01544401544402
      * current_price : 11.19

@@ -83,9 +83,9 @@ public class GoGoalWebView extends WebView {
                         res = new WebResourceResponse("image/png", "UTF-8", localCopy);
                     } catch (IOException e) {
                     }
-                } else if (url.endsWith("/check.png")) {
+                } else if (url.endsWith("/checkUpdata.png")) {
                     try {
-                        InputStream localCopy = mContext.getAssets().open("check.png");
+                        InputStream localCopy = mContext.getAssets().open("checkUpdata.png");
                         res = new WebResourceResponse("image/png", "UTF-8", localCopy);
                     } catch (IOException e) {
                     }

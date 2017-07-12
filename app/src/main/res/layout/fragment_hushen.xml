@@ -1,20 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cn.gogoal.im.ui.view.XLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/xLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/refesh_main_bg"
     android:orientation="vertical">
 
     <cn.gogoal.im.ui.widget.refresh.RefreshLayout
-        android:id="@+id/swiperefreshlayout"
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/refesh_main_bg">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_market"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:scrollbarStyle="outsideOverlay"
+            android:background="@android:color/white"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <cn.gogoal.im.ui.widget.ForbitParentLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <cn.gogoal.im.ui.view.AutoScrollViewPager
+                        android:id="@+id/vp_market_zhishu"
+                        android:layout_width="match_parent"
+                        android:layout_height="110dp" />
+
+                </cn.gogoal.im.ui.widget.ForbitParentLayout>
+
+                <include
+                    android:id="@+id/include_title_hot_industry"
+                    layout="@layout/header_view_market" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_market_hot_industry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                    app:spanCount="3" />
+
+                <include
+                    android:id="@+id/include_title_big_data"
+                    layout="@layout/header_view_market" />
+
+                <include layout="@layout/item_stock_makret_big_data" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_rankList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
 
     </cn.gogoal.im.ui.widget.refresh.RefreshLayout>
 

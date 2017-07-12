@@ -145,7 +145,7 @@ public class SettingActivity extends BaseActivity {
 
                     holder.setVisible(R.id.view_divider, !(data.getItemValue().equalsIgnoreCase("账号与安全")
                             || data.getItemValue().equalsIgnoreCase("涨跌显示设置")
-                            || data.getItemValue().equalsIgnoreCase("服务协议")
+                            || data.getItemValue().equalsIgnoreCase("检查更新")
                             || data.getItemValue().equalsIgnoreCase("清除缓存")
                     ));
 
@@ -199,6 +199,9 @@ public class SettingActivity extends BaseActivity {
                                     NormalIntentUtils.go2WebActivity(
                                             getActivity(),
                                             AppConst.GG_SERVICE_AGREEMENT, data.getItemValue());
+                                    break;
+                                case "检查更新":
+                                    AppDevice.checkUpdata(getSupportFragmentManager(),true);
                                     break;
                                 default:
                                     break;

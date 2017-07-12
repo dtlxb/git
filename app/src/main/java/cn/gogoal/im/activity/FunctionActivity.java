@@ -333,6 +333,7 @@ public class FunctionActivity extends BaseActivity {
         settings.setBuiltInZoomControls(false);
 
         String ua = mWebView.getSettings().getUserAgentString() + " GoGoaler/" + AppDevice.getAppVersionName(getContext());
+
         mWebView.getSettings().setUserAgentString(ua);
 
         // 开启DOM缓存。
