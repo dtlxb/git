@@ -2,7 +2,6 @@ package cn.gogoal.im.common;
 
 import android.util.Base64;
 
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -117,7 +116,6 @@ public class UFileUpload {
 
             @Override
             public void onFail(org.json.JSONObject response) {
-                KLog.e("onFail " + response);
                 listener.onFailed();
             }
         });

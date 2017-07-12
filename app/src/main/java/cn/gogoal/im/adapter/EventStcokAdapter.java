@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -99,7 +98,6 @@ public class EventStcokAdapter extends BaseSectionQuickAdapter<SectionEventStock
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KLog.e(position);
                 NormalIntentUtils.go2StockDetail(v.getContext(),
                         stockData.getStock_code(), stockData.getStock_name());
             }

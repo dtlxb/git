@@ -17,7 +17,6 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -257,7 +256,6 @@ public class UserUtils {
         user.put(key, newValue);
         SPTools.saveJsonObject("userInfo", user);
 
-        KLog.json(SPTools.getString("userInfo", ""));
     }
 
     /**
@@ -276,7 +274,6 @@ public class UserUtils {
         new GGOKHTTP(map, GGOKHTTP.UPDATE_ACCOUNT_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (parseObject(responseInfo).getIntValue("code") == 0) {
                     JSONObject result = parseObject(responseInfo).getJSONObject("data");
                     boolean success = result.getBoolean("success");

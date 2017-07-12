@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +88,6 @@ public class SocialRecordAdapter extends CommonAdapter<SocialRecordData, BaseVie
 
         String identifies = SPTools.getString(invite_id, null);
 
-        KLog.json(identifies);
 
         if (identifies == null) {
             InviteAuthDialog.newInstance("video", invite_id).show(mContext.getSupportFragmentManager());

@@ -3,7 +3,6 @@ package cn.gogoal.im.adapter;
 import android.view.View;
 
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -39,7 +38,6 @@ public class SearchPersionResultAdapter extends CommonAdapter<ContactBean,BaseVi
                     data.getAvatar(),
                     imageView);
         } catch (Exception e) {
-            KLog.e(e.getMessage());
         }
 
         UIHelper.setRippBg(holder.itemView);

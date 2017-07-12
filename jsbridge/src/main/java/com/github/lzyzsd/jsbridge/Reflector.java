@@ -1,6 +1,5 @@
 package com.github.lzyzsd.jsbridge;
 
-import com.socks.library.KLog;
 
 import java.lang.reflect.Field;
 
@@ -29,7 +28,6 @@ class Reflector<T> {
                 field = f;
                 return;
             } catch (Exception e) {
-                KLog.e(e.getMessage());
             } finally {
                 c = c.getSuperclass();
             }

@@ -29,5 +29,5 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
     //        compile 'cn.leancloud.android:fastjson:1.2.30-leancloud'
-    compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
+    //compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
 }
