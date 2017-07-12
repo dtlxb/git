@@ -11,7 +11,6 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 import org.simple.eventbus.EventBus;
@@ -94,7 +93,6 @@ public class MessageSaveService extends Service {
         }
         SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", noBother);
         //股票消息不缓存
-        KLog.e(chatType);
         if (chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             Long rightNow = CalendarUtils.getCurrentTime();
             String nickName = "";
