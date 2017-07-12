@@ -110,8 +110,8 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("E00002638");
 //        loginPassWord.setText("123456");
 
-        loginUserName.setText("E00018281");//瑜
-        loginPassWord.setText("369520");
+//        loginUserName.setText("E00018281");//瑜
+//        loginPassWord.setText("369520");
 
 //        loginUserName.setText("E010399");
 //        loginPassWord.setText("198122");
