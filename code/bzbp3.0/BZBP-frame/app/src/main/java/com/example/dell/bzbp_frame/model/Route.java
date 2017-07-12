@@ -14,42 +14,58 @@ import java.util.List;
 
 public class Route implements Serializable {
 
-    private String mText;
-    private Time mTime;
+    private static final long serialVersionUID = 3494746809864002552L;
 
-    public String getText() {
-        return mText;
+    public int rid;
+    public String username;
+    public ArrayList<MyLatlng> location_list;
+    public String comment;
+    public Long start_time, end_time;
+    public ArrayList<Posto> postos;
+
+    public Route(){
+        location_list = new ArrayList<MyLatlng>();
+        postos = new ArrayList<Posto>();
     }
 
-    public void setText(String text) {
-        mText = text;
+    public String getUsername() {
+        return username;
     }
 
-    public Time getTime() {
-        return mTime;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setTime(Time time) {
-        mTime = time;
+    public String getComment() {
+        return comment;
     }
 
-    private List<Posto> mPostoList = new ArrayList();
-
-    public List<Posto> getPostos() {
-        return mPostoList;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public void setPostos(List<Posto> postos) {
-        this.mPostoList = postos;
+    public Long getStart_time() {
+        return start_time;
     }
 
-    private List<Location> mLocationList = new ArrayList();
-
-    public List<Location> getLocations() {
-        return mLocationList;
+    public void setStart_time(Long start_time) {
+        this.start_time = start_time;
     }
 
-    public void setLocations(List<Location> locations) {
-        this.mLocationList = locations;
+    public Long getEnd_time() {
+        return end_time;
     }
+
+    public void setEnd_time(Long end_time) {
+        this.end_time = end_time;
+    }
+
+    public ArrayList<Posto> getPostos() {
+        return postos;
+    }
+
+    public void setPostos(ArrayList<Posto> postos) {
+        this.postos = postos;
+    }
+
 }

@@ -23,7 +23,7 @@ public class Route implements  Serializable {
     public ArrayList<MyLatlng> location_list;
     public String comment;
     public Date start, end;
-    public List<Posto> postos;
+    public ArrayList<Posto> postos;
 
     public Route(){
         location_list = new ArrayList<MyLatlng>();
@@ -62,11 +62,11 @@ public class Route implements  Serializable {
         this.end = end;
     }
 
-    public List<Posto> getPostos() {
+    public ArrayList<Posto> getPostos() {
         return postos;
     }
 
-    public void setPostos(List<Posto> postos) {
+    public void setPostos(ArrayList<Posto> postos) {
         this.postos = postos;
     }
 }

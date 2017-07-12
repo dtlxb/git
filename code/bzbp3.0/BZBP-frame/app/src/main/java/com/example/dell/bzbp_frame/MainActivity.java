@@ -29,7 +29,7 @@ import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.example.dell.bzbp_frame.model.User;
+import com.example.dell.bzbp_frame.model.*;
 
 import java.sql.Timestamp;
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
     private Button mCameraButton;
     private Button mStartRouteButton;
 
-    private LatLng last_location;
+    private MyLatlng last_location;
 
 
     private AMap aMap;
@@ -111,16 +111,19 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         });
 
         //route
-        /*
+
         mStartRouteButton = (Button) findViewById(R.id.button_main_route_start);
         mStartRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this,RouteActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                i.putExtras(intent_bundle);
                 startActivity(i);
             }
         });
-        */
+
 
         //init map
 
@@ -237,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                     mLocMarker.setPosition(location);
                 }
                 aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
-                last_location = location;
+                last_location = new MyLatlng(location.latitude,location.longitude);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
                 Log.e("AmapErr",errText);
