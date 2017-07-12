@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.webkit.WebView;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

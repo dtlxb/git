@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hply.imagepicker.ITakePhoto;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -106,7 +105,6 @@ public class FunctionFragment extends Fragment {
 //    }
 
     private void compressPhoto(final List<String> uriPaths) {
-        KLog.e(uriPaths);
         for (int i = 0; i < uriPaths.size(); i++) {
             Luban.get(getActivity())
                     .load(new File(uriPaths.get(i)))                     //传人要压缩的图片
