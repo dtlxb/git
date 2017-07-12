@@ -27,7 +27,7 @@ public class IndexBar extends View {
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
             "W", "X", "Y", "Z", "#"};
 
-    private boolean isNeedRealIndex = true;
+    private boolean isNeedRealIndex ;
 
     //索引数据源
     private List<String> mIndexDatas;

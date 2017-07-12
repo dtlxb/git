@@ -131,16 +131,7 @@ public class MainStockFragment extends BaseFragment {
         });
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);
-
-        //test
-        imgMyStockRefresh.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //startActivity(new Intent(mContext, Test2Activity.class));
-                return true;
-            }
-        });
-
+        
         unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(getActivity());
         initBadge(unReadCount, badge);
@@ -324,8 +315,11 @@ public class MainStockFragment extends BaseFragment {
         Map map = baseMessage.getOthers();
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         //获取免打扰
-        List<String> muList = (List<String>) conversation.get("mu");
-        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        boolean noBother = false;
+        if (conversation.get("mu") != null) {
+            List<String> muList = (List<String>) conversation.get("mu");
+            noBother = muList.contains(UserUtils.getMyAccountId());
+        }
         int chatType = (int) conversation.getAttribute("chat_type");
         if (!noBother && chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             unReadCount++;

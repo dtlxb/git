@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -25,6 +26,7 @@ import cn.gogoal.im.adapter.ResearchAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -111,6 +113,10 @@ public class StockNewsMinFragment extends BaseFragment {
         iniFootView();
 
         getDatas();
+
+        ViewGroup.LayoutParams layoutParams = xLayout.getLayoutParams();
+        layoutParams.height= AppDevice.dp2px(375);
+        xLayout.setLayoutParams(layoutParams);
 
         xLayout.setEmptyText("暂无" + stockNewsType.getTitle() + "数据");
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {

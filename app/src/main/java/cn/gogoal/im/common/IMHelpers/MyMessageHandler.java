@@ -52,7 +52,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                         if (!message.getFrom().equals(clientID)) {
                             showNotification(message, conversation);
                             final int chatType = (int) conversation.getAttribute("chat_type");
-
+                            KLog.e(message.getContent());
+                            KLog.e(conversation.get("mu"));
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊
@@ -220,8 +221,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
      * 推送Notification
      */
     private void showNotification(AVIMMessage message, AVIMConversation conversation) {
-        List<String> muList = (List<String>) conversation.get("mu");
-        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        boolean noBother = false;
+        if (conversation.get("mu") != null) {
+            List<String> muList = (List<String>) conversation.get("mu");
+            noBother = muList.contains(UserUtils.getMyAccountId());
+        }
 
         if (noBother) {
             return;

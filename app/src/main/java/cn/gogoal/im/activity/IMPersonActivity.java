@@ -68,8 +68,11 @@ public class IMPersonActivity extends BaseActivity {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 //获取免打扰
-                List<String> muList = (List<String>) conversation.get("mu");
-                boolean noBother = muList.contains(UserUtils.getMyAccountId());
+                boolean noBother = false;
+                if (conversation.get("mu") != null) {
+                    List<String> muList = (List<String>) conversation.get("mu");
+                    noBother = muList.contains(UserUtils.getMyAccountId());
+                }
                 messageSwitch.setChecked(noBother);
             }
 
