@@ -51,7 +51,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,7 +103,6 @@ public class AppDevice {
         final float scale = MyApp.getAppContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f * (dpValue >= 0 ? 1 : -1));
     }
-
 
 
     public static int px2dp(Context context, float pxValue) {
@@ -288,7 +286,7 @@ public class AppDevice {
         return new BigInteger(
                 String.valueOf(
                         Math.round(alpher * 255)), 10)
-                .toString(16)+colorString;
+                .toString(16) + colorString;
     }
 
     //获取真实的手机屏幕尺寸
@@ -1234,17 +1232,16 @@ public class AppDevice {
 
     /**
      * 应用检测更新
-     * @param manager FragmentManager
+     *
+     * @param manager     FragmentManager
      * @param checkByUser 是否是手动检测，还是自动检测
-     * */
-    public static void checkUpdata(final FragmentManager manager, final boolean checkByUser){
+     */
+    public static void checkUpdata(final FragmentManager manager, final boolean checkByUser) {
         final HashMap<String, String> map = new HashMap<>();
         map.put("versions", AppDevice.getAppVersionName(MyApp.getAppContext()));
         new GGOKHTTP(map, GGOKHTTP.GET_ANDROID_VERSIONS_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-                KLog.e(StringUtils.map2ggParameter(map));
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     JSONObject updataObject = JSONObject.parseObject(responseInfo).getJSONObject("data");
                     if (updataObject.getBooleanValue("isUpdate")) {
@@ -1255,12 +1252,12 @@ public class AppDevice {
                                 updataObject.getString("url"));
                         updataDialog.setCancelable(false);
                         updataDialog.show(manager);
-                    }else {
+                    } else {
                         if (checkByUser)
-                            NormalSingleAlertDialog.newInstance("当前为最新版本","哦，知道了",null).show(manager);
+                            NormalSingleAlertDialog.newInstance("当前为最新版本", "哦，知道了", null).show(manager);
                     }
-                }else {
-                   //
+                } else {
+                    //
                 }
             }
 

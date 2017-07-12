@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 
@@ -71,17 +70,16 @@ public class ChangePasswordActivity extends BaseActivity {
                 new GGOKHTTP(map, GGOKHTTP.RESET_PASSWORD, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.e(responseInfo);
 
                         JSONObject object = JSONObject.parseObject(responseInfo);
                         if (object.getIntValue("code") == 0) {
                             boolean success = object.getJSONObject("data").getBoolean("success");
-                            if (success){
+                            if (success) {
                                 loadingDialog.dismiss();
                                 WaitDialog dialog = WaitDialog.getInstance("修改密码成功", R.mipmap.login_success, false);
                                 dialog.show(getSupportFragmentManager());
-                                dialog.dismiss(false,true);
-                            }else {
+                                dialog.dismiss(false, true);
+                            } else {
                                 loadingDialog.dismiss();
                                 showErrorDialog("原密码错误");
                             }
@@ -105,13 +103,13 @@ public class ChangePasswordActivity extends BaseActivity {
     }
 
     private void showErrorDialog(String text) {
-        WaitDialog dialog = WaitDialog.getInstance(0.5f,text, R.mipmap.login_error, false);
+        WaitDialog dialog = WaitDialog.getInstance(0.5f, text, R.mipmap.login_error, false);
         dialog.show(getSupportFragmentManager());
         dialog.dismiss(false);
     }
 
     private WaitDialog showLoadingDialog(String text) {
-        WaitDialog dialog = WaitDialog.getInstance(0.5f,text, R.mipmap.login_loading, true);
+        WaitDialog dialog = WaitDialog.getInstance(0.5f, text, R.mipmap.login_loading, true);
         dialog.show(getSupportFragmentManager());
         return dialog;
     }

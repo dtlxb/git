@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -248,8 +247,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         //获取股票数据
         stockName = getIntent().getStringExtra("stockName");
         stockCode = getIntent().getStringExtra("stockCode");
-
-        KLog.e("stockName="+stockName+";stockCode="+stockCode);
 
 //        stockSource=getIntent().getStringExtra("stockSource");
 
@@ -589,7 +586,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
                         textLayout.setVisibility(View.VISIBLE);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.getMessage();
                 }
             }
@@ -955,8 +952,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         param.put("type", String.valueOf(seat));
         param.put("channel", getStockCode);
 
-        KLog.e(cn.gogoal.im.common.StringUtils.map2ggParameter(param));
-
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -1001,7 +996,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     load_animation_change.setVisibility(View.GONE);
                     stock_lv.setVisibility(View.GONE);
                     stock_no_data.setVisibility(View.VISIBLE);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.getMessage();
                 }
             }

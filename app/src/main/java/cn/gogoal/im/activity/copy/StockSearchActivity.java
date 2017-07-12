@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -109,7 +108,6 @@ public class StockSearchActivity extends BaseActivity {
         init();
         Intent intent = getIntent();
         num = intent.getIntExtra("num", 0);
-        KLog.e(num);
         initHotList();
     }
 

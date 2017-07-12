@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,7 +194,6 @@ public class ContactsActivity extends BaseActivity {
         List<UserBean> userBeanList = new ArrayList<>();
         userBeanList.addAll(UserInfoUtils.getAllUserInfo());
 
-        KLog.e(userBeanList);
         if (null != userBeanList && userBeanList.size() > 0) {
             parseContactDatas(userBeanList, contactBeanList);
         } else {
@@ -229,7 +227,6 @@ public class ContactsActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     UIHelper.toast(getActivity(), "此人删除成功");
                     upDataFootCount(UserUtils.getUserContacts());
@@ -264,7 +261,6 @@ public class ContactsActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     UserInfoUtils.saveAllUserInfo(responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
@@ -278,7 +274,6 @@ public class ContactsActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
                 UIHelper.toastError(getActivity(), msg);
             }
         };

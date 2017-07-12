@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 
@@ -66,7 +65,6 @@ public class MyStockNewsActivity extends BaseActivity {
                             break;
                     }
                 } else {
-                    KLog.e("======" + data + "========");
                 }
             }
         });

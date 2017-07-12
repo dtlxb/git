@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.hply.imagepicker.ITakePhoto;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class DemoActivity extends BaseActivity {
                 .get();
     }
 
-    @OnClick({R.id.setWatchLive, R.id.btn_test, R.id.btn_upload, R.id.btn_item_dialog,R.id.btn_wechat,R.id.btn_item_edit})
+    @OnClick({R.id.setWatchLive, R.id.btn_test, R.id.btn_upload, R.id.btn_item_dialog, R.id.btn_wechat, R.id.btn_item_edit})
     public void WatchLive(View view) {
         switch (view.getId()) {
             case R.id.setWatchLive:
@@ -81,14 +80,13 @@ public class DemoActivity extends BaseActivity {
                 break;
 
             case R.id.btn_upload:
-                ImageTakeUtils.getInstance().takePhoto(getAppContext(),9, false, new ITakePhoto() {
+                ImageTakeUtils.getInstance().takePhoto(getAppContext(), 9, false, new ITakePhoto() {
                     @Override
                     public void success(List<String> uriPaths, boolean isOriginalPic) {
-                        KLog.e(uriPaths);
                         if (uriPaths != null) {
                             //返回的图片集合不为空，执行上传操作
                             doUpload(uriPaths);
-                            UIHelper.toast(getAppContext(),uriPaths.toString());
+                            UIHelper.toast(getAppContext(), uriPaths.toString());
                         }
                     }
 
@@ -112,11 +110,10 @@ public class DemoActivity extends BaseActivity {
                                         .wechat().login(new IOpenCallback() {
                                     @Override
                                     public void onFailed(String errorString) {
-                                        KLog.e(errorString);
                                     }
+
                                     @Override
                                     public void onSuccess(String responceString) {
-                                        KLog.e(responceString);
                                     }
                                 });
                                 dialog.dismiss();
@@ -131,7 +128,7 @@ public class DemoActivity extends BaseActivity {
                                 dialog.dismiss();
                                 break;
                         }
-                        UIHelper.toast(getAppContext(),view.getText().toString());
+                        UIHelper.toast(getAppContext(), view.getText().toString());
                     }
                 });
 
@@ -151,7 +148,7 @@ public class DemoActivity extends BaseActivity {
                 });
 
             case R.id.btn_item_edit:
-                EditTextDialog dialog=new EditTextDialog();
+                EditTextDialog dialog = new EditTextDialog();
                 dialog.show(getActivity().getSupportFragmentManager());
 
                 dialog.setOnSendButtonClick(new EditTextDialog.OnSendMessageListener() {
@@ -185,19 +182,16 @@ public class DemoActivity extends BaseActivity {
 
                     @Override
                     public void onUploading(final int progress) {
-                        KLog.e("上传进度===" + progress);
                     }
 
                     @Override
                     public void onSuccess(String onlineUri) {
-                        KLog.e("上传成功===" + onlineUri);
                         waitDialog[0].cancel();
                         UIHelper.toast(getAppContext(), "上传成功" + onlineUri);
                     }
 
                     @Override
                     public void onFailed() {
-                        KLog.e("上传失败!!!!!!");
                         waitDialog[0].cancel();
                     }
                 });

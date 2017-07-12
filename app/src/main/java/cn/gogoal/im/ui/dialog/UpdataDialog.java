@@ -13,8 +13,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -75,15 +73,11 @@ public class UpdataDialog extends BaseCentDailog {
 
         File appFile = getActivity().getExternalFilesDir("apk");
 
-        KLog.e(appFile);
-
         if (!appFile.exists()) {
             appFile.mkdirs();
         }
 
         filePath = appFile.getAbsolutePath();
-
-        KLog.e(filePath);
 
         Bundle bundle = getArguments();
         if (bundle == null) {

@@ -24,7 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,7 +129,6 @@ public class PhoneContactsActivity extends BaseActivity {
             @Override
             public void onRefusedAuthorize(List<String> deniedPermissions) {
                 emptyLayout.setVisibility(View.VISIBLE);
-                KLog.e("获取联系人权限被拒");
             }
         });
     }
@@ -173,7 +171,6 @@ public class PhoneContactsActivity extends BaseActivity {
         protected String doInBackground(String... params) {
             phoneContactDatas = getContacts();//读联系人
 
-            KLog.e(JSONObject.toJSONString(phoneContactDatas));
 
             phoneAdapter = new PhoneAdapter(phoneContacts);
             return "Executed";

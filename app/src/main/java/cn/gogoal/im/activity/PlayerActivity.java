@@ -39,7 +39,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -297,7 +296,6 @@ public class PlayerActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     playerData = object.getJSONArray("data").getJSONObject(0);
@@ -341,7 +339,7 @@ public class PlayerActivity extends BaseActivity {
             NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-            KLog.json("mobile " + mobNetInfo.isConnected() + " wifi " + wifiNetInfo.isConnected());
+            //KLog.json("mobile " + mobNetInfo.isConnected() + " wifi " + wifiNetInfo.isConnected());
 
             if (!isLastWifiConnected && wifiNetInfo.isConnected()) {
                 isLastWifiConnected = true;
@@ -546,7 +544,7 @@ public class PlayerActivity extends BaseActivity {
         public void surfaceCreated(SurfaceHolder holder) {
             holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
             holder.setKeepScreenOn(true);
-            KLog.json("AlivcPlayer onSurfaceCreated.");
+            //KLog.json("AlivcPlayer onSurfaceCreated.");
 
             // 重点:
             if (mPlayer != null) {
@@ -559,17 +557,17 @@ public class PlayerActivity extends BaseActivity {
 
             if (mPlayerControl != null)
                 mPlayerControl.start();
-            KLog.json("AlivcPlayeron SurfaceCreated over.");
+            //KLog.json("AlivcPlayeron SurfaceCreated over.");
         }
 
         public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-            KLog.json("onSurfaceChanged is valid ? " + holder.getSurface().isValid());
+            //KLog.json("onSurfaceChanged is valid ? " + holder.getSurface().isValid());
             if (mPlayer != null)
                 mPlayer.setSurfaceChanged();
         }
 
         public void surfaceDestroyed(SurfaceHolder holder) {
-            KLog.json("onSurfaceDestroy.");
+            //KLog.json("onSurfaceDestroy.");
 
             if (mPlayer != null) {
                 mPlayer.releaseVideoSurface();
@@ -578,7 +576,7 @@ public class PlayerActivity extends BaseActivity {
     };
 
     private boolean startToPlay(String mURI) {
-        KLog.json("start play.");
+        //KLog.json("start play.");
 
         resetUI();
 
@@ -609,8 +607,6 @@ public class PlayerActivity extends BaseActivity {
         //添加播放器地址
         mPlayer.prepareAndPlay(mURI);
 
-        KLog.e(mURI);
-
         if (mStatusListener != null)
             mStatusListener.notifyStatus(STATUS_START);
 
@@ -630,7 +626,7 @@ public class PlayerActivity extends BaseActivity {
 
         @Override
         public void onPrepared() {
-            KLog.json("onPrepared");
+            //KLog.json("onPrepared");
             if (mPlayer != null) {
                 //VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING  |  VIDEO_SCALING_MODE_SCALE_TO_FIT
                 mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
@@ -666,7 +662,7 @@ public class PlayerActivity extends BaseActivity {
 
         public void onError(int what, int extra) {
 
-            KLog.json("Error what = " + what + " extra = " + extra);
+            //KLog.json("Error what = " + what + " extra = " + extra);
 
             if (mPlayer == null) {
                 return;
@@ -716,7 +712,7 @@ public class PlayerActivity extends BaseActivity {
     private class VideoInfolistener implements MediaPlayer.MediaPlayerInfoListener {
 
         public void onInfo(int what, int extra) {
-            KLog.json("onInfo what = " + what + " extra = " + extra);
+            //KLog.json("onInfo what = " + what + " extra = " + extra);
 
             switch (what) {
                 case MediaPlayer.MEDIA_INFO_UNKNOW: //未知信息
@@ -735,11 +731,11 @@ public class PlayerActivity extends BaseActivity {
                     break;
                 case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START: //首帧显示时间
                     if (mPlayer != null)
-                        KLog.json("on Info first render start : "
-                                + ((long) mPlayer.getPropertyDouble(AliVcMediaPlayer.FFP_PROP_DOUBLE_1st_VFRAME_SHOW_TIME, -1)
-                                - (long) mPlayer.getPropertyDouble(AliVcMediaPlayer.FFP_PROP_DOUBLE_OPEN_STREAM_TIME, -1)));
+//                        KLog.json("on Info first render start : "
+//                                + ((long) mPlayer.getPropertyDouble(AliVcMediaPlayer.FFP_PROP_DOUBLE_1st_VFRAME_SHOW_TIME, -1)
+//                                - (long) mPlayer.getPropertyDouble(AliVcMediaPlayer.FFP_PROP_DOUBLE_OPEN_STREAM_TIME, -1)));
 
-                    show_buffering_ui(false);
+                        show_buffering_ui(false);
                     break;
             }
         }
@@ -761,7 +757,7 @@ public class PlayerActivity extends BaseActivity {
     private class VideoCompletelistener implements MediaPlayer.MediaPlayerCompletedListener {
 
         public void onCompleted() {
-            KLog.json("onCompleted.");
+            //KLog.json("onCompleted.");
             setFinishDialog();
         }
     }
@@ -787,7 +783,7 @@ public class PlayerActivity extends BaseActivity {
     private class VideoSizeChangelistener implements MediaPlayer.MediaPlayerVideoSizeChangeListener {
 
         public void onVideoSizeChange(int width, int height) {
-            KLog.json("onVideoSizeChange width = " + width + " height = " + height);
+            //KLog.json("onVideoSizeChange width = " + width + " height = " + height);
         }
     }
 
@@ -803,7 +799,7 @@ public class PlayerActivity extends BaseActivity {
     private class VideoStoppedListener implements MediaPlayer.MediaPlayerStopedListener {
         @Override
         public void onStopped() {
-            KLog.json("onVideoStopped.");
+            //KLog.json("onVideoStopped.");
         }
     }
 
@@ -919,7 +915,7 @@ public class PlayerActivity extends BaseActivity {
 
     //stop the video
     private void stop() {
-        KLog.json("AudioRender: stop play");
+        //KLog.json("AudioRender: stop play");
         if (mPlayer != null) {
             mPlayer.stop();
             if (mStatusListener != null)
@@ -931,7 +927,7 @@ public class PlayerActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        KLog.json("AudioRender: onDestroy.");
+        //KLog.json("AudioRender: onDestroy.");
         if (mPlayer != null) {
             mTimerHandler.removeCallbacks(mRunnable);
         }
@@ -958,7 +954,6 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        KLog.json("onResume");
 
         // 重点:如果播放器是从锁屏/后台切换到前台,那么调用player.stat
         if (mPlayer != null && !isStopPlayer && isPausePlayer) {
@@ -972,21 +967,21 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        KLog.json("onStart.");
+        //KLog.json("onStart.");
 
         if (!isCurrentRunningForeground) {
-            KLog.json(">>>>>>>>>>>>>>>>>>>切到前台 activity process");
+            //KLog.json(">>>>>>>>>>>>>>>>>>>切到前台 activity process");
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        KLog.json("onPause." + isStopPlayer + " " + isPausePlayer + " " + (mPlayer == null));
+        //KLog.json("onPause." + isStopPlayer + " " + isPausePlayer + " " + (mPlayer == null));
 
         // 重点:播放器没有停止,也没有暂停的时候,在activity的pause的时候也需要pause
         if (!isStopPlayer && !isPausePlayer && mPlayer != null) {
-            KLog.json("onPause mpayer.");
+            //KLog.json("onPause mpayer.");
             mPlayer.pause();
             isPausePlayer = true;
         }
@@ -995,11 +990,11 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        KLog.json("onStop.");
+        //KLog.json("onStop.");
 
         isCurrentRunningForeground = isRunningForeground();
         if (!isCurrentRunningForeground) {
-            KLog.json(">>>>>>>>>>>>>>>>>>>切到后台 activity process");
+            //KLog.json(">>>>>>>>>>>>>>>>>>>切到后台 activity process");
         }
     }
 
@@ -1011,12 +1006,12 @@ public class PlayerActivity extends BaseActivity {
         for (ActivityManager.RunningAppProcessInfo appProcessInfo : appProcessInfos) {
             if (appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                 if (appProcessInfo.processName.equals(this.getApplicationInfo().processName)) {
-                    KLog.json("EntryActivity isRunningForeGround");
+                    //KLog.json("EntryActivity isRunningForeGround");
                     return true;
                 }
             }
         }
-        KLog.json("EntryActivity isRunningBackGround");
+        //KLog.json("EntryActivity isRunningBackGround");
         return false;
     }
 

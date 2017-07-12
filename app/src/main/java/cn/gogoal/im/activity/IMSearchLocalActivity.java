@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,11 +23,11 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseIconText;
-import cn.gogoal.im.bean.group.GroupCollectionData;
-import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.bean.SearchBean;
 import cn.gogoal.im.bean.SearchData;
 import cn.gogoal.im.bean.UserBean;
+import cn.gogoal.im.bean.group.GroupCollectionData;
+import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
@@ -216,7 +215,6 @@ public class IMSearchLocalActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_LIST, ggHttpInterface).startGet();

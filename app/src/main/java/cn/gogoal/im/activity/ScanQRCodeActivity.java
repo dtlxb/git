@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.qrcode_lib.activity.CaptureFragment;
 import com.hply.qrcode_lib.activity.CodeUtils;
-import com.socks.library.KLog;
 
 import butterknife.OnClick;
 import cn.gogoal.im.R;
@@ -108,8 +107,6 @@ public class ScanQRCodeActivity extends BaseActivity {
                     public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
                         String codeBody = GGQrCode.getUserQrCodeBody(result);
 
-                        KLog.e(codeBody);
-
                         try {
                             final JSONObject scanBody = JSONObject.parseObject(codeBody);
 
@@ -123,7 +120,6 @@ public class ScanQRCodeActivity extends BaseActivity {
                                 ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<String>() {
                                     @Override
                                     public void response(int code, String data) {
-                                        KLog.e(data);
                                         GroupData groupData = JSONObject.parseObject(data, GroupData.class);
                                         switch (code) {
                                             case Impl.RESPON_DATA_SUCCESS:
@@ -143,7 +139,6 @@ public class ScanQRCodeActivity extends BaseActivity {
 
                         } catch (Exception e) {
                             e.getMessage();
-                            KLog.e("结果不是json，或者非GoGoal APP系二维码");
                             UIHelper.toast(getActivity(), "非GoGoal二维码");
                         }
                     }

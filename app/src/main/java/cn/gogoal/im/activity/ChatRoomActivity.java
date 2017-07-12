@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.MediaPlayer;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +69,7 @@ public class ChatRoomActivity extends BaseActivity {
     private View animView;
 
     private LinearLayoutManager layoutManager;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_chatroom;
@@ -83,12 +81,10 @@ public class ChatRoomActivity extends BaseActivity {
         kayboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchRelativeLayout.OnKeyboardChangeListener() {
             @Override
             public void OnKeyboardPop(int height) {
-                KLog.e("键盘弹出:::"+height);
             }
 
             @Override
             public void OnKeyboardClose() {
-                KLog.e("键盘收起");
             }
         });
         imgVoice.setOnSwitchListener(new SwitchImageView.OnSwitchListener() {
@@ -111,19 +107,19 @@ public class ChatRoomActivity extends BaseActivity {
             }
         });
 
-        layoutManager=new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false);
+        layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
         voiceView.setAudioFinishRecorderListener(new VoiceButton.AudioFinishRecorderListener() {
             @Override
             public void onFinish(float seconds, String filePath) {
-                Recorder recorder = new Recorder(seconds,filePath);
+                Recorder recorder = new Recorder(seconds, filePath);
                 mDatas.add(recorder);
                 mAdapter.notifyDataSetChanged();//通知更新的内容
-                layoutManager.scrollToPosition(mAdapter.getItemCount()-1);
+                layoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
             }
         });
-        mAdapter=new AudioAdapter(mDatas);
+        mAdapter = new AudioAdapter(mDatas);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -142,8 +138,8 @@ public class ChatRoomActivity extends BaseActivity {
 
     @OnTextChanged(R.id.et_input)
     void onTextChanged(CharSequence s) {
-        btnSend.setVisibility(s.length()>0?View.VISIBLE:View.INVISIBLE);
-        imgFunction.setVisibility(s.length()>0?View.INVISIBLE:View.VISIBLE);
+        btnSend.setVisibility(s.length() > 0 ? View.VISIBLE : View.INVISIBLE);
+        imgFunction.setVisibility(s.length() > 0 ? View.INVISIBLE : View.VISIBLE);
     }
 
 
@@ -165,7 +161,7 @@ public class ChatRoomActivity extends BaseActivity {
         MediaManager.release();
     }
 
-    private class AudioAdapter extends CommonAdapter<Recorder,BaseViewHolder> {
+    private class AudioAdapter extends CommonAdapter<Recorder, BaseViewHolder> {
 
         private AudioAdapter(List<Recorder> datas) {
             super(R.layout.item_recorder, datas);
@@ -173,20 +169,20 @@ public class ChatRoomActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder holder, final Recorder recorder, final int position) {
-            holder.setText(R.id.recorder_time,Math.round(recorder.getDuration())+"\"");
+            holder.setText(R.id.recorder_time, Math.round(recorder.getDuration()) + "\"");
 
             View holderLengthView = holder.getView(R.id.recorder_length);
 
             ViewGroup.LayoutParams params = holderLengthView.getLayoutParams();
             int mMaxItemWidth = (int) (AppDevice.getWidth(getActivity()) * 0.7f);
             int mMinItemWidth = (int) (AppDevice.getWidth(getActivity()) * 0.16f);
-            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f)* recorder.getDuration());
+            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * recorder.getDuration());
             holderLengthView.setLayoutParams(params);
 
             holderLengthView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(animView != null) {
+                    if (animView != null) {
                         animView.setBackgroundResource(R.drawable.v_anim3);
                         animView = null;
                     }

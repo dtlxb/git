@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -10,7 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -144,7 +142,6 @@ public class RegisterActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
 //                tvGetCode.setEnabled(true);
 //                tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
@@ -194,7 +191,6 @@ public class RegisterActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 waitDialog.dismiss();
 
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 loginLayout.setEnabled(true);
                 if (result.getIntValue("code") == 0) {
@@ -245,7 +241,6 @@ public class RegisterActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 waitDialog.dismiss();
 
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 loginLayout.setEnabled(true);
                 if (result.getIntValue("code") == 0) {

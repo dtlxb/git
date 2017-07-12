@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,8 +57,6 @@ public class TestStockDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
 
-                KLog.e(responseInfo);
-
                 StockDetail bean = JSONObject.parseObject(responseInfo, StockDetail.class);
 
                 if (bean.getCode() == 0) {
@@ -78,7 +75,6 @@ public class TestStockDetailActivity extends BaseActivity {
             @Override
             public void onFailure(String msg) {
                 UIHelper.toast(getApplicationContext(), "请检查网络");
-                KLog.e(msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.ONE_STOCK_DETAIL, httpInterface).startGet();

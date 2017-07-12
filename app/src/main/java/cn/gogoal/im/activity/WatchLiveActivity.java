@@ -42,7 +42,6 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -282,7 +281,6 @@ public class WatchLiveActivity extends BaseActivity {
                     UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.SquareInfoCallback() {
                         @Override
                         public void squareGetSuccess(JSONObject object) {
-                            KLog.e(object.toJSONString());
                             List<LiveOnlinePersonData> accountList = JSONArray.parseArray(String.valueOf(object.getJSONArray("accountList")), LiveOnlinePersonData.class);
                             if (accountList != null) {
                                 for (int i = 0; i < accountList.size(); i++) {
@@ -429,7 +427,6 @@ public class WatchLiveActivity extends BaseActivity {
                 GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.json(responseInfo);
                         player_edit.setText("");
                         mBottomFragment.hideCommentEditUI();
 
@@ -441,7 +438,6 @@ public class WatchLiveActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String msg) {
-                        KLog.json(msg);
                     }
                 };
                 new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
@@ -505,7 +501,7 @@ public class WatchLiveActivity extends BaseActivity {
 
         @Override
         public boolean onError(IVideoChatParter iVideoChatParter, int what, int extra) {
-            KLog.e("WatchLiveActivity-->what = " + what + ", extra = " + extra);
+            //KLog.e("WatchLiveActivity-->what = " + what + ", extra = " + extra);
             if (what == 0) {
                 return false;
             }
@@ -524,7 +520,7 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaError.ALIVC_ERR_PLAYER_NO_NETWORK:
                 case MediaError.ALIVC_ERR_PLAYER_UNKNOW:
                     //UIHelper.toast(getContext(), R.string.error_stop_playing);
-                    KLog.e("播放出错，请退出观看！what=" + what);
+                    //KLog.e("播放出错，请退出观看！what=" + what);
                     //如果正在连麦则结束连麦
                     if (isChatting()) {
                         closeVideoCall();
@@ -532,16 +528,16 @@ public class WatchLiveActivity extends BaseActivity {
                     stopPlaying();
                     break;
                 case MediaError.ALIVC_ERR_PLAYER_TIMEOUT:
-                    KLog.e("encounter player timeout, so call restartToPlayer");
+                    //KLog.e("encounter player timeout, so call restartToPlayer");
                     mChatParter.reconnect();
                     break;
                 case MediaError.ALIVC_ERR_PUBLISHER_AUDIO_CAPTURE_DISABLED://音频采集失败
                 case MediaError.ALIVC_ERR_PUBLISHER_AUDIO_CAPTURE_NO_DATA:
                     if (isChatting()) {
-                        KLog.e("音频采集失败，结束连麦");
+                        //KLog.e("音频采集失败，结束连麦");
                         closeVideoCall();
                     } else {
-                        KLog.e("音频采集失败，但是当前没有处于连麦状态");
+                        //KLog.e("音频采集失败，但是当前没有处于连麦状态");
                     }
                     break;
                 case MediaError.ALIVC_ERR_PUBLISHER_VIDEO_CAPTURE_DISABLED:
@@ -601,7 +597,7 @@ public class WatchLiveActivity extends BaseActivity {
                     // 首帧显示时间
                     if (!isChatting()) {
                         //计算首帧耗时
-                        KLog.e("首帧耗时: " + (System.currentTimeMillis() - mStartTime) + "ms");
+                        //KLog.e("首帧耗时: " + (System.currentTimeMillis() - mStartTime) + "ms");
                     }
                     show_buffering_ui(false);
                     break;
@@ -618,7 +614,7 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaError.ALIVC_INFO_PLAYER_INTERRUPT_PLAYING:
                 case MediaError.ALIVC_INFO_PLAYER_STOP_PROCESS_FINISHED:
             }
-            KLog.e("MediaPlayer onInfo, what =" + what + ", extra = " + extra);
+            //KLog.e("MediaPlayer onInfo, what =" + what + ", extra = " + extra);
             return false;
         }
     };
@@ -629,29 +625,29 @@ public class WatchLiveActivity extends BaseActivity {
     SurfaceHolder.Callback mPlaySurfaceCB = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            KLog.e("parter player surface create.");
+            //KLog.e("parter player surface create.");
             holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
             holder.setKeepScreenOn(true);
 
             if (mPlaySurfaceStatus == SurfaceStatus.UNINITED) {
                 mPlaySurfaceStatus = SurfaceStatus.CREATED;
                 getPlayerInfo();
-                KLog.e("Player surface status is created");
+                //KLog.e("Player surface status is created");
             } else if (mPlaySurfaceStatus == SurfaceStatus.DESTROYED) {
                 mPlaySurfaceStatus = SurfaceStatus.RECREATED;
-                KLog.e("Player surface status is recreated");
+                //KLog.e("Player surface status is recreated");
             }
         }
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            KLog.e("parter player surface change.");
+            //KLog.e("parter player surface change.");
             mPlaySurfaceStatus = SurfaceStatus.CHANGED;
 
             if (mPreviewSurfaceStatus == null
                     || mPreviewSurfaceStatus == SurfaceStatus.UNINITED
                     || mPreviewSurfaceStatus == SurfaceStatus.CHANGED) {
-                KLog.e("WatchLivePresenter", "SurfaceChanged resume");
+                //KLog.e("WatchLivePresenter", "SurfaceChanged resume");
                 mediaResume(mPlaySurfaceView, mPreviewSurfaceView);
 
                 //TODO：对于需要结束连麦的情况，因为surface很可能重建了，所以需要sleep一秒，不然可能出现offlineChat后不能恢复播放的情况
@@ -674,7 +670,7 @@ public class WatchLiveActivity extends BaseActivity {
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             mPlaySurfaceStatus = SurfaceStatus.DESTROYED;
-            KLog.e("parter player surface destroy.");
+            //KLog.e("parter player surface destroy.");
         }
     };
 
@@ -684,7 +680,7 @@ public class WatchLiveActivity extends BaseActivity {
     SurfaceHolder.Callback mPublishSurfaceCB = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            KLog.e("WatchLiveActivity-->preview surface created");
+            //KLog.e("WatchLiveActivity-->preview surface created");
             holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
             holder.setKeepScreenOn(true);
 
@@ -697,7 +693,7 @@ public class WatchLiveActivity extends BaseActivity {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            KLog.e("WatchLiveActivity-->preview surface changed, width=" + width + ",height=" + height);
+            //KLog.e("WatchLiveActivity-->preview surface changed, width=" + width + ",height=" + height);
             mPreviewSurfaceStatus = SurfaceStatus.CHANGED;
             if (mPreviewSurfaceStatus == SurfaceStatus.CHANGED && mPlaySurfaceStatus == SurfaceStatus.CHANGED) {
                 mediaResume(mPlaySurfaceView, mPreviewSurfaceView);
@@ -706,7 +702,7 @@ public class WatchLiveActivity extends BaseActivity {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            KLog.e("WatchLiveActivity-->preview surface destroyed");
+            //KLog.e("WatchLiveActivity-->preview surface destroyed");
             mPreviewSurfaceStatus = SurfaceStatus.DESTROYED;
         }
     };
@@ -722,7 +718,7 @@ public class WatchLiveActivity extends BaseActivity {
             initPlayer();
         }
         mStartTime = System.currentTimeMillis();
-        KLog.e("WatchActivity --> mChatParter.startToPlay");
+        //KLog.e("WatchActivity --> mChatParter.startToPlay");
         mChatParter.startToPlay(mPlayUrl, surfaceView); //开始直播
         isPlaying = true;
         //TODO:显示loading
@@ -736,7 +732,7 @@ public class WatchLiveActivity extends BaseActivity {
      */
     public void mediaResume(SurfaceView previewSurf, SurfaceView playSurf) {
         if (mChatParter != null && mIsPublishPaused) {
-            KLog.e("WatchLiveActivity-->mChatParter.resume(), previewSurf = " + previewSurf + ", playSurf = " + playSurf);
+            //KLog.e("WatchLiveActivity-->mChatParter.resume(), previewSurf = " + previewSurf + ", playSurf = " + playSurf);
             mChatParter.resume(previewSurf, playSurf);
             mIsPublishPaused = false;
         }
@@ -748,7 +744,7 @@ public class WatchLiveActivity extends BaseActivity {
     public void mediaPause() {
         if (mChatParter != null && !mIsPublishPaused) {
             mChatParter.pause();
-            KLog.e("WatchLiveActivity--> mChatParter.pause()");
+            //KLog.e("WatchLiveActivity--> mChatParter.pause()");
             mIsPublishPaused = true;
         }
     }
@@ -759,11 +755,11 @@ public class WatchLiveActivity extends BaseActivity {
      */
     public void sdkOfflineChat() {
         if (mChatParter != null && isChatting()) {
-            KLog.e("WatchActivity --> offlineChat, Thread id: " + Thread.currentThread().getId());
+            //KLog.e("WatchActivity --> offlineChat, Thread id: " + Thread.currentThread().getId());
             mChatParter.offlineChat();      //客户端SDK结束连麦
             mChatStatus = VideoChatStatus.UNCHAT; //更新当前连麦状态为未连麦状态
         } else {
-            KLog.e("WatchActivity --> offlineChat, but mChatParter is null");
+            //KLog.e("WatchActivity --> offlineChat, but mChatParter is null");
         }
     }
 
@@ -797,7 +793,6 @@ public class WatchLiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 JSONObject data = object.getJSONObject("data");
                 if (object.getIntValue("code") == 0 && data.getBooleanValue("result")) {
@@ -807,7 +802,7 @@ public class WatchLiveActivity extends BaseActivity {
                     }
                 } else {
                     //显示结束连麦失败的
-                    KLog.e("Close video chat failed");
+                    //KLog.e("Close video chat failed");
                     UIHelper.toast(getContext(), R.string.close_video_chatting_failed);
                 }
             }
@@ -826,7 +821,7 @@ public class WatchLiveActivity extends BaseActivity {
      * @param isShowUI 是否需要显示相应的UI
      */
     private void abortChat(boolean isShowUI) {
-        KLog.e("call abortChat(" + isShowUI + "), isDestroyed = " + isDestoyed);
+        //KLog.e("call abortChat(" + isShowUI + "), isDestroyed = " + isDestoyed);
         if (isShowUI && !isDestoyed) {
             changePlayViewToNormalMode();
             closeVideoChatSmallView();
@@ -852,7 +847,7 @@ public class WatchLiveActivity extends BaseActivity {
             mPlaySurfaceView.setLayoutParams(layoutParams);
         }
         mIvChatClose.setVisibility(View.GONE);
-        KLog.e("mIvChatClose setVisibility gone");
+        //KLog.e("mIvChatClose setVisibility gone");
         mBottomFragment.hideCameraView();
         shouldOffLine = true; //表示在surfaceChanged时需要调用真正的offlineChat，来结束连麦
     }
@@ -870,7 +865,7 @@ public class WatchLiveActivity extends BaseActivity {
      */
     public void stopPlaying() {
         if (mChatParter != null) {
-            KLog.e("WatchActivity --> mChatPartter.stopPlaying(), Thread id: " + Thread.currentThread().getId());
+            //KLog.e("WatchActivity --> mChatPartter.stopPlaying(), Thread id: " + Thread.currentThread().getId());
             mChatParter.stopPlaying();
         }
     }
@@ -923,7 +918,7 @@ public class WatchLiveActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        KLog.e("WatchLiveActivity--> onDestroy");
+        //KLog.e("WatchLiveActivity--> onDestroy");
         isDestoyed = true; //标记当前activity销毁了，则不需要再做UI提醒了
         if (mChatParter != null) {
             mChatParter.setErrorListener(null);
@@ -998,7 +993,6 @@ public class WatchLiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
@@ -1090,7 +1084,6 @@ public class WatchLiveActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
@@ -1109,7 +1102,6 @@ public class WatchLiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -1168,7 +1160,6 @@ public class WatchLiveActivity extends BaseActivity {
 
                 //主播关闭直播了
                 if (_lctype == 12) {
-                    KLog.e("结束直播");
                     showLiveCloseUI();
                 }
 
@@ -1267,7 +1258,6 @@ public class WatchLiveActivity extends BaseActivity {
             GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
                 @Override
                 public void onSuccess(String responseInfo) {
-                    KLog.e(responseInfo);
                     JSONObject object = JSONObject.parseObject(responseInfo);
                     JSONObject data = object.getJSONObject("data");
                     if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {

@@ -16,7 +16,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -228,12 +227,10 @@ public class Face2FaceActivity extends BaseActivity {
         params.put("longitude", String.valueOf(locationClient.getLastKnownLocation().getLongitude()));
         params.put("latitude", String.valueOf(locationClient.getLastKnownLocation().getLatitude()));
 
-        KLog.e(StringUtils.map2ggParameter(params));
 
         new GGOKHTTP(params, GGOKHTTP.FTF_CREATE_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {

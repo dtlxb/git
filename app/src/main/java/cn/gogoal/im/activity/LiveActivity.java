@@ -43,7 +43,6 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -306,7 +305,6 @@ public class LiveActivity extends BaseActivity {
                     UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.SquareInfoCallback() {
                         @Override
                         public void squareGetSuccess(JSONObject object) {
-                            KLog.e(object.toJSONString());
                             List<LiveOnlinePersonData> accountList = JSONArray.parseArray(String.valueOf(object.getJSONArray("accountList")), LiveOnlinePersonData.class);
                             if (accountList != null) {
                                 for (int i = 0; i < accountList.size(); i++) {
@@ -447,7 +445,6 @@ public class LiveActivity extends BaseActivity {
                 GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.json(responseInfo);
                         player_edit.setText("");
                         mBottomFragment.hideCommentEditUI();
 
@@ -458,7 +455,6 @@ public class LiveActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String msg) {
-                        KLog.json(msg);
                     }
                 };
                 new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
@@ -512,7 +508,6 @@ public class LiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 JSONObject data = object.getJSONObject("data");
                 if (object.getIntValue("code") == 0 && data.getIntValue("code") == 1) {
@@ -533,7 +528,7 @@ public class LiveActivity extends BaseActivity {
     SurfaceHolder.Callback mPreviewCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(final SurfaceHolder holder) {
-            KLog.d("LiveActivity-->Preview surface created");
+            //KLog.d("LiveActivity-->Preview surface created");
             //记录Surface的状态
             if (mPreviewSurfaceStatus == SurfaceStatus.UNINITED) {
                 mPreviewSurfaceStatus = SurfaceStatus.CREATED;
@@ -545,7 +540,7 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            KLog.d("LiveActivity-->Preview surface changed");
+            //KLog.d("LiveActivity-->Preview surface changed");
             mPreviewSurfaceStatus = SurfaceStatus.CHANGED;
             mPreviewWidth = width;
             mPreviewHeight = height;
@@ -557,7 +552,7 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            KLog.d("LiveActivity-->Preview surface destroyed");
+            //KLog.d("LiveActivity-->Preview surface destroyed");
             mPreviewSurfaceStatus = SurfaceStatus.DESTROYED;
         }
     };
@@ -567,7 +562,7 @@ public class LiveActivity extends BaseActivity {
      */
     public void startPreView(final SurfaceHolder holder) {
         //开启预览
-        KLog.d("LiveActivity-->mChatHost.prepareToPublish()");
+        //KLog.d("LiveActivity-->mChatHost.prepareToPublish()");
         mChatHost.prepareToPublish(holder.getSurface(), 360, 640, mMediaParam);
         if (mCameraFacing == AlivcMediaFormat.CAMERA_FACING_FRONT) {
             mChatHost.setFilterParam(mFilterMap);
@@ -584,7 +579,6 @@ public class LiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 JSONObject data = object.getJSONObject("data");
                 if (object.getIntValue("code") == 0 && data.getBooleanValue("result")) {
@@ -592,7 +586,6 @@ public class LiveActivity extends BaseActivity {
                     abortChat(true);
                 } else {
                     //显示结束连麦失败的
-                    KLog.e("Close chatting failed");
                     UIHelper.toast(getContext(), R.string.close_chat_failed_for_new_chat);
                 }
             }
@@ -610,7 +603,7 @@ public class LiveActivity extends BaseActivity {
      */
     public void abortChat(boolean isShowUI) {
         if (mChatHost != null && isChatting()) {
-            KLog.d("LiveActivity-->mChatHost.abortChat()");
+            //KLog.d("LiveActivity-->mChatHost.abortChat()");
             mChatHost.abortChat();
             mVideoChatStatus = VideoChatStatus.UNCHAT;
             if (isShowUI) {
@@ -645,7 +638,7 @@ public class LiveActivity extends BaseActivity {
     private SurfaceHolder.Callback mPlayCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            KLog.e("host player surface create.");
+            //KLog.e("host player surface create.");
             if (mPlayerSurfaceStatus == SurfaceStatus.UNINITED) {
                 mPlayerSurfaceStatus = SurfaceStatus.CREATED;
                 launchChat(mPlaySurfaceView);
@@ -656,7 +649,7 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            KLog.e("host player surface changed.");
+            //KLog.e("host player surface changed.");
             mPlayerSurfaceStatus = SurfaceStatus.CHANGED;
             // 此处有两种情况:
             // 1.首次创建此surface,那么launchChat
@@ -668,7 +661,7 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            KLog.e("host player surface destroy.");
+            //KLog.e("host player surface destroy.");
             mPlayerSurfaceStatus = SurfaceStatus.DESTROYED;
         }
     };
@@ -678,7 +671,7 @@ public class LiveActivity extends BaseActivity {
      */
     public void launchChat(SurfaceView playSurfaceView) {
         if (mSmallDelayPlayUrl != null && isChatting()) {
-            KLog.d("LiveActivity-->mChatHost.launchChat()");
+            //KLog.d("LiveActivity-->mChatHost.launchChat()");
             mChatHost.launchChat(mSmallDelayPlayUrl, playSurfaceView);
         }
     }
@@ -688,7 +681,7 @@ public class LiveActivity extends BaseActivity {
      */
     public void resumePublishStream(SurfaceView mPreviewSurf, SurfaceView mPlaySurf) {
         if (mChatHost != null && mIsPublishPaused) {
-            KLog.d("LiveActivity --> mChatHost.resume()");
+            //KLog.d("LiveActivity --> mChatHost.resume()");
             mChatHost.resume(mPreviewSurf, mPlaySurf);
             mIsPublishPaused = false;
         }
@@ -776,7 +769,7 @@ public class LiveActivity extends BaseActivity {
         mMediaParam.put(MediaConstants.PUBLISHER_PARAM_MAX_BITRATE, "" + 1000000);        //最大码率
 
         mChatHost = new AlivcVideoChatHost();
-        KLog.e("LiveActivity--> mChatHost.init()");
+        //KLog.e("LiveActivity--> mChatHost.init()");
         mChatHost.init(this);
         mChatHost.setHostViewScalingMode(IMediaPublisher.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
         mChatHost.setParterViewScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
@@ -801,7 +794,7 @@ public class LiveActivity extends BaseActivity {
             if (what == 0) {
                 return false;
             }
-            KLog.d("Live stream connection error-->" + what);
+            //KLog.d("Live stream connection error-->" + what);
             switch (what) {
                 case MediaError.ALIVC_ERR_PUBLISHER_NETWORK_POOR:
                     UIHelper.toast(getContext(), R.string.network_busy);
@@ -821,7 +814,7 @@ public class LiveActivity extends BaseActivity {
                     abortChat(true);
                     break;
                 case MediaError.ALIVC_ERR_PLAYER_TIMEOUT:
-                    KLog.d("encounter player timeout, so call restartToPlayer");
+                    //KLog.d("encounter player timeout, so call restartToPlayer");
                     mChatHost.reconnectChat();
                     break;
                 case MediaError.ALIVC_ERR_PUBLISHER_AUDIO_CAPTURE_DISABLED://音频采集关闭
@@ -843,7 +836,7 @@ public class LiveActivity extends BaseActivity {
                 case MediaError.ALIVC_ERR_PUBLISHER_NETWORK_UNCONNECTED:
                 case MediaError.ALIVC_ERR_PUBLISHER_ILLEGAL_ARGUMENT:
                 default:
-                    KLog.e("Live stream connection error-->" + what);
+                    //KLog.e("Live stream connection error-->" + what);
                     break;
             }
             return false;
@@ -865,7 +858,7 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public boolean onInfo(IVideoChatHost iVideoChatHost, int what, int extra) {
-            KLog.e("LiveActivity --> what = " + what + ", extra = " + extra);
+            //KLog.e("LiveActivity --> what = " + what + ", extra = " + extra);
             switch (what) {
                 case MediaError.ALIVC_INFO_PUBLISH_NETWORK_GOOD:
 
@@ -900,13 +893,13 @@ public class LiveActivity extends BaseActivity {
         mHeadsetMonitor.register(this); //注册对耳机状态的监听
 
         if (mPreviewSurfaceStatus != SurfaceStatus.DESTROYED) {
-            KLog.e("LiveActivity -->chatHost.resume(), onResume");
+            //KLog.e("LiveActivity -->chatHost.resume(), onResume");
             if (mPlayerSurfaceStatus != SurfaceStatus.DESTROYED) {
-                KLog.e("LiveActivity-->previewSurface and playSurface all is null");
+                //KLog.e("LiveActivity-->previewSurface and playSurface all is null");
                 resumePublishStream(null, mPlaySurfaceView);
             } else {
                 //恢复推流
-                KLog.e("LiveActivity-->previewSurface is null, playSurface isn't null");
+                //KLog.e("LiveActivity-->previewSurface is null, playSurface isn't null");
                 resumePublishStream(null, mPlaySurfaceView);
             }
         }
@@ -927,7 +920,7 @@ public class LiveActivity extends BaseActivity {
      */
     public void pausePublishStream() {
         if (mChatHost != null && !mIsPublishPaused) {
-            KLog.e("LiveActivity-->mChatHost.pause()");
+            //KLog.e("LiveActivity-->mChatHost.pause()");
             //暂停推流
             mChatHost.pause();
             mIsPublishPaused = true;
@@ -959,7 +952,7 @@ public class LiveActivity extends BaseActivity {
             closeLiveChat();
         }
         if (mChatHost != null) {
-            KLog.e("LiveActivity -->mChatHost.release()");
+            //KLog.e("LiveActivity -->mChatHost.release()");
             mChatHost.release();
             mChatHost = null;
         }
@@ -970,9 +963,9 @@ public class LiveActivity extends BaseActivity {
      */
     public void stopPublish() {
         if (null != mChatHost) {
-            KLog.e("LiveActivity-->mChatHost.stopPublishing()");
+            //KLog.e("LiveActivity-->mChatHost.stopPublishing()");
             mChatHost.stopPublishing();
-            KLog.e("LiveActivity-->mChatHost.finishPublishing()");
+            //KLog.e("LiveActivity-->mChatHost.finishPublishing()");
             mChatHost.finishPublishing();
             mIsLive = false;
         }
@@ -1061,7 +1054,6 @@ public class LiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
@@ -1133,7 +1125,6 @@ public class LiveActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
@@ -1152,7 +1143,6 @@ public class LiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -1174,7 +1164,6 @@ public class LiveActivity extends BaseActivity {
         UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.SquareInfoCallback() {
             @Override
             public void squareGetSuccess(JSONObject object) {
-                KLog.e(object.toJSONString());
                 JSONArray accountList = object.getJSONArray("accountList");
                 if (accountList.size() >= 2) {
                     Intent intent = new Intent(getContext(), ChooseContactActivity.class);
@@ -1201,7 +1190,6 @@ public class LiveActivity extends BaseActivity {
         if (resultCode != 0) {
             if (requestCode == AppConst.LIVE_CONTACT_SOMEBODY) {
                 mContactBean = (ContactBean) data.getSerializableExtra("choose_connect_livebean");
-                KLog.e(mContactBean);
                 if (mVideoChatStatus == VideoChatStatus.UNCHAT) {
                     sendLiveInvite(String.valueOf(mContactBean.getFriend_id()));
                     mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
@@ -1226,7 +1214,6 @@ public class LiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 JSONObject data = object.getJSONObject("data");
                 if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {
@@ -1263,7 +1250,6 @@ public class LiveActivity extends BaseActivity {
 
             JSONObject contentObject = JSON.parseObject(message.getContent());
             int _lctype = contentObject.getIntValue("_lctype");
-            KLog.e(message.getContent());
             int chatType = (int) conversation.getAttribute("chat_type");
 
             if (imConversation.getConversationId().equals(conversation.getConversationId()) && chatType == 1009) {

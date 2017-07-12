@@ -6,7 +6,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,12 +78,11 @@ public class ChangePhoneNumberActivity extends BaseActivity {
                 new GGOKHTTP(map, GGOKHTTP.SEND_CAPTCHA, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.e(responseInfo);
                         int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                        if (code==0){
+                        if (code == 0) {
                             mTimeCount.start();//倒计时
-                            UIHelper.toast(getActivity(),"验证码已发送,请查收");
-                        }else {
+                            UIHelper.toast(getActivity(), "验证码已发送,请查收");
+                        } else {
                             tvGetCode.setEnabled(true);
                             tvGetCode.setClickable(true);
                             tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
@@ -101,7 +99,7 @@ public class ChangePhoneNumberActivity extends BaseActivity {
                 break;
             case R.id.btn_ok:
                 if (StringUtils.checkPhoneString(mobile) &&
-                        StringUtils.checkVerificationCode(etPaseCode.getText().toString())){
+                        StringUtils.checkVerificationCode(etPaseCode.getText().toString())) {
 
                     Map<String, String> map0 = new HashMap<>();
                     map0.put("token", UserUtils.getToken());
@@ -110,21 +108,20 @@ public class ChangePhoneNumberActivity extends BaseActivity {
                     new GGOKHTTP(map0, GGOKHTTP.BIND_MOBILE, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
-                            KLog.e(responseInfo);
                             int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                            if (code==0){
-                                JSONObject data=JSONObject.parseObject(responseInfo).getJSONObject("data");
-                                if (data.getBoolean("success")){
-                                    UIHelper.toast(getActivity(),"手机号绑定成功!");
+                            if (code == 0) {
+                                JSONObject data = JSONObject.parseObject(responseInfo).getJSONObject("data");
+                                if (data.getBoolean("success")) {
+                                    UIHelper.toast(getActivity(), "手机号绑定成功!");
                                     finish();
-                                    AppManager.getInstance().sendMessage("updata_userinfo","更新数据咯");
+                                    AppManager.getInstance().sendMessage("updata_userinfo", "更新数据咯");
 
-                                    UserUtils.updateLocalUserInfo("mobile",mobile);
-                                }else {
-                                    UIHelper.toast(getActivity(),"手机号绑定失败!\n\r验证码不正确");
+                                    UserUtils.updateLocalUserInfo("mobile", mobile);
+                                } else {
+                                    UIHelper.toast(getActivity(), "手机号绑定失败!\n\r验证码不正确");
                                 }
-                            }else {
-                                UIHelper.toastResponseError(getActivity(),responseInfo);
+                            } else {
+                                UIHelper.toastResponseError(getActivity(), responseInfo);
                             }
                         }
 
@@ -134,8 +131,8 @@ public class ChangePhoneNumberActivity extends BaseActivity {
                         }
                     }).startGet();
 
-                }else {
-                    UIHelper.toast(getActivity(),"验证码格式不正确");
+                } else {
+                    UIHelper.toast(getActivity(), "验证码格式不正确");
                     return;
                 }
                 break;

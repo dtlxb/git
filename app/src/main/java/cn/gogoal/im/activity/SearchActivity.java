@@ -6,12 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +65,6 @@ public class SearchActivity extends BaseActivity {
 
         final String conversationId = getIntent().getStringExtra("conversation_id");
 
-        KLog.e(conversationId);
 
         AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
             @Override
@@ -76,7 +73,6 @@ public class SearchActivity extends BaseActivity {
                     @Override
                     public void done(List<AVIMMessage> list, AVIMException e) {
                         if (null != list && !list.isEmpty()) {
-                            KLog.e(JSONObject.toJSONString(list));
                         }
                     }
                 });
@@ -88,9 +84,9 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        rvFlagSearch.setAdapter(new CommonAdapter<BaseIconText<Integer,String>, BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
+        rvFlagSearch.setAdapter(new CommonAdapter<BaseIconText<Integer, String>, BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
             @Override
-            protected void convert(BaseViewHolder holder, BaseIconText<Integer,String> data, int position) {
+            protected void convert(BaseViewHolder holder, BaseIconText<Integer, String> data, int position) {
                 holder.setImageResource(R.id.img_search_item, data.getIamge());
                 holder.setText(R.id.tv_search_item, data.getText());
             }
@@ -138,10 +134,10 @@ public class SearchActivity extends BaseActivity {
 //        });
     }
 
-    private List<BaseIconText<Integer,String>> getFlagData() {
+    private List<BaseIconText<Integer, String>> getFlagData() {
         int[] flagIcons = {R.mipmap.img_search_flag_contact, R.mipmap.img_search_flag_group, R.mipmap.home_bottom_tab_icon_message_normal,
                 R.mipmap.img_search_flag_live, R.mipmap.img_search_flag_yanwang, R.mipmap.img_search_flag_pinpai};
-        List<BaseIconText<Integer,String>> list = new ArrayList<>();
+        List<BaseIconText<Integer, String>> list = new ArrayList<>();
 
         for (int i = 0; i < flagIcons.length; i++) {
             list.add(new BaseIconText<>(flagIcons[i], searchFlagArray[i]));

@@ -27,7 +27,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -470,7 +469,6 @@ public class StockDetailActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.GET_STOCK_GROUP_ID, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     try {

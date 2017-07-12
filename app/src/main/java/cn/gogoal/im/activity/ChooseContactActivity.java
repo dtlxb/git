@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -364,12 +363,10 @@ public class ChooseContactActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(userIdList));
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject resultJson = JSONObject.parseObject(responseInfo);
                 if (resultJson.getIntValue("code") == 0) {
                     JSONObject jsonObject = resultJson.getJSONObject("data");
@@ -448,7 +445,6 @@ public class ChooseContactActivity extends BaseActivity {
 
     private void showContact() {
         if (null == userContacts || userContacts.isEmpty()) {
-            KLog.e("用户没有好友");
             return;
         }
 
@@ -533,7 +529,6 @@ public class ChooseContactActivity extends BaseActivity {
 
             // 设置CheckBox的状态
             if (map.get(data.getFriend_id()) == null) {
-                KLog.e(data.getFriend_id());
                 checkBox.setEnabled(false);
                 holder.itemView.setClickable(false);
                 holder.itemView.setEnabled(false);

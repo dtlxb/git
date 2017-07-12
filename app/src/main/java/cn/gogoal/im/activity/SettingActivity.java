@@ -10,8 +10,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,7 +149,6 @@ public class SettingActivity extends BaseActivity {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            KLog.e("pos=" + position + ";itemText=" + data.getItemKey());
                             Intent intent;
 
                             switch (data.getItemValue()) {
@@ -200,7 +197,7 @@ public class SettingActivity extends BaseActivity {
                                             AppConst.GG_SERVICE_AGREEMENT, data.getItemValue());
                                     break;
                                 case "检查更新":
-                                    AppDevice.checkUpdata(getSupportFragmentManager(),true);
+                                    AppDevice.checkUpdata(getSupportFragmentManager(), true);
                                     break;
                                 default:
                                     break;

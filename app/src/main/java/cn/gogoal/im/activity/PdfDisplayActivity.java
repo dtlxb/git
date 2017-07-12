@@ -15,7 +15,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -66,8 +65,6 @@ public class PdfDisplayActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         String jsonData = getIntent().getStringExtra("pdf_data");
-
-        KLog.e(jsonData);
 
         if (!TextUtils.isEmpty(jsonData)) {
             try {
@@ -263,7 +260,7 @@ public class PdfDisplayActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (pdialog!=null && pdialog.isShowing()) {
+            if (pdialog != null && pdialog.isShowing()) {
                 pdialog.dismiss();
                 finish();
             } else {

@@ -17,7 +17,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.hply.qrcode_lib.activity.CodeUtils;
-import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -103,8 +102,6 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
 
         accountId = getIntent().getStringExtra("qrcode_content_id");
 
-        KLog.e(accountId);
-
         tvMyQqrcodeName.setText(StringUtils.isActuallyEmpty(name) ? "--" : name);
         tvMyQqrcodeDuty.setText(StringUtils.isActuallyEmpty(userInfo) ? "--" : userInfo);
 
@@ -179,8 +176,6 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
             }
         });
 
-        KLog.e(accountId);
-
         qrCodeBitmap = CodeUtils.createImage(
                 getActivity(),//上下文
                 GGQrCode.getQrcodeString(codeType, accountId),//内容
@@ -215,7 +210,7 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                 /*1.*/
                 ImageUtils.cacheImage(getActivity(),
                         params[0],
-                        MD5Utils.getMD5EncryptyString32(String.valueOf(System.currentTimeMillis()))+".png",
+                        MD5Utils.getMD5EncryptyString32(String.valueOf(System.currentTimeMillis())) + ".png",
                         new Impl<String>() {
                             @Override
                             public void response(int code, String data) {

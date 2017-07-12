@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -108,14 +106,12 @@ public class EditMyStockActivity extends BaseActivity {
             @Override
             public void add(MyStockData data) {
                 result.add(data);
-                KLog.e("添加：" + data.getStock_name());
                 notifCountText(result.size());
             }
 
             @Override
             public void remove(MyStockData data) {
                 result.remove(data);
-                KLog.d("移除：" + data.getStock_name());
                 notifCountText(result.size());
             }
         });
@@ -148,7 +144,6 @@ public class EditMyStockActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                KLog.e(isSelectedAll(myStockList));
 
                 if (isSelectedAll(myStockList)) {
                     HashMap<String, String> params = UserUtils.getTokenParams();
@@ -157,7 +152,6 @@ public class EditMyStockActivity extends BaseActivity {
                     new GGOKHTTP(params, GGOKHTTP.RESET_MYSTOCKS, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
-                            KLog.e(responseInfo);
                             myStockList.clear();
                             StockUtils.clearLocalMyStock();
                             dragAdapter.notifyDataSetChanged();
@@ -165,7 +159,6 @@ public class EditMyStockActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(String msg) {
-                            KLog.e(msg);
                         }
                     }).startGet();
                 } else {
@@ -243,9 +236,6 @@ public class EditMyStockActivity extends BaseActivity {
 
                 @Override
                 public void onSelectedChanged(int fromPosition, int toPosition) {
-                    KLog.e("fromPosition=" + fromPosition + ";toPosition=" + toPosition);
-                    KLog.e("fromIndex=" + myStockListNormal.get(fromPosition).getStock_sort() +
-                            ";toIndex=" + myStockListNormal.get(toPosition).getStock_sort());
 
                     HashMap<String, String> tokenParams = UserUtils.getTokenParams();
                     tokenParams.put("fromIndex", String.valueOf(myStockListNormal.get(fromPosition).getStock_sort()));
@@ -254,7 +244,6 @@ public class EditMyStockActivity extends BaseActivity {
                     new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
-                            KLog.e(responseInfo);
                             dragAdapter.notifyDataSetChanged();
                             setData();
                         }
@@ -294,7 +283,6 @@ public class EditMyStockActivity extends BaseActivity {
         @Override
         protected Integer doInBackground(MyStockData... params) {
             for (MyStockData data : params) {
-                KLog.e(data.getStock_name() + ";;" + data.getStock_sort());
             }
             return null;
         }

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -198,12 +197,10 @@ public class IMNewFriendActivity extends BaseActivity {
         params.put("token", UserUtils.getToken());
         params.put("friend_id", friend_id);
         params.put("text", "你好！");
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (view.getText().toString().equals("添加")) {
@@ -243,14 +240,11 @@ public class IMNewFriendActivity extends BaseActivity {
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(idList));
         params.put("conv_id", conversationId);
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     if (view.getText().toString().equals("通过")) {
                         view.setText("已通过");

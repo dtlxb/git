@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -206,7 +205,6 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         //将碎片加入碎片集合
         timesFragment = new TimesFragment();
         fiveDayFragment = new FiveDayFragment();
-        KLog.e(stockType);
         if (stockType == STOCK_MARKE_INDEX) {
             authority_blog.setVisibility(View.GONE);
         }

@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,7 +176,6 @@ public class ToolsSettingActivity extends BaseActivity {
         new GGOKHTTP(map, GGOKHTTP.GET_EDITE_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -231,7 +229,7 @@ public class ToolsSettingActivity extends BaseActivity {
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
                         List<ToolData> toolDatas = JSONArray.parseArray(data, ToolData.class);
-                        for (ToolData toolData: toolDatas) {
+                        for (ToolData toolData : toolDatas) {
                             dataAll.add(new SectionToolsData(true, toolData.getTitle()));
                             List<ToolData.Tool> itemList = toolData.getDatas();
                             for (ToolData.Tool item : itemList) {
@@ -314,7 +312,6 @@ public class ToolsSettingActivity extends BaseActivity {
                 if (!rvAll.isComputingLayout()) {
                     adapterAllData.notifyItemChanged(dataAll.indexOf(d));
                 } else {
-                    KLog.e("操作出错");
                 }
                 break;
             }
