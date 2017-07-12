@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.hply.imagepicker.ITakePhoto;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -211,7 +210,6 @@ public class ImageDetailActivity extends BaseActivity {
                                 onlineUri);
                         UserUtils.updateLocalUserInfo("simple_avatar", onlineUri);
 
-                        KLog.e(UserUtils.getUserAvatar());
 
                         Map<String, String> map = new HashMap<>();
                         map.put("avatar", StringUtils.decodeUrl(onlineUri));

@@ -10,9 +10,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CompoundButton;
 
-import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;

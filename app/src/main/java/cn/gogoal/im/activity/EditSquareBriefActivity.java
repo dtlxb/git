@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -173,7 +172,6 @@ public class EditSquareBriefActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationID);
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -215,7 +213,6 @@ public class EditSquareBriefActivity extends BaseActivity {
         } else {
             params.put("group_intro", etGroupInfo.getText().toString());
         }
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

@@ -8,9 +8,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+<<<<<<< HEAD
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+=======
+>>>>>>> af8a20b39e1f5f215d9331b9628ed189f167b346
 
 import org.litepal.crud.DataSupport;
 import org.simple.eventbus.EventBus;
@@ -50,12 +52,11 @@ public class MessageSaveService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         EventBus.getDefault().register(this);
 
-        flags = START_STICKY;
         IMMessageBeans = new ArrayList<>();
         IMMessageBeans.clear();
         //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
-        return super.onStartCommand(intent, flags, startId);
+        return super.onStartCommand(intent, START_FLAG_REDELIVERY, startId);
     }
 
     @Override

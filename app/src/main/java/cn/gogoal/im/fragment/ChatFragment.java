@@ -33,7 +33,6 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 import org.simple.eventbus.Subscriber;
@@ -711,7 +710,6 @@ public class ChatFragment extends BaseFragment {
                         params.put("conv_id", imConversation.getConversationId());
                         params.put("chat_type", String.valueOf(chatType));
                         params.put("message", JSONObject.toJSON(messageMap).toString());
-                        KLog.e(onlineUri);
 
                         //发送图片消息
                         sendAVIMMessage(params, mImageMessage);

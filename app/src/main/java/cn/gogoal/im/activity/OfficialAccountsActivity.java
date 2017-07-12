@@ -13,13 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -91,14 +89,12 @@ public class OfficialAccountsActivity extends BaseActivity {
                 conversation.queryMessagesFromCache(15, new AVIMMessagesQueryCallback() {
                     @Override
                     public void done(List<AVIMMessage> list, AVIMException e) {
-                        KLog.e(list.size());
                         if (e == null) {
                             if (null != list) {
                                 for (int i = 0; i < list.size(); i++) {
                                     JSONObject contentObject = JSON.parseObject(list.get(i).getContent());
                                     JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
                                     officialMessages.add(JSON.parseObject(lcattrsObject.toJSONString(), LcattrsBean.class));
-                                    KLog.e(officialMessages);
                                 }
                             }
                         }

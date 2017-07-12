@@ -10,11 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +30,6 @@ import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -223,7 +220,7 @@ public class MyGroupsActivity extends BaseActivity {
                         startActivity(intent);
                     } else {
                         IMMessageBean imMessageBean = new IMMessageBean(data.getConv_id(), AppConst.IM_CHAT_TYPE_SQUARE, new Date().getTime(), "0",
-                                data.getName(), "", "", "",false);
+                                data.getName(), "", "", "", false);
                         ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity, imMessageBean);
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
@@ -254,12 +251,10 @@ public class MyGroupsActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationId);
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     UIHelper.toast(MyGroupsActivity.this, "群已取消收藏!!!");
@@ -268,7 +263,6 @@ public class MyGroupsActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();

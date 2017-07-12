@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -121,7 +120,7 @@ public class MainActivity extends BaseActivity {
         badge = new BadgeView(MainActivity.this);
         initBadge(unReadCount, badge);
 
-        AppDevice.checkUpdata(getSupportFragmentManager(),false);
+        AppDevice.checkUpdata(getSupportFragmentManager(), false);
 
     }
 
@@ -207,7 +206,6 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
                 UIHelper.toastError(getActivity(), msg);
             }
         };
@@ -276,7 +274,6 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e("获取直播分类失败");
             }
         }).startGet();
 

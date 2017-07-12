@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,13 +93,10 @@ public class RankListDetialActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        
+
         setMyTitle(getIntent().getStringExtra("MODULE_TITLE"), true);
 
         moduleType = getIntent().getIntExtra("MODULE_TYPE", 0);
-
-        KLog.e(moduleType);
-        KLog.e(getIntent().getIntExtra("RANK_LIST_TYPE", -1));
 
         switch (moduleType) {
             case MODULE_TYPE_HOT_INDUSTRY_TITLE://热门话题title

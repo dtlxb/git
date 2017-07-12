@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,13 +71,11 @@ public class EditSquareNameActivity extends BaseActivity {
         params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationID);
         params.put("group_name", editSquareName.getText().toString());
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     UIHelper.toast(getActivity(), "群名称修改成功");
                     //刷新conversation

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +110,7 @@ public class SquareCardActivity extends BaseActivity {
                     intent1.putExtra("squareName", squareName);
                     intent1.putExtra("need_update", true);
                     startActivity(intent1);
-                } else if (chatType==1010){
+                } else if (chatType == 1010) {
 
                     List<String> addIdList = new ArrayList<>();
                     addIdList.add(UserUtils.getMyAccountId());
@@ -132,7 +131,7 @@ public class SquareCardActivity extends BaseActivity {
                         }
                     });
 
-                }else {
+                } else {
                     ChatGroupHelper.applyIntoGroup(getActivity(), conversationId);
                 }
                 break;
@@ -171,7 +170,6 @@ public class SquareCardActivity extends BaseActivity {
     }
 
     private void getAllContacts(List<GroupMemberInfo> MBeanList) {
-        KLog.e(MBeanList);
         for (int i = 0; i < MBeanList.size(); i++) {
             GroupMemberInfo mBean = mBeanList.get(i);
             contactBeens.add(addNomoralFuns(mBean.getNickname(), mBean.getAccount_id(), mBean.getAvatar(), mBean.getAccount_name()));
@@ -202,29 +200,29 @@ public class SquareCardActivity extends BaseActivity {
                     case Impl.RESPON_DATA_SUCCESS:
                         GroupData groupData = JSONObject.parseObject(data, GroupData.class);
                         //群名称
-                        tvSquareName.setText(TextUtils.isEmpty(groupData.getName())?"":groupData.getName());
+                        tvSquareName.setText(TextUtils.isEmpty(groupData.getName()) ? "" : groupData.getName());
                         //群详情
-                        tvSquareDetail.setText(TextUtils.isEmpty(groupData.getAttr().getIntro())?
-                        "暂无群简介":groupData.getAttr().getIntro());
+                        tvSquareDetail.setText(TextUtils.isEmpty(groupData.getAttr().getIntro()) ?
+                                "暂无群简介" : groupData.getAttr().getIntro());
                         //群简介
-                        if (StringUtils.isActuallyEmpty(groupData.getAttr().getNotice())){
+                        if (StringUtils.isActuallyEmpty(groupData.getAttr().getNotice())) {
                             square_notice.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             square_notice.setVisibility(View.VISIBLE);
                             square_notice.setText(groupData.getAttr().getNotice());
                         }
                         //加入按钮
-                        isIn=groupData.is_in();
-                        chatType=groupData.getAttr().getChat_type();
-                        if (groupData.is_in() || groupData.getAttr().getChat_type()==1010){
+                        isIn = groupData.is_in();
+                        chatType = groupData.getAttr().getChat_type();
+                        if (groupData.is_in() || groupData.getAttr().getChat_type() == 1010) {
                             join_group.setText("进入聊天");
-                        }else {
+                        } else {
                             join_group.setText("我要报名");
                         }
                         join_group.setClickable(true);
                         break;
                     case Impl.RESPON_DATA_ERROR:
-                        UIHelper.toast(getActivity(),"没有信息");
+                        UIHelper.toast(getActivity(), "没有信息");
                         break;
                 }
             }

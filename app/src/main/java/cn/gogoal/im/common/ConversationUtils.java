@@ -1,11 +1,9 @@
 package cn.gogoal.im.common;
 
-import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
-import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -27,11 +25,10 @@ public class ConversationUtils {
 
     }
 
-    public void test(final int limit,AVIMConversation conversation){
+    public void test(final int limit, AVIMConversation conversation) {
         conversation.queryMessagesFromCache(limit, new AVIMMessagesQueryCallback() {
             @Override
             public void done(List<AVIMMessage> list, AVIMException e) {
-                KLog.e(JSONObject.toJSONString(limit));
             }
         });
     }

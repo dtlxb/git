@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-import com.socks.library.KLog;
-
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 /**
@@ -29,7 +27,7 @@ public class SaveBitmapAsyncTask extends AsyncTask<Bitmap, Void, Integer> {
 
     public SaveBitmapAsyncTask(Context context, String saveName, String flag) {
         this.context = context;
-        this.saveName=saveName;
+        this.saveName = saveName;
         this.flag = flag;
     }
 
@@ -51,7 +49,6 @@ public class SaveBitmapAsyncTask extends AsyncTask<Bitmap, Void, Integer> {
                 new Impl<String>() {
                     @Override
                     public void response(int code, String data) {
-                        KLog.e("code=" + code + ";data=" + data);
                         resCode = code;
                     }
                 });

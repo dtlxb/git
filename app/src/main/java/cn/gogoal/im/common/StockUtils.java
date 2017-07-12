@@ -10,7 +10,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,9 +30,9 @@ public class StockUtils {
 
     /**
      * 存储股票code set集合
-     * */
-    private static void saveSetData(LinkedHashSet<String> set){
-        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", set);
+     */
+    private static void saveSetData(LinkedHashSet<String> set) {
+        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", set);
     }
 
     /**
@@ -50,7 +49,7 @@ public class StockUtils {
 
     public static void saveMyStock(List<MyStockData> array) {
         LinkedHashSet<String> set = new LinkedHashSet<>();
-        for (MyStockData d:array){
+        for (MyStockData d : array) {
             set.add(d.getStock_code());
         }
         saveSetData(set);
@@ -61,7 +60,7 @@ public class StockUtils {
      * 获取本地自选股集合
      */
     public static LinkedHashSet<String> getMyStockCodeList() {
-        return SPTools.getSetData(UserUtils.getMyAccountId()+"_my_stock_set", new LinkedHashSet<String>());
+        return SPTools.getSetData(UserUtils.getMyAccountId() + "_my_stock_set", new LinkedHashSet<String>());
     }
 
     public static String getStockCodes(@NonNull JsonArray array) {
@@ -139,7 +138,7 @@ public class StockUtils {
      * 清除自选股
      */
     public static void clearLocalMyStock() {
-        SPTools.clearItem(UserUtils.getMyAccountId()+"_my_stock_set");
+        SPTools.clearItem(UserUtils.getMyAccountId() + "_my_stock_set");
     }
 
     //数据处理，1保存两位，2.正数补+，
@@ -427,7 +426,6 @@ public class StockUtils {
 
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if (result.getIntValue("code") == 0) {
                     StockUtils.addStock2MyStock(stock_code);
@@ -507,7 +505,6 @@ public class StockUtils {
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 int code = result.getIntValue("code");
@@ -570,15 +567,14 @@ public class StockUtils {
         new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
     }
 
-    public static void stockSort(int fromIndex,int toIndex,Impl<String> callback){
+    public static void stockSort(int fromIndex, int toIndex, Impl<String> callback) {
         HashMap<String, String> tokenParams = UserUtils.getTokenParams();
-        tokenParams.put("fromIndex",String.valueOf(fromIndex));
-        tokenParams.put("toIndex",String.valueOf(toIndex));
+        tokenParams.put("fromIndex", String.valueOf(fromIndex));
+        tokenParams.put("toIndex", String.valueOf(toIndex));
 
         new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
             }
 
             @Override

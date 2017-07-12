@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.qrcode_lib.activity.CodeUtils;
-import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -107,12 +106,9 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         try {
-            KLog.e("==========" + data.getExtras().getString(CodeUtils.RESULT_STRING) + "===========");
         } catch (Exception e) {
             e.getMessage();
         }
-
-        KLog.e("requestCode==" + requestCode);
 
         if (requestCode == REQUEST_CODE) {
             //处理扫描结果（在界面上显示）
@@ -152,8 +148,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
                                             break;
 
                                         default:
-                                            KLog.e("解析::" + data);
-                                            UIHelper.toast(getActivity(),"暂无相关信息");
+                                            UIHelper.toast(getActivity(), "暂无相关信息");
                                             break;
                                     }
                                 }
@@ -163,7 +158,6 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
 
                     } catch (Exception e) {
                         e.getMessage();
-                        KLog.e("结果不是json，或者非GoGoal APP系二维码");
                         UIHelper.toast(getActivity(), "非GoGoal二维码");
                     }
 

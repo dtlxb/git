@@ -15,7 +15,6 @@ import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -164,7 +163,6 @@ public class TypeLoginActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
@@ -193,7 +191,6 @@ public class TypeLoginActivity extends BaseActivity {
                                 public void done(AVIMClient avimClient, AVIMException e) {
 
                                     if (e == null) {
-                                        KLog.e("IM登录成功");
 
                                         LaunchRequest.init();//初始化缓存数据
 
@@ -201,7 +198,6 @@ public class TypeLoginActivity extends BaseActivity {
                                         PushService.subscribe(TypeLoginActivity.this, data.getString("account_id"), MainActivity.class);
                                         finish();
                                     } else {
-                                        KLog.e(e.toString());
                                         UIHelper.toast(getActivity(), "即时通讯登录失败");
                                     }
                                     loginButton.setClickable(true);
@@ -241,7 +237,6 @@ public class TypeLoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
 
                 loginDialog.dismiss(true);
                 loginButton.setClickable(true);

@@ -1,7 +1,6 @@
 package cn.gogoal.im.ui.dialog;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -11,30 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.AVFile;
 import com.bumptech.glide.Glide;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.io.File;
-import java.util.HashMap;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.GGImageMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -84,19 +74,16 @@ public class ShareMessageDialog extends BaseCentDailog {
             return;
         }
 
-        KLog.e(JSONObject.toJSONString(entity));
 
         final RoundedImageView icon = (RoundedImageView) v.findViewById(R.id.item_contacts_iv_icon);
         TextView name = (TextView) v.findViewById(R.id.item_contacts_tv_nickname);
         TextView tvShareMsgDesc = (TextView) v.findViewById(R.id.tv_dialog_share_msg_desc);
         ImageView ivShare = (ImageView) v.findViewById(R.id.iv_dialog_share_image);
 
-        KLog.e(entity.getEntity().getImage());
 
         try {
             Glide.with(getActivity()).load(new File(entity.getEntity().getImage())).into(ivShare);
         } catch (Exception e) {
-            KLog.e(entity.getEntity().getImage());
         }
 
         String shareType = entity.getEntity().getShareType();

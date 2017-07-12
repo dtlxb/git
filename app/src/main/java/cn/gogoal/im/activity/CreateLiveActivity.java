@@ -8,7 +8,6 @@ import android.widget.EditText;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.ITakePhoto;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.HashMap;
@@ -109,7 +108,6 @@ public class CreateLiveActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String onlineUri) {
-                        KLog.e("上传成功===" + onlineUri);
 
                         liveLargeImg = onlineUri;
 
@@ -123,7 +121,6 @@ public class CreateLiveActivity extends BaseActivity {
 
                     @Override
                     public void onFailed() {
-                        KLog.e("上传失败!!!!!!");
 
                         waitDialog.dismiss();
                         liveLargeImg = null;
@@ -167,7 +164,6 @@ public class CreateLiveActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");

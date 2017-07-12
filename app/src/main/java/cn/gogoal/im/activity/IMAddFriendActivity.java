@@ -5,7 +5,6 @@ import android.support.v7.widget.SearchView;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,6 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.XTitle;
-import hply.com.niugu.StringUtils;
 
 /**
  * Created by huangxx on 2017/3/13.
@@ -77,7 +75,6 @@ public class IMAddFriendActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 JSONObject data = result.getJSONObject("data");
-                KLog.e(responseInfo);
                 if (result.getInteger("code") == 0) {
                     if (data.getBoolean("success")) {
                         waitDialog.dismiss(true);
@@ -103,7 +100,6 @@ public class IMAddFriendActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
                 waitDialog.dismiss(true);
                 final WaitDialog errorDialog = WaitDialog.getInstance(msg,
                         R.mipmap.login_error, false);

@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +62,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * phone 18930640263
  * description :自选股
  */
-public class MyStockFragment extends BaseFragment implements MyStockSortInteface{
+public class MyStockFragment extends BaseFragment implements MyStockSortInteface {
 
     //排序头，为了对齐，使用item的引用布局
     @BindView(R.id.item_mystock)
@@ -131,7 +130,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         try {
             refreshMyStock(AppConst.REFRESH_TYPE_RESUME);
         } catch (Exception e) {
-            KLog.e(e.getMessage());
         }
     }
 
@@ -243,7 +241,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                         @Override
                         public void onFailure(String msg) {
-                            KLog.e(msg);
                             refreshComplate();
                         }
                     }).startGet();

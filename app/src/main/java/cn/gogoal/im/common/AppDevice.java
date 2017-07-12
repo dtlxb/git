@@ -105,7 +105,6 @@ public class AppDevice {
     }
 
 
-
     public static int px2dp(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f * (pxValue >= 0 ? 1 : -1));
@@ -287,7 +286,7 @@ public class AppDevice {
         return new BigInteger(
                 String.valueOf(
                         Math.round(alpher * 255)), 10)
-                .toString(16)+colorString;
+                .toString(16) + colorString;
     }
 
     //获取真实的手机屏幕尺寸
@@ -1233,10 +1232,11 @@ public class AppDevice {
 
     /**
      * 应用检测更新
-     * @param manager FragmentManager
+     *
+     * @param manager     FragmentManager
      * @param checkByUser 是否是手动检测，还是自动检测
-     * */
-    public static void checkUpdata(final FragmentManager manager, final boolean checkByUser){
+     */
+    public static void checkUpdata(final FragmentManager manager, final boolean checkByUser) {
         final HashMap<String, String> map = new HashMap<>();
         map.put("versions", AppDevice.getAppVersionName(MyApp.getAppContext()));
         new GGOKHTTP(map, GGOKHTTP.GET_ANDROID_VERSIONS_INFO, new GGOKHTTP.GGHttpInterface() {
@@ -1252,12 +1252,12 @@ public class AppDevice {
                                 updataObject.getString("url"));
                         updataDialog.setCancelable(false);
                         updataDialog.show(manager);
-                    }else {
+                    } else {
                         if (checkByUser)
-                            NormalSingleAlertDialog.newInstance("当前为最新版本","哦，知道了",null).show(manager);
+                            NormalSingleAlertDialog.newInstance("当前为最新版本", "哦，知道了", null).show(manager);
                     }
-                }else {
-                   //
+                } else {
+                    //
                 }
             }
 

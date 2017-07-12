@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.io.ByteArrayOutputStream;
 
@@ -69,7 +68,6 @@ public class ImageDisplay {
                     .into(imageView);
 
         } catch (Exception e) {
-            KLog.e("出错了！！！！");
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);

@@ -17,7 +17,6 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -86,7 +85,6 @@ public class FunctionActivity extends BaseActivity {
         //接收传值
         title = getIntent().getStringExtra("title");
         String url = getIntent().getStringExtra("function_url");
-        KLog.e(url);
         needShare = getIntent().getBooleanExtra("need_share", false);
 
         //初始化标题
@@ -116,7 +114,6 @@ public class FunctionActivity extends BaseActivity {
                     webView.callHandler("shareWeb", "", new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
-                            KLog.e(value);
 
 //                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
 //                                GGShareEntity entity = new GGShareEntity();
@@ -168,7 +165,6 @@ public class FunctionActivity extends BaseActivity {
                     webView.callHandler("methodFromJs", "java调用js方法:这是java转给js参数", new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
-                            KLog.e(value);
                         }
                     });
                 }
@@ -250,7 +246,6 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("addMyStock", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                KLog.e("添加", data);
                 JSONObject stockObject = JSONObject.parseObject(data);
                 StockUtils.addMyStock(stockObject.getString("stock_code"), new Impl<Boolean>() {
                     @Override
@@ -265,7 +260,6 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("deleteMyStock", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                KLog.e("移除", data);
                 JSONObject stockObject = JSONObject.parseObject(data);
                 StockUtils.deleteMyStockOld(stockObject.getString("stock_code"), new Impl<String>() {
                     @Override
@@ -281,11 +275,9 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("makeEnquiries", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                KLog.e("查询", data);
                 String stockCode = JSONObject.parseObject(data).getString("stock_code");
                 function.onReceiveValue(StockUtils.isMyStock(stockCode) ? "0" : "1");
 
-                KLog.e(StockUtils.isMyStock(stockCode) ? "0" : "1");
             }
         });
 

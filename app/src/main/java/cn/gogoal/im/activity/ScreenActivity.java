@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +84,6 @@ public class ScreenActivity extends BaseActivity {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 SocialLiveBean object = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
                 if (object.getCode() == 0) {
                     orgLiveLinear.setVisibility(View.VISIBLE);
@@ -119,7 +117,6 @@ public class ScreenActivity extends BaseActivity {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 SocialRecordBean object = JSONObject.parseObject(responseInfo, SocialRecordBean.class);
                 if (object.getCode() == 0) {
                     recordLinear.setVisibility(View.VISIBLE);

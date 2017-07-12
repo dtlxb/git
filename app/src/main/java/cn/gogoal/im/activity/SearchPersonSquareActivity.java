@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,12 +150,10 @@ public class SearchPersonSquareActivity extends BaseActivity {
         param.put("rows", "20");
         param.put("keyword", keyword);
 
-        KLog.e("token=" + UserUtils.getToken() + "&keyword=" + keyword);
 
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     searchResultList.clear();
@@ -206,7 +203,6 @@ public class SearchPersonSquareActivity extends BaseActivity {
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     groupDatas.clear();
