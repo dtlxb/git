@@ -89,10 +89,6 @@ public class EditMyStockActivity extends BaseActivity {
 
         setData();
 
-        for (MyStockData data : myStockList) {
-            KLog.e("name=" + data.getStock_code() + ";sort=" + data.getStock_sort());
-        }
-
         dragAdapter = new DragAdapter(mContext, myStockList);
         dragAdapter.setOnItemCheckedChangeListener(onCheckedChangeListener);
         rvEditDrag.setAdapter(dragAdapter);
