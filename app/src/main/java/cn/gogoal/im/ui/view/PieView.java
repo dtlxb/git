@@ -12,8 +12,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 

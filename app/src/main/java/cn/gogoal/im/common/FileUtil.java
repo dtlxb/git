@@ -3,15 +3,11 @@ package cn.gogoal.im.common;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.socks.library.KLog;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
-
-import cn.gogoal.im.base.MyApp;
 
 /**
  * Created by Administrator on 2017/1/15 0015.
@@ -34,17 +30,15 @@ public class FileUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeIO(outFileStream);
         }
     }
 
-    public static void writeRequestResponse(String response){
-        KLog.file("TAG", MyApp.getAppContext().getExternalFilesDir("json"),"json_"+CalendarUtils.getCurrentTime("yyyyMMddHHmmss")+".txt",response);
+    public static void writeRequestResponse(String response) {
     }
 
-    public static void writeRequestResponse(String response,String name){
-        KLog.file("TAG", MyApp.getAppContext().getExternalFilesDir("json"),name+".txt",response);
+    public static void writeRequestResponse(String response, String name) {
     }
 
     /**
@@ -87,6 +81,7 @@ public class FileUtil {
         }
         return dir.delete();
     }
+
     //删除文件
     public static boolean deleteFile(File file) {
         return file != null && (!file.exists() || file.isFile() && file.delete());
@@ -123,6 +118,7 @@ public class FileUtil {
             return String.format(Locale.getDefault(), "%.3fGB", (double) byteNum / 1073741824);
         }
     }
+
     /**
      * 字节数转合适内存大小
      * <p>保留3位小数</p>
@@ -134,15 +130,16 @@ public class FileUtil {
         if (byteNum < 0) {
             return "shouldn't be less than zero!";
         } else if (byteNum < 1024) {
-            return String.format(Locale.CHINA,"%.3fB", byteNum + 0.0005);
+            return String.format(Locale.CHINA, "%.3fB", byteNum + 0.0005);
         } else if (byteNum < 1048576) {
-            return String.format(Locale.CHINA,"%.3fKB", byteNum / 1024 + 0.0005);
+            return String.format(Locale.CHINA, "%.3fKB", byteNum / 1024 + 0.0005);
         } else if (byteNum < 1073741824) {
-            return String.format(Locale.CHINA,"%.3fMB", byteNum / 1048576 + 0.0005);
+            return String.format(Locale.CHINA, "%.3fMB", byteNum / 1048576 + 0.0005);
         } else {
-            return String.format(Locale.CHINA,"%.3fGB", byteNum / 1073741824 + 0.0005);
+            return String.format(Locale.CHINA, "%.3fGB", byteNum / 1073741824 + 0.0005);
         }
     }
+
     //获取文件夹大小
     public static String getDirSize(File dir) {
         long len = getDirLength(dir);

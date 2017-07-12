@@ -3,13 +3,10 @@ package cn.gogoal.im.ui.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
-
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;

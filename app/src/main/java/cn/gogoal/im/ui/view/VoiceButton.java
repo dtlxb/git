@@ -14,8 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.socks.library.KLog;
-
 import java.io.File;
 import java.util.List;
 

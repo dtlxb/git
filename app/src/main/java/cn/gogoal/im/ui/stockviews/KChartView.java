@@ -6,13 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-
-import com.socks.library.KLog;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,14 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.gogoal.im.activity.copy.MessageHandlerList;
-import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
-import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.bean.MALineBean;
 
 /**

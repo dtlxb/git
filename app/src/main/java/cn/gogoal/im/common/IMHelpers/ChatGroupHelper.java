@@ -11,7 +11,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ public class ChatGroupHelper {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     AVIMClientManager.getInstance().refreshConversation(conversationId);
@@ -114,12 +112,10 @@ public class ChatGroupHelper {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != groupManager) {
@@ -143,12 +139,10 @@ public class ChatGroupHelper {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != groupManager) {
@@ -382,7 +376,6 @@ public class ChatGroupHelper {
 
             @Override
             public void joinFail(String error) {
-                KLog.e(error);
             }
         });
     }
@@ -409,7 +402,6 @@ public class ChatGroupHelper {
         params.put("conv_id", contactBean.getConv_id());
         params.put("chat_type", "1001");
         params.put("message", JSONObject.toJSONString(messageMap));
-        KLog.e(params);
 
         //分享消息
         final GGShareMessage shareMessage = new GGShareMessage();
@@ -428,9 +420,7 @@ public class ChatGroupHelper {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     if (null != response) {
                         response.getInfoSuccess(result.getJSONObject("data"));
@@ -476,7 +466,6 @@ public class ChatGroupHelper {
         params.put("conv_id", shareItemInfo.getImMessageBean().getConversationID());
         params.put("chat_type", String.valueOf(shareItemInfo.getImMessageBean().getChatType()));
         params.put("message", JSONObject.toJSONString(messageMap));
-        KLog.e(params);
 
         //分享消息
         final GGShareMessage shareMessage = new GGShareMessage();
@@ -495,9 +484,7 @@ public class ChatGroupHelper {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     if (null != response) {
                         response.getInfoSuccess(result.getJSONObject("data"));
@@ -691,12 +678,10 @@ public class ChatGroupHelper {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationId);
-        KLog.e(params);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     JSONObject dataJson = result.getJSONObject("data");
                     if (dataJson.getBoolean("success")) {
@@ -732,7 +717,6 @@ public class ChatGroupHelper {
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {

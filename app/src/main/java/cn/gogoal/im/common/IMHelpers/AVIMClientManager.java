@@ -11,7 +11,6 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -127,7 +126,6 @@ public class AVIMClientManager {
                     if (null != mChatJoinManager) {
                         mChatJoinManager.joinFail(e.getMessage());
                     }
-                    KLog.e(e.getMessage());
                 }
             }
         });
@@ -152,7 +150,6 @@ public class AVIMClientManager {
                         list.get(0).fetchInfoInBackground(new AVIMConversationCallback() {
                             @Override
                             public void done(AVIMException e) {
-                                KLog.e(list.get(0).getMembers());
                             }
                         });
                     }

@@ -2,7 +2,6 @@ package cn.gogoal.im.common.IMHelpers;
 
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMClientEventHandler;
-import com.socks.library.KLog;
 
 import cn.gogoal.im.base.AppManager;
 

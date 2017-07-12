@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -24,7 +23,7 @@ import okhttp3.Call;
 
 // 实现IWXAPIEventHandler 接口，以便于微信事件处理的回调
 
-public class WXEntryActivity extends Activity{
+public class WXEntryActivity extends Activity {
 
     private static final String WEIXIN_ACCESS_TOKEN_KEY = "wx_access_token_key";
     private static final String WEIXIN_OPENID_KEY = "wx_openid_key";
@@ -50,7 +49,7 @@ public class WXEntryActivity extends Activity{
         }
         SendAuth.Resp resp = new SendAuth.Resp(intent.getExtras());
         if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
-            wechatCallback= OpenServiceFactory.with(getContext()).wechat().getCallback();
+            wechatCallback = OpenServiceFactory.with(getContext()).wechat().getCallback();
 
             //用户同意
             String code = resp.code;
@@ -92,7 +91,6 @@ public class WXEntryActivity extends Activity{
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        KLog.e("鉴权失败：" + e.getMessage());
                         WXEntryActivity.this.finish();
                     }
 
@@ -105,7 +103,6 @@ public class WXEntryActivity extends Activity{
 //                            KLog.e("accessToken有效");
                         } else {
                             // 过期了，使用refresh_token来刷新accesstoken
-                            KLog.e("accessToken无效");
                             refreshAccessToken();
                         }
                     }
@@ -128,13 +125,11 @@ public class WXEntryActivity extends Activity{
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        KLog.e("错误信息" + e.getMessage());
                         WXEntryActivity.this.finish();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        KLog.e("refreshAccessToken: " + response);
                         // 判断是否获取成功，成功则去获取用户信息，否则提示失败
                         processGetAccessTokenResult(response);
                     }
@@ -149,21 +144,23 @@ public class WXEntryActivity extends Activity{
             String access_token = JSONObject.parseObject(response).getString("access_token");
             String openid = JSONObject.parseObject(response).getString("openid");
             // 保存信息到手机本地
-            saveAccessInfotoLocation(access_token,openid);
+            saveAccessInfotoLocation(access_token, openid);
             // 获取用户信息
-            getUserInfo(access_token,openid);
+            getUserInfo(access_token, openid);
         } else {
             // 授权口令获取失败，解析返回错误信息
 //            // 提示错误信息
             try {
-                Toast.makeText(this,JSONObject.parseObject(response).getString("errmsg"), Toast.LENGTH_SHORT).show();
-            }catch (Exception e){
-                Toast.makeText(this,"鉴权出错！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, JSONObject.parseObject(response).getString("errmsg"), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, "鉴权出错！", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    /**将刷新的access_token存储*/
+    /**
+     * 将刷新的access_token存储
+     */
     private void saveAccessInfotoLocation(String access_token, String openid) {
         SPTools.saveString(WEIXIN_ACCESS_TOKEN_KEY, access_token);
         SPTools.saveString(WEIXIN_OPENID_KEY, openid);
@@ -188,17 +185,18 @@ public class WXEntryActivity extends Activity{
                 // "expires_in":7200,
                 // "refresh_token":"9zWxjda0plg8JoM6CYiYYOaH90si5tN4AF9Ovs6pF20m8SHlRxESRwWuP_QLocMnHKP5Y1PYNQUtk9Gf_j017fH4EUhes8DG-zS4mNE3R5E",
                 // "openid":"oxmyNv4YfkwdzSYAlbrBBZmBoOHQ","scope":"snsapi_userinfo","unionid":"o4ZYIwU0Gq0DDGmHxgU76-DHsjds"}
-                KLog.e(response);
-                String access_token=JSONObject.parseObject(response).getString("access_token");
-                String openid=JSONObject.parseObject(response).getString("openid");
-                saveAccessInfotoLocation(access_token,openid);
-                getUserInfo(access_token,openid);
+                String access_token = JSONObject.parseObject(response).getString("access_token");
+                String openid = JSONObject.parseObject(response).getString("openid");
+                saveAccessInfotoLocation(access_token, openid);
+                getUserInfo(access_token, openid);
             }
         });
     }
 
-    /**获取到微信用户信息*/
-    private void getUserInfo(String accessToken ,String openid){
+    /**
+     * 获取到微信用户信息
+     */
+    private void getUserInfo(String accessToken, String openid) {
         String url = String.format(AppConst.WEXIN_GET_USER_INFO, accessToken, openid);
 
         OkHttpUtils
@@ -208,14 +206,12 @@ public class WXEntryActivity extends Activity{
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        KLog.e(e.getMessage());
                         WXEntryActivity.this.finish();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        KLog.e("微信用户信息: " + response);
-                        if (wechatCallback!=null){
+                        if (wechatCallback != null) {
                             wechatCallback.onSuccess(response);
                         }
                         finish();

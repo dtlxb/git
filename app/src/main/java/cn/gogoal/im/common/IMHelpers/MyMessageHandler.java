@@ -16,7 +16,6 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avospush.notification.NotificationCompat;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +51,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                         if (!message.getFrom().equals(clientID)) {
                             showNotification(message, conversation);
                             final int chatType = (int) conversation.getAttribute("chat_type");
-                            KLog.e(message.getContent());
-                            KLog.e(conversation.get("mu"));
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊
@@ -258,7 +255,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     mNotifyMgr.notify(mNotificationId, mBuilder.build());
 
                 } catch (Exception e) {
-                    KLog.e(e);
                 }
             }
         }

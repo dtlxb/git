@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +77,7 @@ public class RecommendAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
             addView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChatGroupHelper.applyIntoGroup(context,data.getConv_id());
+                    ChatGroupHelper.applyIntoGroup(context, data.getConv_id());
                     addView.setText("等待审核");
                 }
             });
@@ -99,7 +98,6 @@ public class RecommendAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
 
                 @Override
                 public void failed(Exception e) {
-                    KLog.e("使用占位图头像--拼接出错");
                     ((FragmentActivity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

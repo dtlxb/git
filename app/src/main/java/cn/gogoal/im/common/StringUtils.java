@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.widget.EditText;
 
-import com.socks.library.KLog;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.ParseException;
@@ -162,7 +160,6 @@ public class StringUtils {
         try {
             dealExpression(context, spannableString, textSize, pattern, 0);
         } catch (Exception e) {
-            KLog.e(e.toString());
         }
         return spannableString;
     }
@@ -458,7 +455,6 @@ public class StringUtils {
         }
         if (str.endsWith(" ")) {
             int positionAt = str.lastIndexOf("@");
-            KLog.e(positionAt);
             if (positionAt != -1) {
                 return str.substring(0, positionAt);
             } else {
@@ -467,7 +463,6 @@ public class StringUtils {
         }
         if (str.endsWith("]")) {
             int positionAt = str.lastIndexOf("[");
-            KLog.e(positionAt);
             if (positionAt != -1) {
                 return str.substring(0, positionAt);
             } else {
