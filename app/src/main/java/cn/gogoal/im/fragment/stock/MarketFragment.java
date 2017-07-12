@@ -39,7 +39,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.CatchLayoutManager;
-import cn.gogoal.im.ui.widget.loopviewpager.DisallowParentTouchViewPager;
+import cn.gogoal.im.ui.widget.DisallowParentTouchViewPager;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;

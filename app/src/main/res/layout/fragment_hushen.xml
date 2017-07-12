@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <cn.gogoal.im.ui.widget.loopviewpager.DisallowParentTouchViewPager
+                <cn.gogoal.im.ui.widget.DisallowParentTouchViewPager
                     android:id="@+id/vp_market_zhishu"
                     android:layout_width="match_parent"
                     android:layout_height="110dp" />

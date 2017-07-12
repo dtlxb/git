@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.widget.loopviewpager;
+package cn.gogoal.im.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
