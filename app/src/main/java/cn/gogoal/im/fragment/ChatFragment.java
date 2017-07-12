@@ -192,8 +192,8 @@ public class ChatFragment extends BaseFragment {
                             if (e == null && null != list && list.size() > 0) {
                                 messageList.addAll(0, list);
                                 imageUrls.addAll(0, getAllImageUrls(list));
-                                imChatAdapter.notifyItemRangeInserted(0, list.size());
                                 dealSquareMessage();
+                                imChatAdapter.notifyItemRangeInserted(0, list.size());
                             }
                             message_swipe.setRefreshing(false);
                         }
@@ -633,6 +633,12 @@ public class ChatFragment extends BaseFragment {
 
     private void refreshRecyclerView(AVIMMessage avimMessage, boolean needJump) {
         if (avimMessage != null) {
+            if (avimMessage instanceof GGGroupAddMessage || avimMessage instanceof GGGroupDelMessage) {
+                GGSystemMessage systemMessage = (GGSystemMessage) avimMessage;
+                JSONArray accountArray = (JSONArray) systemMessage.getAttrs().get("accountList");
+                String _lctext = MessageListUtils.findSquarePeople(accountArray, String.valueOf(systemMessage.getMessageType()));
+                systemMessage.setText(_lctext);
+            }
             imChatAdapter.addItem(avimMessage);
             imChatAdapter.setUrls(imageUrls);
             imChatAdapter.notifyItemInserted(messageList.size() - 1);

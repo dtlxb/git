@@ -129,7 +129,7 @@ public class KChartsFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo, "GetKLineDataPage");
+                //FileUtil.writeRequestResponse(responseInfo, "GetKLineDataPage");
                 if (KChartsFragment.this.isVisible()) {
                     if (is_authroity) mOHLCData.clear();
                     JsonObject result = JsonUtils.toJsonObject(responseInfo);

@@ -30,6 +30,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.PdfData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.FileUtil;
@@ -371,7 +372,8 @@ public class FunctionActivity extends BaseActivity {
         //获取免打扰
         List<String> muList = (List<String>) conversation.get("mu");
         boolean noBother = muList.contains(UserUtils.getMyAccountId());
-        if (!noBother) {
+        int chatType = (int) conversation.getAttribute("chat_type");
+        if (!noBother && chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             unReadCount++;
         }
         badge.setBadgeNumber(unReadCount);

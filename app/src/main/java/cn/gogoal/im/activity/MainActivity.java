@@ -348,7 +348,8 @@ public class MainActivity extends BaseActivity {
         //获取免打扰
         List<String> muList = (List<String>) conversation.get("mu");
         boolean noBother = muList.contains(UserUtils.getMyAccountId());
-        if (!noBother) {
+        int chatType = (int) conversation.getAttribute("chat_type");
+        if (!noBother && chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             unReadCount++;
         }
         badge.setBadgeNumber(unReadCount);

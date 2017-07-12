@@ -537,132 +537,133 @@ public class MessageFragment extends BaseFragment {
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
+        int chatType = (int) conversation.getAttribute("chat_type");
         //移除站位
         xLayout.setStatus(XLayout.Success);
         //获取免打扰
         List<String> muList = (List<String>) conversation.get("mu");
         boolean noBother = muList.contains(UserUtils.getMyAccountId());
 
-        int chatType = (int) conversation.getAttribute("chat_type");
-        Long rightNow = CalendarUtils.getCurrentTime();
-        String nickName = "";
-        String avatar = "";
-        int unreadMessage;
+        if (chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
+            Long rightNow = CalendarUtils.getCurrentTime();
+            String nickName = "";
+            String avatar = "";
+            int unreadMessage;
 
-        JSONObject contentObject = JSON.parseObject(message.getContent());
-        JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
-        String _lctype = contentObject.getString("_lctype");
-        switch (_lctype) {
-            case AppConst.IM_MESSAGE_TYPE_TEXT:
-                //文字
-            case AppConst.IM_MESSAGE_TYPE_PHOTO:
-                //图片
-            case AppConst.IM_MESSAGE_TYPE_AUDIO:
-                //语音
-            case AppConst.IM_MESSAGE_TYPE_CONTACT_ADD:
-            case AppConst.IM_MESSAGE_TYPE_SHARE:
-                //好友加入通讯录
-                nickName = lcattrsObject.getString("username");
-                break;
-            case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
-            case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
-                //加好友
-                nickName = lcattrsObject.getString("nickname");
-                break;
-            case AppConst.IM_MESSAGE_TYPE_CONTACT_DEL:
-                //好友从通讯录移除
-                break;
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
-                //好友入群
-                break;
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_REQUEST:
-                //申请入群
-                nickName = lcattrsObject.getString("nickname");
-                break;
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
-                //群公告,群简介
-                nickName = lcattrsObject.getString("nickname");
-                break;
-            case AppConst.IM_MESSAGE_TYPE_PUBLIC:
-                //公众号
-                avatar = (String) conversation.getAttribute("avatar");
-                nickName = conversation.getName();
-                break;
-            case AppConst.IM_MESSAGE_TYPE_STOCK:
-                //股票消息
-                break;
-            default:
-                break;
-        }
-
-        switch (chatType) {
-            //单聊,群聊,加好友请求
-            case AppConst.IM_CHAT_TYPE_SINGLE:
-                avatar = lcattrsObject.getString("avatar");
-                break;
-            case AppConst.IM_CHAT_TYPE_SQUARE:
-            case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
-                nickName = conversation.getName();
-                avatar = (String) conversation.getAttribute("avatar");
-                break;
-            case AppConst.IM_CHAT_TYPE_SYSTEM:
-                break;
-            //直播
-            case AppConst.IM_CHAT_TYPE_LIVE:
-                break;
-            //操纵通讯录
-            case AppConst.IM_CHAT_TYPE_CONTACTS_ACTION:
-                break;
-            //公众号模块
-            case AppConst.IM_CHAT_TYPE_CONSULTATION:
-                break;
-            //群通知
-            case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
-                avatar = lcattrsObject.getString("avatar");
-                break;
-            default:
-                break;
-        }
-
-        //已有的会话
-        for (int i = 0; i < IMMessageBeans.size(); i++) {
-            if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
-                IMMessageBeans.get(i).setLastTime(rightNow);
-                IMMessageBeans.get(i).setMute(noBother);
-                IMMessageBeans.get(i).setLastMessage(JSON.toJSONString(message));
-                unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
-                IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
-                isTheSame = true;
+            JSONObject contentObject = JSON.parseObject(message.getContent());
+            JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
+            String _lctype = contentObject.getString("_lctype");
+            switch (_lctype) {
+                case AppConst.IM_MESSAGE_TYPE_TEXT:
+                    //文字
+                case AppConst.IM_MESSAGE_TYPE_PHOTO:
+                    //图片
+                case AppConst.IM_MESSAGE_TYPE_AUDIO:
+                    //语音
+                case AppConst.IM_MESSAGE_TYPE_CONTACT_ADD:
+                case AppConst.IM_MESSAGE_TYPE_SHARE:
+                    //好友加入通讯录
+                    nickName = lcattrsObject.getString("username");
+                    break;
+                case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
+                case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
+                    //加好友
+                    nickName = lcattrsObject.getString("nickname");
+                    break;
+                case AppConst.IM_MESSAGE_TYPE_CONTACT_DEL:
+                    //好友从通讯录移除
+                    break;
+                case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
+                case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
+                    //好友入群
+                    break;
+                case AppConst.IM_MESSAGE_TYPE_SQUARE_REQUEST:
+                    //申请入群
+                    nickName = lcattrsObject.getString("nickname");
+                    break;
+                case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
+                    //群公告,群简介
+                    nickName = lcattrsObject.getString("nickname");
+                    break;
+                case AppConst.IM_MESSAGE_TYPE_PUBLIC:
+                    //公众号
+                    avatar = (String) conversation.getAttribute("avatar");
+                    nickName = conversation.getName();
+                    break;
+                case AppConst.IM_MESSAGE_TYPE_STOCK:
+                    //股票消息
+                    break;
+                default:
+                    break;
             }
-        }
 
-        //新添的会话
-        if (!isTheSame) {
-            IMMessageBean imMessageBean = new IMMessageBean();
-            imMessageBean.setConversationID(ConversationId);
-            imMessageBean.setLastMessage(JSON.toJSONString(message));
-            imMessageBean.setLastTime(rightNow);
-            imMessageBean.setNickname(nickName);
-            imMessageBean.setMute(noBother);
-            imMessageBean.setAvatar(avatar);
-            imMessageBean.setChatType(chatType);
-            unreadMessage = 1;
-            imMessageBean.setUnReadCounts(unreadMessage + "");
-            IMMessageBeans.add(imMessageBean);
-        }
-        //按照时间排序
-        if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
-            Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
-                @Override
-                public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(object2.getLastTime(), object1.getLastTime());
+            switch (chatType) {
+                //单聊,群聊,加好友请求
+                case AppConst.IM_CHAT_TYPE_SINGLE:
+                    avatar = lcattrsObject.getString("avatar");
+                    break;
+                case AppConst.IM_CHAT_TYPE_SQUARE:
+                case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
+                    nickName = conversation.getName();
+                    avatar = (String) conversation.getAttribute("avatar");
+                    break;
+                case AppConst.IM_CHAT_TYPE_SYSTEM:
+                    break;
+                //直播
+                case AppConst.IM_CHAT_TYPE_LIVE:
+                    break;
+                //操纵通讯录
+                case AppConst.IM_CHAT_TYPE_CONTACTS_ACTION:
+                    break;
+                //公众号模块
+                case AppConst.IM_CHAT_TYPE_CONSULTATION:
+                    break;
+                //群通知
+                case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
+                    avatar = lcattrsObject.getString("avatar");
+                    break;
+                default:
+                    break;
+            }
+
+            //已有的会话
+            for (int i = 0; i < IMMessageBeans.size(); i++) {
+                if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
+                    IMMessageBeans.get(i).setLastTime(rightNow);
+                    IMMessageBeans.get(i).setMute(noBother);
+                    IMMessageBeans.get(i).setLastMessage(JSON.toJSONString(message));
+                    unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                    IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
+                    isTheSame = true;
                 }
-            });
+            }
+
+            //新添的会话
+            if (!isTheSame) {
+                IMMessageBean imMessageBean = new IMMessageBean();
+                imMessageBean.setConversationID(ConversationId);
+                imMessageBean.setLastMessage(JSON.toJSONString(message));
+                imMessageBean.setLastTime(rightNow);
+                imMessageBean.setNickname(nickName);
+                imMessageBean.setMute(noBother);
+                imMessageBean.setAvatar(avatar);
+                imMessageBean.setChatType(chatType);
+                unreadMessage = 1;
+                imMessageBean.setUnReadCounts(unreadMessage + "");
+                IMMessageBeans.add(imMessageBean);
+            }
+            //按照时间排序
+            if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
+                Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
+                    @Override
+                    public int compare(IMMessageBean object1, IMMessageBean object2) {
+                        return Long.compare(object2.getLastTime(), object1.getLastTime());
+                    }
+                });
+            }
+
+            listAdapter.notifyDataSetChanged();
         }
-
-        listAdapter.notifyDataSetChanged();
     }
-
 
 }

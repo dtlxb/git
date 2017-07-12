@@ -91,6 +91,7 @@ public class MessageSaveService extends Service {
         boolean noBother = muList.contains(UserUtils.getMyAccountId());
         SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", noBother);
         //股票消息不缓存
+        KLog.e(chatType);
         if (chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             Long rightNow = CalendarUtils.getCurrentTime();
             String nickName = "";
