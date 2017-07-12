@@ -23,13 +23,13 @@ public class GGAPI {
 
     //预正式环境
 //    private static final String Native_API = "http://ggservice-pre.go-goal.cn";
-    private static final String APP_KEY = "VzNQumNMxCmPcbD";
-    private static final String APP_SECRET = "SYRyCEmkmZsMm8xnN5VrLQLXfc7C9GB1";
+//    private static final String APP_KEY = "VzNQumNMxCmPcbD";
+//    private static final String APP_SECRET = "SYRyCEmkmZsMm8xnN5VrLQLXfc7C9GB1";
 
     //正式环境
     private static final String Native_API = "https://ggservice.go-goal.cn";
-//    private static final String APP_KEY = "GnbhWYzxfcbrMOd";
-//    private static final String APP_SECRET = "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS";
+    private static final String APP_KEY = "aQbUnbaRdkkHnBG";
+    private static final String APP_SECRET = "bgX2vMuKMkkVX2izTrQv2iGXavfExIEf";
 
     public static String get(String api, Map<String, String> params) throws Exception {
         long timeStamp = System.currentTimeMillis() / 1000L;

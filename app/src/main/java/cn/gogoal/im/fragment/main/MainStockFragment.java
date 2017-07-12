@@ -127,7 +127,7 @@ public class MainStockFragment extends BaseFragment {
         });
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);
-
+        
         unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(getActivity());
         initBadge(unReadCount, badge);

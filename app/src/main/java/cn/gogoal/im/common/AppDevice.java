@@ -1259,12 +1259,14 @@ public class AppDevice {
                         if (checkByUser)
                             NormalSingleAlertDialog.newInstance("当前为最新版本","哦，知道了",null).show(manager);
                     }
+                }else {
+                   //
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-
+//
             }
         }).startGet();
     }
