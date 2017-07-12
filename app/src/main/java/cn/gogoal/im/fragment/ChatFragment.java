@@ -133,6 +133,7 @@ public class ChatFragment extends BaseFragment {
     private FunctionFragment functionFragment;
     private FragmentTransaction transaction;
     private FragmentManager childManager;
+    private boolean mute;
     private int keyBordHeight;
     private List<String> imageUrls = new ArrayList<>();//图片集合
 
@@ -533,7 +534,7 @@ public class ChatFragment extends BaseFragment {
                 //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
                         null != userBean.getNickname() ? userBean.getNickname() : "",
-                        String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
+                        String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message), mute);
             }
         } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
@@ -544,7 +545,7 @@ public class ChatFragment extends BaseFragment {
                 }
             }
             imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0", imConversation.getName(),
-                    "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", JSON.toJSONString(message));
+                    "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", JSON.toJSONString(message), mute);
         }
         MessageListUtils.saveMessageInfo(imMessageBean);
         //通知服务重新获取
@@ -918,6 +919,9 @@ public class ChatFragment extends BaseFragment {
         if (null != conversation) {
             imConversation = conversation;
             chatType = (int) imConversation.getAttribute("chat_type");
+            //获取免打扰
+            List<String> muList = (List<String>) conversation.get("mu");
+            mute = muList.contains(UserUtils.getMyAccountId());
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE && user != null) {
                 userBean = user;
             }
@@ -963,7 +967,7 @@ public class ChatFragment extends BaseFragment {
                 strBuilder.append(inputStr.substring(0, inputStr.length() - 1));
                 List<ContactBean> changeContactBeans = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
                 for (int i = 0; i < changeContactBeans.size(); i++) {
-                    strBuilder.append("@" + changeContactBeans.get(i).getTarget() + " ");
+                    strBuilder.append("@").append(changeContactBeans.get(i).getTarget()).append(" ");
                 }
                 etInput.setText(strBuilder.toString());
                 etInput.setSelection(strBuilder.toString().length());

@@ -96,13 +96,22 @@ public class MessageListUtils {
         if (null != cacheBeans && cacheBeans.size() > 0) {
             return cacheBeans.get(0);
         }
-        return new IMMessageBean(conversationID, AppConst.IM_CHAT_TYPE_SQUARE, System.currentTimeMillis(), "0", "", "", "", null);
+        return new IMMessageBean(conversationID, AppConst.IM_CHAT_TYPE_SQUARE, System.currentTimeMillis(), "0", "", "", "", null, false);
+    }
+
+    /**
+     * 根据对话id修改mute
+     */
+    public static void updateMuteById(String conversationID, boolean mute) {
+        ContentValues values = new ContentValues();
+        values.put("mute", mute);
+        DataSupport.updateAll(IMMessageBean.class, values, "conversationID = ?", conversationID);
     }
 
     /**
      * 根据对话id更改群昵称
      */
-    public static void upDateIMMessageBeanById(String conversationID, String nickName) {
+    public static void updateIMMessageBeanById(String conversationID, String nickName) {
         ContentValues values = new ContentValues();
         values.put("nickname", nickName);
         DataSupport.updateAll(IMMessageBean.class, values, "conversationID = ?", conversationID);
@@ -124,7 +133,7 @@ public class MessageListUtils {
      * 消息列表：获取未读数
      */
     public static int getAllMessageUnreadCount() {
-        return DataSupport.sum(IMMessageBean.class, "unReadCounts", int.class);
+        return DataSupport.where("mute = ?", "0").sum(IMMessageBean.class, "unReadCounts", int.class);
     }
 
     /**

@@ -84,16 +84,12 @@ public class MessageSaveService extends Service {
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
-        //获取免打扰
-        /*KLog.e(conversation.get("mu"));
-        if (conversation.get("mu") != null) {
-            boolean noBother = (boolean) conversation.get("mu");
-            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", noBother);
-        } else {
-            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", false);
-        }*/
 
         int chatType = (int) conversation.getAttribute("chat_type");
+        //获取免打扰
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", noBother);
         //股票消息不缓存
         if (chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             Long rightNow = CalendarUtils.getCurrentTime();
@@ -188,6 +184,7 @@ public class MessageSaveService extends Service {
             for (int i = 0; i < IMMessageBeans.size(); i++) {
                 if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
                     IMMessageBeans.get(i).setLastTime(rightNow);
+                    IMMessageBeans.get(i).setMute(noBother);
                     IMMessageBeans.get(i).setLastMessage(JSON.toJSONString(message));
                     unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                     IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
@@ -203,14 +200,16 @@ public class MessageSaveService extends Service {
                 imMessageBean.setLastTime(rightNow);
                 imMessageBean.setNickname(nickName);
                 imMessageBean.setAvatar(avatar);
+                imMessageBean.setMute(noBother);
                 imMessageBean.setChatType(chatType);
-                imMessageBean.setUnReadCounts(1 + "");
+                unreadMessage = 1;
+                imMessageBean.setUnReadCounts(unreadMessage + "");
                 IMMessageBeans.add(imMessageBean);
             }
 
             //保存
             IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                    isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, JSON.toJSONString(message));
+                    String.valueOf(unreadMessage), nickName, friend_id, avatar, JSON.toJSONString(message), noBother);
             MessageListUtils.saveMessageInfo(imMessageBean);
         }
 

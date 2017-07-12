@@ -13,6 +13,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ import cn.gogoal.im.bean.BaseIconText;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
@@ -308,28 +310,30 @@ public class MessageFragment extends BaseFragment {
         protected void convert(BaseViewHolder holder, IMMessageBean messageBean, int position) {
             String dateStr = "";
             String message = "";
-            String unRead = "";
             String nickName = "";
             String squareMessageFrom = "";
             int chatType = messageBean.getChatType();
-            boolean noBother = SPTools.getBoolean(UserUtils.getMyAccountId() + messageBean.getConversationID() + "noBother", false);
+            boolean noBother = messageBean.isMute();
             final RoundedImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
+            View viewNoBother = holder.getView(R.id.view_noBother);
             ImageView botherIv = holder.getView(R.id.iv_no_bother);
             //消息免打扰
             if (noBother) {
                 botherIv.setVisibility(View.VISIBLE);
+                countTv.setVisibility(View.GONE);
+                if (messageBean.getUnReadCounts().equals("0")) {
+                    viewNoBother.setVisibility(View.GONE);
+                } else {
+                    viewNoBother.setVisibility(View.VISIBLE);
+                }
             } else {
+                viewNoBother.setVisibility(View.GONE);
                 botherIv.setVisibility(View.GONE);
-            }
-
-            //未读数
-            setCountTag(countTv, messageBean.getUnReadCounts());
-            if (messageBean.getUnReadCounts().equals("0")) {
-                unRead = "";
-            } else {
-                unRead = "[" + messageBean.getUnReadCounts() + "条] ";
+                countTv.setVisibility(View.VISIBLE);
+                //未读数
+                setCountTag(countTv, messageBean.getUnReadCounts());
             }
             //时间
             if (null != messageBean.getLastTime()) {
@@ -527,7 +531,7 @@ public class MessageFragment extends BaseFragment {
      */
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        Map<String, Object> map = baseMessage.getOthers();
+        Map map = baseMessage.getOthers();
 
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
@@ -536,13 +540,8 @@ public class MessageFragment extends BaseFragment {
         //移除站位
         xLayout.setStatus(XLayout.Success);
         //获取免打扰
-        /*KLog.e(conversation.get("mu"));
-        if (conversation.get("mu") != null) {
-            boolean canBother = (boolean) conversation.get("mu");
-            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", canBother);
-        } else {
-            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", false);
-        }*/
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
 
         int chatType = (int) conversation.getAttribute("chat_type");
         Long rightNow = CalendarUtils.getCurrentTime();
@@ -630,6 +629,7 @@ public class MessageFragment extends BaseFragment {
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
                 IMMessageBeans.get(i).setLastTime(rightNow);
+                IMMessageBeans.get(i).setMute(noBother);
                 IMMessageBeans.get(i).setLastMessage(JSON.toJSONString(message));
                 unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                 IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
@@ -644,9 +644,11 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setLastMessage(JSON.toJSONString(message));
             imMessageBean.setLastTime(rightNow);
             imMessageBean.setNickname(nickName);
+            imMessageBean.setMute(noBother);
             imMessageBean.setAvatar(avatar);
             imMessageBean.setChatType(chatType);
-            imMessageBean.setUnReadCounts(1 + "");
+            unreadMessage = 1;
+            imMessageBean.setUnReadCounts(unreadMessage + "");
             IMMessageBeans.add(imMessageBean);
         }
         //按照时间排序

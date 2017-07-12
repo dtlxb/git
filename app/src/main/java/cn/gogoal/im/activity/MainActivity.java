@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -342,7 +343,14 @@ public class MainActivity extends BaseActivity {
      */
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        unReadCount++;
+        Map map = baseMessage.getOthers();
+        AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+        //获取免打扰
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        if (!noBother) {
+            unReadCount++;
+        }
         badge.setBadgeNumber(unReadCount);
     }
 

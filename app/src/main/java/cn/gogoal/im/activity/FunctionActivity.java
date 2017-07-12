@@ -13,12 +13,16 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
+
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -35,6 +39,7 @@ import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WebViewUtil;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.ui.Badge.BadgeView;
@@ -361,7 +366,14 @@ public class FunctionActivity extends BaseActivity {
      */
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        unReadCount++;
+        Map map = baseMessage.getOthers();
+        AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+        //获取免打扰
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        if (!noBother) {
+            unReadCount++;
+        }
         badge.setBadgeNumber(unReadCount);
     }
 

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -370,7 +371,14 @@ public class MineFragment extends BaseFragment {
      */
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        unReadCount++;
+        Map map = baseMessage.getOthers();
+        AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+        //获取免打扰
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        if (!noBother) {
+            unReadCount++;
+        }
         badge.setBadgeNumber(unReadCount);
     }
 

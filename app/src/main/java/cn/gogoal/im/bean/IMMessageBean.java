@@ -19,6 +19,8 @@ public class IMMessageBean extends DataSupport implements Parcelable {
     private String avatar;
     //消息
     private String lastMessage;
+    //免打扰(静音)
+    private boolean mute;
 
     public IMMessageBean() {
     }
@@ -88,6 +90,13 @@ public class IMMessageBean extends DataSupport implements Parcelable {
         this.chatType = chatType;
     }
 
+    public boolean isMute() {
+        return mute;
+    }
+
+    public void setMute(boolean mute) {
+        this.mute = mute;
+    }
 
     @Override
     public String toString() {
@@ -99,11 +108,13 @@ public class IMMessageBean extends DataSupport implements Parcelable {
                 ", nickname='" + nickname + '\'' +
                 ", friend_id='" + friend_id + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", lastMessage=" + lastMessage +
+                ", lastMessage='" + lastMessage + '\'' +
+                ", mute=" + mute +
                 '}';
     }
 
-    public IMMessageBean(String conversationID, int chatType, Long lastTime, String unReadCounts, String nickname, String friend_id, String avatar, String lastMessage) {
+    public IMMessageBean(String conversationID, int chatType, Long lastTime, String unReadCounts,
+                         String nickname, String friend_id, String avatar, String lastMessage, boolean mute) {
         this.conversationID = conversationID;
         this.chatType = chatType;
         this.lastTime = lastTime;
@@ -112,6 +123,7 @@ public class IMMessageBean extends DataSupport implements Parcelable {
         this.friend_id = friend_id;
         this.avatar = avatar;
         this.lastMessage = lastMessage;
+        this.mute = mute;
     }
 
     @Override
@@ -129,6 +141,7 @@ public class IMMessageBean extends DataSupport implements Parcelable {
         dest.writeString(this.friend_id);
         dest.writeString(this.avatar);
         dest.writeString(this.lastMessage);
+        dest.writeByte((byte) (this.mute ? 1 : 0));
     }
 
     protected IMMessageBean(Parcel in) {
@@ -140,6 +153,7 @@ public class IMMessageBean extends DataSupport implements Parcelable {
         this.friend_id = in.readString();
         this.avatar = in.readString();
         this.lastMessage = in.readString();
+        this.mute = in.readByte() != 0;
     }
 
     public static final Creator<IMMessageBean> CREATOR = new Creator<IMMessageBean>() {

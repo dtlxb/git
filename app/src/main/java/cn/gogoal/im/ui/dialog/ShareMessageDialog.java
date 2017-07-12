@@ -32,6 +32,7 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.GGImageMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
@@ -149,7 +150,8 @@ public class ShareMessageDialog extends BaseCentDailog {
                                                 IMMessageBean imMessageBean = new IMMessageBean(entity.getImMessageBean().getConversationID(),
                                                         entity.getImMessageBean().getChatType(), System.currentTimeMillis(), "0",
                                                         entity.getImMessageBean().getNickname(), String.valueOf(entity.getImMessageBean().getFriend_id()),
-                                                        entity.getImMessageBean().getAvatar(), JSON.toJSONString(ChatGroupHelper.getImageMessage(entity.getEntity())));
+                                                        entity.getImMessageBean().getAvatar(), JSON.toJSONString(ChatGroupHelper.getImageMessage(entity.getEntity())),
+                                                        entity.getImMessageBean().isMute());
 
                                                 MessageListUtils.saveMessageInfo(imMessageBean);
                                                 //通知服务器重新获取

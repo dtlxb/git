@@ -105,10 +105,10 @@ public class Face2FaceActivity extends BaseActivity {
         xTitle.setLeftTextColor(Color.WHITE);
         xTitle.setTitleColor(Color.WHITE);
 
-        numbersImage=new int[10];
+        numbersImage = new int[10];
 
-        for (int i=0;i<10;i++){
-            numbersImage[i]=getResources().getIdentifier("img_face2face_password_"+i,"mipmap",getPackageName());
+        for (int i = 0; i < 10; i++) {
+            numbersImage[i] = getResources().getIdentifier("img_face2face_password_" + i, "mipmap", getPackageName());
         }
 
         keyboardDatas = new ArrayList<>();
@@ -199,10 +199,10 @@ public class Face2FaceActivity extends BaseActivity {
             if (count == 4) {
                 //创建群、获取加入群
                 if (locationClient != null) {
-                    if (locationClient.getLastKnownLocation()!=null &&
-                            locationClient.getLastKnownLocation()!=null) {
+                    if (locationClient.getLastKnownLocation() != null &&
+                            locationClient.getLastKnownLocation() != null) {
                         creatGoupChart();
-                    }else {
+                    } else {
                         dialogNoLocation();
                     }
                 } else {
@@ -251,7 +251,7 @@ public class Face2FaceActivity extends BaseActivity {
                     memberDatas.add(contactMe);
 
                     if (groupData.getM_info() != null) {
-                        for (GroupMemberInfo info:groupData.getM_info()){
+                        for (GroupMemberInfo info : groupData.getM_info()) {
                             if (!memberDatas.contains(info)) {
                                 memberDatas.add(info);
                             }
@@ -292,6 +292,7 @@ public class Face2FaceActivity extends BaseActivity {
                         Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
                         intent.putExtra("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
                         intent.putExtra("conversation_id", conversionId);
+                        intent.putExtra("squareName", "群聊");
                         startActivity(intent);
                         Face2FaceActivity.this.finish();
                     } else {

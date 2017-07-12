@@ -16,11 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -322,7 +325,14 @@ public class MainStockFragment extends BaseFragment {
      */
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        unReadCount++;
+        Map map = baseMessage.getOthers();
+        AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+        //获取免打扰
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        if (!noBother) {
+            unReadCount++;
+        }
         badge.setBadgeNumber(unReadCount);
     }
 

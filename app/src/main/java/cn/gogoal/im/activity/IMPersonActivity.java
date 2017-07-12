@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -24,9 +25,11 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -61,8 +64,20 @@ public class IMPersonActivity extends BaseActivity {
         contactBeans.add(contactBean);
         contactBeans.add(addFunctionHead("", R.mipmap.person_add));
         //初始化打扰设置
-        boolean noBother = SPTools.getBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", false);
-        messageSwitch.setChecked(noBother);
+        AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
+            @Override
+            public void joinSuccess(AVIMConversation conversation) {
+                //获取免打扰
+                List<String> muList = (List<String>) conversation.get("mu");
+                boolean noBother = muList.contains(UserUtils.getMyAccountId());
+                messageSwitch.setChecked(noBother);
+            }
+
+            @Override
+            public void joinFail(String error) {
+            }
+        });
+
 
         //初始化
         personListRecycler.setLayoutManager(new GridLayoutManager(this, 5));

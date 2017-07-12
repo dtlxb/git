@@ -223,7 +223,7 @@ public class MyGroupsActivity extends BaseActivity {
                         startActivity(intent);
                     } else {
                         IMMessageBean imMessageBean = new IMMessageBean(data.getConv_id(), AppConst.IM_CHAT_TYPE_SQUARE, new Date().getTime(), "0",
-                                data.getName(), "", "", "");
+                                data.getName(), "", "", "",false);
                         ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity, imMessageBean);
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
