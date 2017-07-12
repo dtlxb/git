@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="model.Posto" table="posto">
+		<id name="pid" type="int">
+			<column name="pid" />
+			<generator class="assigned" />
+		</id>
+		<property name="username" type="java.lang.String">
+			<column name="username" />
+		</property>
+		
+		<property name="name" type="java.lang.String">
+			<column name="name" />
+		</property>
+				
+		<property name="comment" type="java.lang.String">
+			<column name="comment" />
+		</property>
+				
+		<property name="path_local" type="java.lang.String">
+			<column name="path_local" />
+		</property>
+				
+		<property name="path_server" type="java.lang.String">
+			<column name="path_server" />
+		</property>
+				
+		<property name="latitude" type="double">
+			<column name="latitude" />
+		</property>
+		
+		<property name="longitude" type="double">
+			<column name="longitude" />
+		</property>
+				
+		<property name="date" type="double">
+			<column name="date" />
+		</property>
+		
+ 		<property name="belong_rid" type="int">
+			<column name="belong_rid" />
+		</property>
+		
+	</class>
+</hibernate-mapping>

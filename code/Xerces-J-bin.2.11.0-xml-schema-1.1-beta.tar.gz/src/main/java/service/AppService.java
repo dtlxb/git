@@ -5,6 +5,8 @@ import java.util.List;
 import model.Book;
 import model.Order;
 import model.Orderitem;
+import model.Route;
+import model.Posto;
 import model.User;
 
 /**
@@ -67,9 +69,40 @@ public interface AppService {
 	public void deleteUser(User user);
 
 	public void updateUser(User user);
-
+	public Integer checkUser (String username,String password);
+	public Integer checkUsername (String username,String password);
 	public User getUserById(int id);
 
 	public List<User> getAllUsers();
+	/**
+	 * posto
+	 * 
+	 */
+	
+	public Integer addPosto(Posto Posto);
 
+	public void deletePosto(Posto Posto);
+	
+	public void deletePostoById(int id);
+
+	public void updatePosto(Posto Posto);
+
+	public Posto getPostoById(int id);
+
+	public List<Posto> getAllPostos();
+	/**
+	 * route
+	 * 
+	 */
+	public Integer addRoute(Route Route);
+
+	public void deleteRoute(Route Route);
+	
+	public void deleteRouteById(int id);
+
+	public void updateRoute(Route Route);
+
+	public Route getRouteById(int id);
+
+	public List<Route> getAllRoutes();
 }

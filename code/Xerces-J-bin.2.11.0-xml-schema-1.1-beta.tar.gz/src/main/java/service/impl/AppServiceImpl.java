@@ -2,6 +2,8 @@ package service.impl;
 
 import java.util.List;
 
+import model.Route;
+import model.Posto;
 import model.Book;
 import model.Order;
 import model.Orderitem;
@@ -10,6 +12,8 @@ import service.AppService;
 import dao.BookDao;
 import dao.OrderDao;
 import dao.OrderitemDao;
+import dao.PostoDao;
+import dao.RouteDao;
 import dao.UserDao;
 
 /**
@@ -23,7 +27,15 @@ public class AppServiceImpl implements AppService {
 	private OrderDao orderDao;
 	private OrderitemDao orderitemDao;
 	private UserDao userDao;
-
+	private PostoDao postoDao;
+	private RouteDao routeDao;
+	
+	public void setRouteDao(RouteDao routeDao) {
+		this.routeDao = routeDao;
+	}
+	public void setPostoDao(PostoDao postoDao) {
+		this.postoDao= postoDao;
+	}
 	public void setBookDao(BookDao bookDao) {
 		this.bookDao = bookDao;
 	}
@@ -124,7 +136,9 @@ public class AppServiceImpl implements AppService {
 	public Integer addUser(User user) {
 		return userDao.save(user);
 	}
-
+	public Integer checkUser (String username,String password){
+		return userDao.check(username,password);
+	}
 	public void deleteUser(User user) {
 		userDao.delete(user);
 	}
@@ -136,9 +150,68 @@ public class AppServiceImpl implements AppService {
 	public User getUserById(int id) {
 		return userDao.getUserById(id);
 	}
-
+	public Integer checkUsername (String username,String password){
+		return userDao.checkUsername (username,password);
+	}
 	public List<User> getAllUsers() {
 		return userDao.getAllUsers();
+	}
+	
+	/**
+	 * Posto
+	 * 
+	 */
+	public Integer addPosto(Posto Posto) {
+		return postoDao.save(Posto);
+	}
+
+	public void deletePosto(Posto Posto) {
+		postoDao.delete(Posto);
+	}
+	
+	public void deletePostoById(int id) {
+		Posto thiPosto=postoDao.getPostoById(id);
+		postoDao.delete(thiPosto);
+	}
+
+	public void updatePosto(Posto Posto) {
+		postoDao.update(Posto);
+	}
+
+	public Posto getPostoById(int id) {
+		return postoDao.getPostoById(id);
+	}
+
+	public List<Posto> getAllPostos() {
+		return postoDao.getAllPostos();
+	}
+	/**
+	 * Route
+	 * 
+	 */
+	public Integer addRoute(Route Route) {
+		return routeDao.save(Route);
+	}
+
+	public void deleteRoute(Route Route) {
+		routeDao.delete(Route);
+	}
+	
+	public void deleteRouteById(int id) {
+		Route thiRoute=routeDao.getRouteById(id);
+		routeDao.delete(thiRoute);
+	}
+
+	public void updateRoute(Route Route) {
+		routeDao.update(Route);
+	}
+
+	public Route getRouteById(int id) {
+		return routeDao.getRouteById(id);
+	}
+
+	public List<Route> getAllRoutes() {
+		return routeDao.getAllRoutes();
 	}
 
 }

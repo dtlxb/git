@@ -15,7 +15,7 @@
 	
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close" p:driverClass="com.mysql.jdbc.Driver"
-		p:jdbcUrl="jdbc:mysql://localhost:3306/bookstore" p:user="root"
+		p:jdbcUrl="jdbc:mysql://localhost:3306/bzbp" p:user="root"
 		p:password="1996123" p:maxPoolSize="40" p:minPoolSize="1"
 		p:initialPoolSize="1" p:maxIdleTime="20" />
 
@@ -28,6 +28,8 @@
 				<value>model/Order.hbm.xml</value>
 				<value>model/Orderitem.hbm.xml</value>
 				<value>model/User.hbm.xml</value>
+		     <value>model/Posto.hbm.xml</value>
+		      <value>model/Route.hbm.xml</value>
 			</list>
 		</property>
 		<!-- Hibernate SessionFactory -->
@@ -54,6 +56,12 @@
 	<bean id="userDao" class="dao.impl.UserDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	<bean id="postoDao" class="dao.impl.PostoDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="routeDao" class="dao.impl.RouteDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 	<!-- Service -->
 	<bean id="appService" class="service.impl.AppServiceImpl">
@@ -62,6 +70,8 @@
 		<property name="orderDao" ref="orderDao"></property>
 		<property name="orderitemDao" ref="orderitemDao"></property>
 		<property name="userDao" ref="userDao"></property>
+		<property name="postoDao" ref="postoDao"></property>
+		<property name="routeDao" ref="routeDao"></property>
 	</bean>
 
 	<!-- HibernateTransactionManager -->
