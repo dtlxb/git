@@ -16,6 +16,10 @@ import android.widget.FrameLayout;
  */
 public class ForbitParentLayout extends FrameLayout {
 
+    private int lastX;
+
+    private int lastY;
+
     public ForbitParentLayout(@NonNull Context context) {
         super(context);
     }
@@ -38,5 +42,37 @@ public class ForbitParentLayout extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
         getParent().requestDisallowInterceptTouchEvent(true);
         return false;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        int x = (int) ev.getRawX();
+        int y = (int) ev.getRawY();
+        int dealtX = 0;
+        int dealtY = 0;
+
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                dealtX = 0;
+                dealtY = 0;
+                // 保证子View能够接收到Action_move事件
+                getParent().requestDisallowInterceptTouchEvent(true);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                dealtX += Math.abs(x - lastX);
+                dealtY += Math.abs(y - lastY);
+
+                getParent().requestDisallowInterceptTouchEvent(dealtX/2 >= dealtY);
+
+                lastX = x;
+                lastY = y;
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

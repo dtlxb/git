@@ -15,8 +15,8 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbarStyle="outsideOverlay"
             android:background="@android:color/white"
+            android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical">
 
             <LinearLayout
@@ -24,16 +24,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <cn.gogoal.im.ui.widget.ForbitParentLayout
+                <cn.gogoal.im.ui.widget.loopviewpager.DisallowParentTouchViewPager
+                    android:id="@+id/vp_market_zhishu"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <cn.gogoal.im.ui.view.AutoScrollViewPager
-                        android:id="@+id/vp_market_zhishu"
-                        android:layout_width="match_parent"
-                        android:layout_height="110dp" />
-
-                </cn.gogoal.im.ui.widget.ForbitParentLayout>
+                    android:layout_height="110dp" />
 
                 <include
                     android:id="@+id/include_title_hot_industry"
@@ -55,7 +49,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_rankList"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 

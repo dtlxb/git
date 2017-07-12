@@ -27,7 +27,6 @@ import cn.gogoal.im.adapter.market.rebuild.HostIndustryGridAdapter;
 import cn.gogoal.im.adapter.market.rebuild.MarketViewPagerAdapter;
 import cn.gogoal.im.adapter.market.rebuild.RankData;
 import cn.gogoal.im.adapter.market.rebuild.RankLiastAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.HangqingBean;
 import cn.gogoal.im.bean.stock.HostIndustrylistBean;
@@ -38,9 +37,9 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.XDividerItemDecoration;
-import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.CatchLayoutManager;
+import cn.gogoal.im.ui.widget.loopviewpager.DisallowParentTouchViewPager;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -61,7 +60,7 @@ public class MarketFragment extends BaseFragment {
     XLayout xLayout;
 
     @BindView(R.id.vp_market_zhishu)
-    AutoScrollViewPager vpMarketZhishu;
+    DisallowParentTouchViewPager vpMarketZhishu;
 
     @BindView(R.id.rv_market_hot_industry)
     RecyclerView rvMarketHotIndustry;
@@ -96,6 +95,7 @@ public class MarketFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        vpMarketZhishu.setNestParent(refreshLayout);
         rvMarketHotIndustry.setNestedScrollingEnabled(false);
         rvMarketHotIndustry.addItemDecoration(new GridMarketDivider(mContext));
         rvRankList.setNestedScrollingEnabled(false);
@@ -106,10 +106,10 @@ public class MarketFragment extends BaseFragment {
         rvMarketHotIndustry.setAdapter(hostIndustryGridAdapter);
 
         //liebiao
-        rankDataList=new ArrayList<>();
+        rankDataList = new ArrayList<>();
         rvRankList.setLayoutManager(new CatchLayoutManager(mContext));
         rvRankList.setNestedScrollingEnabled(false);
-        rankLiastAdapter=new RankLiastAdapter(rankDataList);
+        rankLiastAdapter = new RankLiastAdapter(rankDataList);
         rvRankList.setAdapter(rankLiastAdapter);
 
         getMarketInformation(AppConst.REFRESH_TYPE_FIRST);
@@ -121,6 +121,13 @@ public class MarketFragment extends BaseFragment {
                 refreshLayout.refreshComplete();
             }
 
+        });
+
+        xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+                getMarketInformation(AppConst.REFRESH_TYPE_RELOAD);
+            }
         });
     }
 
@@ -163,16 +170,6 @@ public class MarketFragment extends BaseFragment {
 
                 UIHelper.toastError(getActivity(), msg, xLayout);
 
-                if (xLayout != null) {
-                    xLayout.setEmptyText(msg);
-                    xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
-                        @Override
-                        public void onReload(View v) {
-                            getMarketInformation(REFRESH_TYPE_RELOAD);
-                        }
-                    });
-                }
-                AppManager.getInstance().sendMessage("market_stop_animation_refresh");
             }
         };
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_INFORMATION, ggHttpInterface).startGet();
@@ -224,28 +221,28 @@ public class MarketFragment extends BaseFragment {
 
         rankDataList.clear();
         //涨
-        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE,"涨幅榜"));
+        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE, "涨幅榜"));
         List<StockRankData> increaseList = marketData.getStockRanklist().getIncrease_list();
-        for (StockRankData data:increaseList){
-            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST,data));
+        for (StockRankData data : increaseList) {
+            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST, data));
         }
         //跌
-        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE,"跌幅榜"));
+        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE, "跌幅榜"));
         List<StockRankData> downList = marketData.getStockRanklist().getDown_list();
-        for (StockRankData data:downList){
-            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST,data));
+        for (StockRankData data : downList) {
+            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST, data));
         }
         //换
-        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE,"换手率"));
+        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE, "换手率"));
         List<StockRankData> changeList = marketData.getStockRanklist().getChange_list();
-        for (StockRankData data:changeList){
-            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST,data));
+        for (StockRankData data : changeList) {
+            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST, data));
         }
         //振
-        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE,"振幅榜"));
+        rankDataList.add(new RankData(RankData.TYPE_ITEM_TITLE, "振幅榜"));
         List<StockRankData> amplitudeList = marketData.getStockRanklist().getAmplitude_list();
-        for (StockRankData data:amplitudeList){
-            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST,data));
+        for (StockRankData data : amplitudeList) {
+            rankDataList.add(new RankData(RankData.RANK_TYPE_INCREASE_LIST, data));
         }
         rankLiastAdapter.notifyDataSetChanged();
 

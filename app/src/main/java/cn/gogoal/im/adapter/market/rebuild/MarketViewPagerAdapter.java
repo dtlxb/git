@@ -3,7 +3,6 @@ package cn.gogoal.im.adapter.market.rebuild;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +15,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.stock.HangqingBean;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.ui.widget.ForbitRecycler;
 
 /**
  * author wangjd on 2017/7/11 0011.
@@ -48,7 +48,7 @@ public class MarketViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        RecyclerView recyclerView = new RecyclerView(container.getContext());
+        ForbitRecycler recyclerView = new ForbitRecycler(container.getContext());
         recyclerView.setLayoutManager(new GridLayoutManager(
                 container.getContext(), 3,
                 GridLayoutManager.VERTICAL,
