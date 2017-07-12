@@ -778,8 +778,8 @@ public class LiveActivity extends BaseActivity {
         mChatHost = new AlivcVideoChatHost();
         KLog.e("LiveActivity--> mChatHost.init()");
         mChatHost.init(this);
-        mChatHost.setHostViewScalingMode(IMediaPublisher.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-        mChatHost.setParterViewScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+        mChatHost.setHostViewScalingMode(IMediaPublisher.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+        mChatHost.setParterViewScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
         //设置错误信息回调
         mChatHost.setErrorListener(mOnErrorListener);

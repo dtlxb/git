@@ -1022,8 +1022,11 @@ public class WatchLiveActivity extends BaseActivity {
 
                     mPlayUrl = data.getString("url_rtmp");
 
-                    //倒计时
-                    if (data.getLongValue("launch_time") > 0) {
+                    if (data.getIntValue("live_status") == 3) {
+                        UIHelper.toast(getContext(), "主播已下播");
+                    } else if (data.getIntValue("live_status") == 2) {
+                        UIHelper.toast(getContext(), "直播异常");
+                    } else if (data.getLongValue("launch_time") > 0) {
                         show_buffering_ui(false);
 
                         countDownTimer.setVisibility(View.VISIBLE);
@@ -1037,13 +1040,17 @@ public class WatchLiveActivity extends BaseActivity {
                                 startToPlay(mPlayUrl, mPlaySurfaceView);
                             }
                         });
-                    } else {
-                        countDownTimer.setVisibility(View.GONE);
-
-                        PlayDataStatistics.getStatisticalData(getContext(), "1", live_id, "2", "1");
+                    } else if (data.getIntValue("live_status") == 0 && data.getLongValue("launch_time") > 0) {
+                        UIHelper.toast(getContext(), "主播还未开播，\n请您耐心等待。");
+                    } else if (data.getIntValue("live_status") == 1) {
+                        startToPlay(mPlayUrl, mPlaySurfaceView);
                     }
 
-                    startToPlay(mPlayUrl, mPlaySurfaceView);
+                    //倒计时
+                    if (data.getLongValue("launch_time") <= 0) {
+                        countDownTimer.setVisibility(View.GONE);
+                        PlayDataStatistics.getStatisticalData(getContext(), "1", live_id, "2", "1");
+                    }
 
                     room_id = data.getString("room_id");
 
