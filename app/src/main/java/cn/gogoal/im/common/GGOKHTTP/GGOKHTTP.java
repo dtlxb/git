@@ -1053,6 +1053,13 @@ public class GGOKHTTP {
      */
     public static final String GET_STOCK_TAG = "v1/stock/get_stock_tag";
 
+
+    /**
+     * App 自检测更新
+     * versions 当前App版本号
+     */
+    public static final String GET_ANDROID_VERSIONS_INFO = "v1/ggm_versions/get_android_versions_info";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -1080,6 +1087,7 @@ public class GGOKHTTP {
             OkHttpUtils.get()
                     .url(baseUrl)
                     .build()
+//                    .connTimeOut(15000)
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int id) {

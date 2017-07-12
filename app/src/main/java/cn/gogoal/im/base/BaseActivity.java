@@ -38,6 +38,7 @@ import com.hply.imagepicker.ui.SystemBarTintManager;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        catcher();
+//        catcher();
 
         ButterKnife.bind(this);
 
@@ -97,12 +98,23 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     }
 
     private void catcher() {
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/gogoal";
+        final File dirs=new File(path);
+        if (!dirs.exists()){
+            dirs.mkdirs();
+        }
         Cockroach.install(new Cockroach.ExceptionHandler() {
             @Override
             public void handlerException(Thread thread, Throwable throwable) {
-                FileUtil.writeSDcard("thread="+thread.getName()+
-                        "throwable="+throwable.getMessage(),
-                        Environment.getExternalStorageDirectory().getAbsolutePath()+"/gpgoal/log_"+ CalendarUtils.getDataTime()+"_log");
+                try {
+                    throwable.printStackTrace();
+                    FileUtil.writeSDcard("thread=" + thread.getName() +
+                            "throwable=" + throwable.getMessage(),dirs.getAbsolutePath()+File.separator+
+                            "log_" + CalendarUtils.getDataTime() + ".log");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
     }
@@ -114,7 +126,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
 
-    public void setNormalTitleBar(){
+    public void setNormalTitleBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus();
         }
@@ -130,7 +142,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     protected void setStatusColorId(@ColorRes int colorId) {
         SystemBarTintManager tintManager = new SystemBarTintManager(getActivity());
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setStatusBarTintColor(ContextCompat.getColor(getActivity(),colorId));
+        tintManager.setStatusBarTintColor(ContextCompat.getColor(getActivity(), colorId));
     }
 
     @Override
@@ -346,7 +358,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mDialog != null) {
+        if (mDialog != null) {
             mDialog.dismiss();
         }
 
@@ -364,7 +376,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         return this;
     }
 
-    public @ColorInt int getResColor(@ColorRes int colorId) {
+    public
+    @ColorInt
+    int getResColor(@ColorRes int colorId) {
         return ContextCompat.getColor(BaseActivity.this, colorId);
     }
 

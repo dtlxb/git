@@ -208,13 +208,19 @@ public class SevenBy24Fragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.GET_FULL_TIME_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
                 if (JsonUtils.getIntValue(responseInfo, "code") == 0) {
                     JsonObject data = JsonUtils.getJsonArray(responseInfo, "data")
                             .get(0).getAsJsonObject();
-                    long count = JsonUtils.getLongValue(data, "count");
 
+                    long count = JsonUtils.getLongValue(data, "count");
                     long oldCount = SPTools.getLong("new_message_count", 0);
+
+                    //首次存储
+                    if (oldCount==0){
+                        SPTools.saveLong("new_message_count", count);
+                    }
+
+                    //当有旧数据，且新数据比旧的多时，提示
                     if (oldCount > 0 && count > oldCount) {
                         tvNewMessageCount.setVisibility(View.VISIBLE);
                         tvNewMessageCount.setText("有" + (count - oldCount) + "条更新");

@@ -197,7 +197,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     }
 
     /**
-     * check if full page after {@link #setNewData(List)}, if full, it will enable load more again.
+     * checkUpdata if full page after {@link #setNewData(List)}, if full, it will enable load more again.
      *
      * @param recyclerView your recyclerView
      * @see #setNewData(List)

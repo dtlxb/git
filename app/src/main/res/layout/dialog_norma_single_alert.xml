@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_radiu_top"
+        android:gravity="center"
+        android:paddingBottom="25dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="25dp"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/flag_view_btm"
+        android:layout_width="match_parent"
+        android:layout_height="0.5px"
+        android:background="@color/textColor_666666" />
+
+    <TextView
+        android:id="@+id/btn_ok"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sure"
+        android:background="@drawable/shape_radiu_bottom"
+        android:textColor="@color/colorPrimary" />
+
+</LinearLayout>

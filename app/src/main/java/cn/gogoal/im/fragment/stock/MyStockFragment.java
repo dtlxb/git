@@ -296,7 +296,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 @Override
                 public void onClick(View v) {
                     if (enable) {
-                        startActivity(new Intent(v.getContext(), EditMyStockActivity.class));
+                        Intent intent = new Intent(v.getContext(), EditMyStockActivity.class);
+                        intent.putExtra("my_stock_list",cloneDatas);
+                        startActivity(intent);
+
                     } else {
                         UIHelper.toast(getActivity(), "没有自选股可以编辑");
                     }

@@ -30,6 +30,7 @@ import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
@@ -49,6 +50,9 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -60,6 +64,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.ui.dialog.NormalSingleAlertDialog;
+import cn.gogoal.im.ui.dialog.UpdataDialog;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -1034,7 +1041,7 @@ public class AppDevice {
     public static boolean isWifiOpen(Context context) {
         boolean isWifiConnect = false;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        // check the networkInfos numbers
+        // checkUpdata the networkInfos numbers
         NetworkInfo[] networkInfos = cm.getAllNetworkInfo();
         for (int i = 0; i < networkInfos.length; i++) {
             if (networkInfos[i].getState() == NetworkInfo.State.CONNECTED) {
@@ -1200,9 +1207,6 @@ public class AppDevice {
         recyclerView.setNestedScrollingEnabled(false);
     }
 
-    /**
-     * 反射修改TabLayout的默认宽度
-     */
     public static void setTabLayoutWidth(TabLayout t, int dpMargin) {
         try {
             Class<?> tablayout = t.getClass();
@@ -1226,5 +1230,42 @@ public class AppDevice {
         } catch (Exception e) {
             e.getMessage();
         }
+    }
+
+    /**
+     * 应用检测更新
+     * @param manager FragmentManager
+     * @param checkByUser 是否是手动检测，还是自动检测
+     * */
+    public static void checkUpdata(final FragmentManager manager, final boolean checkByUser){
+        final HashMap<String, String> map = new HashMap<>();
+        map.put("versions", AppDevice.getAppVersionName(MyApp.getAppContext()));
+        new GGOKHTTP(map, GGOKHTTP.GET_ANDROID_VERSIONS_INFO, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                KLog.e(StringUtils.map2ggParameter(map));
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    JSONObject updataObject = JSONObject.parseObject(responseInfo).getJSONObject("data");
+                    if (updataObject.getBooleanValue("isUpdate")) {
+
+                        UpdataDialog updataDialog = UpdataDialog.newDialog(
+                                updataObject.getString("content"),
+                                updataObject.getString("versions"),
+                                updataObject.getString("url"));
+                        updataDialog.setCancelable(false);
+                        updataDialog.show(manager);
+                    }else {
+                        if (checkByUser)
+                            NormalSingleAlertDialog.newInstance("当前为最新版本","哦，知道了",null).show(manager);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        }).startGet();
     }
 }

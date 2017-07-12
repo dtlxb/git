@@ -11,7 +11,7 @@ import com.hply.alilayout.layout.LinearLayoutHelper;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.bean.stock.stockRanklist.StockRankBean;
+import cn.gogoal.im.bean.stock.stockRanklist.StockRankData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
@@ -33,11 +33,11 @@ public class RankListAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
 
     public static final int RANK_TYPE_AMPLITUDE_LIST = 0x4;
 
-    private List<StockRankBean> rankBeanList;
+    private List<StockRankData> rankBeanList;
 
     private int rankType;//类型，区分涨跌振换
 
-    public RankListAdapter(List<StockRankBean> rankBeanList, int rankType) {
+    public RankListAdapter(List<StockRankData> rankBeanList, int rankType) {
         this.rankBeanList = rankBeanList;
         this.rankType = rankType;
     }
@@ -57,7 +57,7 @@ public class RankListAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
 
-        final StockRankBean data = rankBeanList.get(position);
+        final StockRankData data = rankBeanList.get(position);
 
         holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
         holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());

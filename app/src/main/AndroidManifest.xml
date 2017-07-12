@@ -187,10 +187,6 @@
         <activity
             android:name=".activity.ChooseContactActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".activity.TestActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
         <activity
             android:name=".activity.WatchLiveActivity"
@@ -241,7 +237,6 @@
         <activity android:name=".activity.QrcodeProcessActivity" />
         <activity android:name=".activity.stock.stockften.FinancialAnalysisActivity" />
         <activity android:name=".activity.QrCodeActivity" />
-        <activity android:name=".activity.Test2Activity" />
         <activity android:name=".activity.stock.stockften.FinancialStatementsActivity" />
 
         <activity android:name=".activity.stock.BigDataAcyivity"/>

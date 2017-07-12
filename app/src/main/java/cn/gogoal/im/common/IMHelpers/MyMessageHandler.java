@@ -50,7 +50,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
-                            showNotification(message);
+                            showNotification(message, conversation);
                             final int chatType = (int) conversation.getAttribute("chat_type");
 
                             switch (chatType) {
@@ -219,7 +219,14 @@ public class MyMessageHandler extends AVIMMessageHandler {
     /**
      * 推送Notification
      */
-    private void showNotification(AVIMMessage message) {
+    private void showNotification(AVIMMessage message, AVIMConversation conversation) {
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+
+        if (noBother) {
+            return;
+        }
+
         JSONObject content = JSONObject.parseObject(message.getContent());
         JSONObject lcattrs = content.getJSONObject("_lcattrs");
         String push = lcattrs.getString("push");
@@ -236,7 +243,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     PendingIntent pendingIntent = PendingIntent.getActivity(MyApp.getAppContext(), 0,
                             resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MyApp.getAppContext())
-                            .setSmallIcon(R.mipmap.logo).setContentTitle("GoGoal")
+                            .setSmallIcon(R.mipmap.logo).setContentTitle("Go-Goal股票")
                             .setContentText(push).setTicker(push);
                     mBuilder.setContentIntent(pendingIntent);
                     mBuilder.setAutoCancel(true);

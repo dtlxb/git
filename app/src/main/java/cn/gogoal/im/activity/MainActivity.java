@@ -121,6 +121,8 @@ public class MainActivity extends BaseActivity {
         badge = new BadgeView(MainActivity.this);
         initBadge(unReadCount, badge);
 
+        AppDevice.checkUpdata(getSupportFragmentManager(),false);
+
     }
 
     //底部tab

@@ -23,10 +23,10 @@ public class StockRanklistBean {
     private int gray_counts;
     private int green_counts;
     private int red_counts;
-    private List<StockRankBean> amplitude_list;
-    private List<StockRankBean> down_list;
-    private List<StockRankBean> change_list;
-    private List<StockRankBean> increase_list;
+    private List<StockRankData> amplitude_list;
+    private List<StockRankData> down_list;
+    private List<StockRankData> change_list;
+    private List<StockRankData> increase_list;
 
     public int getGray_counts() {
         return gray_counts;
@@ -52,35 +52,35 @@ public class StockRanklistBean {
         this.red_counts = red_counts;
     }
 
-    public List<StockRankBean> getAmplitude_list() {
+    public List<StockRankData> getAmplitude_list() {
         return amplitude_list;
     }
 
-    public void setAmplitude_list(List<StockRankBean> amplitude_list) {
+    public void setAmplitude_list(List<StockRankData> amplitude_list) {
         this.amplitude_list = amplitude_list;
     }
 
-    public List<StockRankBean> getDown_list() {
+    public List<StockRankData> getDown_list() {
         return down_list;
     }
 
-    public void setDown_list(List<StockRankBean> down_list) {
+    public void setDown_list(List<StockRankData> down_list) {
         this.down_list = down_list;
     }
 
-    public List<StockRankBean> getChange_list() {
+    public List<StockRankData> getChange_list() {
         return change_list;
     }
 
-    public void setChange_list(List<StockRankBean> change_list) {
+    public void setChange_list(List<StockRankData> change_list) {
         this.change_list = change_list;
     }
 
-    public List<StockRankBean> getIncrease_list() {
+    public List<StockRankData> getIncrease_list() {
         return increase_list;
     }
 
-    public void setIncrease_list(List<StockRankBean> increase_list) {
+    public void setIncrease_list(List<StockRankData> increase_list) {
         this.increase_list = increase_list;
     }
 

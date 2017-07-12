@@ -67,7 +67,7 @@ public class TitleAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
 
                 switch (titleType) {
                     case RANK_LIST_TITLE_HOT_INDUSTRY:
-                        intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TITLE_HOT_INDUSTRY);
+                        intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY_TITLE);
                         context.startActivity(intent);
                         break;
                     case RANK_LIST_TITLE_BIG_DATA_CHOOSE_STOCK:

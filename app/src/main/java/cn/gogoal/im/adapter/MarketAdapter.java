@@ -105,7 +105,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
                 Intent intent = new Intent(context, RankListDetialActivity.class);
                 intent.putExtra("MODULE_TITLE", data.getTitle());
                 if (position == 1) {
-                    intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TITLE_HOT_INDUSTRY);
+                    intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY_TITLE);
                 } else {
                     intent.putExtra("RANK_LIST_TYPE", position - 2);
                     intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TTILE_RANK_LIST);
@@ -187,7 +187,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, RankListDetialActivity.class);
                     intent.putExtra("MODULE_TITLE", data.getName());
-                    intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY);
+                    intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY_GRID);
                     intent.putExtra("INDUSTRY_NAME", data.getName());
                     context.startActivity(intent);
                 }
