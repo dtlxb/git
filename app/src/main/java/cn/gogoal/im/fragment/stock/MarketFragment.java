@@ -154,6 +154,7 @@ public class MarketFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     reconstructData(responseInfo, refreshType);
+                    xLayout.setStatus(XLayout.Success);
                 } else {
                     xLayout.setStatus(XLayout.Error);
                     String errorMsg = JSONObject.parseObject(responseInfo).getString("message");

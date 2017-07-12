@@ -11,7 +11,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -50,7 +49,6 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SortView;
@@ -65,7 +63,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * phone 18930640263
  * description :自选股
  */
-public class MyStockFragment extends BaseFragment implements MyStockSortInteface {
+public class MyStockFragment extends BaseFragment implements MyStockSortInteface{
 
     //排序头，为了对齐，使用item的引用布局
     @BindView(R.id.item_mystock)
@@ -92,7 +90,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
-    private ArrayList<MyStockData> cloneDatas=new ArrayList<>();
+    private ArrayList<MyStockData> cloneDatas = new ArrayList<>();
 
     private Map<String, String> tagMap = new HashMap<>();
 
@@ -223,8 +221,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     myStockDatas.clear();
 
-                    editEnable(true);
-
                     final ArrayList<MyStockData> parseData = JsonUtils.parseJsonObject(responseInfo, MyStockBean.class).getData();
 
                     myStockDatas.addAll(parseData);
@@ -241,7 +237,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                 tagMap = JsonUtils.toMap(JSONObject.parseObject(responseInfo).getString("data"));
                             }
                             refreshComplate();
-                            cloneDatas .addAll(myStockDatas);
+                            cloneDatas.addAll(myStockDatas);
                             myStockAdapter.notifyDataSetChanged();
                         }
 
@@ -265,7 +261,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     noData(true);
                 } else {
                     refreshComplate();
-                    editEnable(false);
                 }
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
             }
@@ -273,7 +268,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             @Override
             public void onFailure(String msg) {
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
-                editEnable(false);
                 refreshComplate();
             }
         };
@@ -286,32 +280,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         }
     }
 
-    /**
-     * 没有正确加载自选股列表的时候(没网络，请求出错，或者没有自选股)时，不允许编辑
-     */
-    void editEnable(final boolean enable) {
-        try {
-            final ImageView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
-            tvEditMyStock.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (enable) {
-                        Intent intent = new Intent(v.getContext(), EditMyStockActivity.class);
-                        intent.putExtra("my_stock_list",cloneDatas);
-                        startActivity(intent);
-
-                    } else {
-                        UIHelper.toast(getActivity(), "没有自选股可以编辑");
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.getMessage();
-        }
-    }
-
     void noData(boolean noData) {
-        editEnable(!noData);
         try {
             itemMystock.setVisibility(noData ? View.GONE : View.VISIBLE);
         } catch (Exception e) {
@@ -348,7 +317,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return Double.compare(o1.getPrice(), o2.getPrice());
                     } else {
-                        return sortReset(o1,o2);
+                        return sortReset(o1, o2);
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
@@ -358,7 +327,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return StringUtils.parseStringDouble(o1.getChange_rate()).compareTo(StringUtils.parseStringDouble(o2.getChange_rate()));
                     } else {
-                        return sortReset(o1,o2);
+                        return sortReset(o1, o2);
                     }
                 } else if (view.getId() == R.id.tv_mystock_rag) {
                     tvMystockPrice.setViewStateNormal();
@@ -384,14 +353,26 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 
-    private int sortReset(MyStockData o1,MyStockData o2) {
-        if (Build.VERSION.SDK_INT>24){
+    private int sortReset(MyStockData o1, MyStockData o2) {
+        if (Build.VERSION.SDK_INT > 24) {
             myStockDatas.clear();
             myStockDatas.addAll(cloneDatas);
             return 0;
-        }else {
+        } else {
             return compareLong(CalendarUtils.parseString2Long(o2.getInsertdate()),
                     CalendarUtils.parseString2Long(o1.getInsertdate()));
+        }
+    }
+
+    public void onEditClickListener() {
+        if (myStockDatas.size() > 0) {
+            getMyStockData(AppConst.REFRESH_TYPE_RELOAD);
+            Intent intent = new Intent(getContext(), EditMyStockActivity.class);
+            intent.putExtra("my_stock_list", myStockDatas);
+            startActivity(intent);
+
+        } else {
+            UIHelper.toast(getActivity(), "没有自选股可以编辑");
         }
     }
 

@@ -54,10 +54,6 @@ public class MainStockFragment extends BaseFragment {
     @BindView(R.id.tv_mystock_edit)
     ImageView tvMystockEdit;
 
-    public ImageView getTvMystockEdit() {
-        return tvMystockEdit;
-    }
-
     @BindView(R.id.tab_my_stock)
     TabLayout tabMyStock;
 
@@ -135,6 +131,13 @@ public class MainStockFragment extends BaseFragment {
         unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(getActivity());
         initBadge(unReadCount, badge);
+
+        tvMystockEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myStockFragment.onEditClickListener();
+            }
+        });
     }
 
     @Subscriber(tag = "updata_refresh_mode")
@@ -323,51 +326,4 @@ public class MainStockFragment extends BaseFragment {
         }
         badge.setBadgeNumber(unReadCount);
     }
-
-//    /**
-//     * 弹出大盘的recyclerview适配器
-//     */
-//    private class GridMarketAdapter extends CommonAdapter<MyStockMarketBean.MyStockMarketData, BaseViewHolder> {
-//
-//        private GridMarketAdapter(List<MyStockMarketBean.MyStockMarketData> datas) {
-//            super(R.layout.item_mystock_market_4rv, datas);
-//        }
-//
-//        @Override
-//        protected void convert(BaseViewHolder holder, final MyStockMarketBean.MyStockMarketData data, final int position) {
-//            View itemView = holder.getView(R.id.item_mystock_market_4rv);
-//
-//            itemView.setTag(position);
-//
-//            if (!TextUtils.isEmpty(data.getFullcode())) {
-//
-//                holder.setText(R.id.tv_mystock_market_name, data.getName());
-//                holder.setText(R.id.tv_mystock_market_price, StringUtils.saveSignificand(data.getPrice(), 2));
-//
-//                holder.setText(R.id.tv_mystock_market_price_change$rate,
-//                        StockUtils.plusMinus(data.getPrice_change(), false) + "  " +
-//                                StockUtils.plusMinus(data.getPrice_change_rate(), true));
-//
-//                holder.setTextResColor(R.id.tv_mystock_market_price_change$rate,
-//                        StockUtils.getStockRateColor(String.valueOf(data.getPrice_change_rate())));
-//
-//                holder.setTextResColor(R.id.tv_mystock_market_price,
-//                        StockUtils.getStockRateColor(String.valueOf(data.getPrice_change_rate())));
-//
-//                itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dismissMarket();
-//                        SPTools.saveInt("change_market_item", position);
-//                        try {
-//                            myStockFragment.changeIitem(data);
-//                        } catch (Exception e) {
-//                            e.getMessage();
-//                        }
-//                    }
-//                });
-//            }
-//        }
-//    }
-
 }
