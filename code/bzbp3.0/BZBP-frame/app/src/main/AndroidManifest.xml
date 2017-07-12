@@ -43,13 +43,13 @@
         <!-- map key & service -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="825fccdfaf26f5a59cbbcdaed69e3f15"/>
+            android:value="407893eda4d71fb31a854ef55441ebab"/>
 
         <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".MenuActivity">
         </activity>
-        <activity android:name=".CameraActivity"    >
+        <activity android:name=".CameraActivity">
 
 
         </activity>
@@ -71,6 +71,10 @@
         </activity>
         <activity android:name=".SearchPostoActivity">
         </activity>
+
+
+        //gps定位服务
+        <service android:name="com.amap.api.location.APSService" />
     </application>
 
 </manifest>
