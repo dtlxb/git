@@ -541,8 +541,11 @@ public class MessageFragment extends BaseFragment {
         //移除站位
         xLayout.setStatus(XLayout.Success);
         //获取免打扰
-        List<String> muList = (List<String>) conversation.get("mu");
-        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        boolean noBother = false;
+        if (conversation.get("mu") != null) {
+            List<String> muList = (List<String>) conversation.get("mu");
+            noBother = muList.contains(UserUtils.getMyAccountId());
+        }
 
         if (chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             Long rightNow = CalendarUtils.getCurrentTime();

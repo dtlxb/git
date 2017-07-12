@@ -87,8 +87,11 @@ public class MessageSaveService extends Service {
 
         int chatType = (int) conversation.getAttribute("chat_type");
         //获取免打扰
-        List<String> muList = (List<String>) conversation.get("mu");
-        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        boolean noBother = false;
+        if (conversation.get("mu") != null) {
+            List<String> muList = (List<String>) conversation.get("mu");
+            noBother = muList.contains(UserUtils.getMyAccountId());
+        }
         SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", noBother);
         //股票消息不缓存
         KLog.e(chatType);
