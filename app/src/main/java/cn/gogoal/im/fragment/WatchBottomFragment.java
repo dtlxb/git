@@ -62,6 +62,7 @@ public class WatchBottomFragment extends BaseFragment {
     private JSONObject introduce;
     private JSONObject anchor;
     private int screenHeight;
+    private String channel;
 
     private int type;
 
@@ -86,12 +87,19 @@ public class WatchBottomFragment extends BaseFragment {
         introduce = JSONObject.parseObject(getArguments().getString("introduce"));
         anchor = introduce.getJSONObject("anchor");
         screenHeight = introduce.getIntValue("screenHeight");
+        channel = introduce.getString("channel");
 
         if (anchor == null) {
             linearPlayerProfiles.setVisibility(View.GONE);
         } else {
             showAnchorProfiles();
             linearPlayerProfiles.setVisibility(View.VISIBLE);
+        }
+
+        if (channel.equals("app")) {
+            linearPlayerFullScreen.setVisibility(View.GONE);
+        } else {
+            linearPlayerFullScreen.setVisibility(View.VISIBLE);
         }
 
         /*//获取屏幕高度
@@ -181,7 +189,7 @@ public class WatchBottomFragment extends BaseFragment {
             linearPlayerFullScreen.setVisibility(View.GONE);
         } else {
             linearPlayerShotCut.setVisibility(View.GONE);
-            linearPlayerFullScreen.setVisibility(View.VISIBLE);
+            //linearPlayerFullScreen.setVisibility(View.VISIBLE);
         }
 
         /*//添加layout大小发生改变监听器

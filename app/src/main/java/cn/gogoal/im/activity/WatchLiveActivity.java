@@ -218,8 +218,6 @@ public class WatchLiveActivity extends BaseActivity {
 
         live_id = getIntent().getStringExtra("live_id");
 
-        KLog.e(live_id);
-
         animation = AnimationUtils.getInstance().setLoadingAnime(text_tip, R.mipmap.login_loading);
         animation.startNow();
 
@@ -493,7 +491,7 @@ public class WatchLiveActivity extends BaseActivity {
         mChatParter.setErrorListener(mPlayerErrorListener);
         mChatParter.init(this);
         mChatParter.setInfoListener(mPlayerInfoListener);
-        mChatParter.setParterViewScalingMode(IMediaPublisher.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+        mChatParter.setParterViewScalingMode(IMediaPublisher.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
 
         //设置连麦预览/推流时开启美颜
         mFilterMap.put(AlivcVideoChatParter.ALIVC_FILTER_PARAM_BEAUTY_ON, Boolean.toString(true));
@@ -816,7 +814,7 @@ public class WatchLiveActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
+                UIHelper.toast(getContext(), R.string.close_video_chatting_failed);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_CLOSE, ggHttpInterface).startGet();
@@ -1061,7 +1059,7 @@ public class WatchLiveActivity extends BaseActivity {
                         }
                     });
 
-                    getOnlineCount(room_id);
+                    //getOnlineCount(room_id);
 
                     JSONObject introduce = new JSONObject();
                     introduce.put("screenHeight", screenHeight);
@@ -1070,6 +1068,7 @@ public class WatchLiveActivity extends BaseActivity {
                     introduce.put("introduction_img", data.getString("introduction_img"));
                     introduce.put("introduction", data.getString("introduction"));
                     introduce.put("live_large_img", data.getString("live_large_img"));
+                    introduce.put("channel", data.getString("channel"));
 
                     mBottomFragment = WatchBottomFragment.newInstance(String.valueOf(introduce));
                     mBottomFragment.setRecordUIClickListener(mUIClickListener);
@@ -1134,7 +1133,7 @@ public class WatchLiveActivity extends BaseActivity {
             int _lctype = contentObject.getIntValue("_lctype");
             int chatType = (int) conversation.getAttribute("chat_type");
 
-            KLog.e(message.getContent());
+            //KLog.e(message.getContent());
 
             if (imConversation.getConversationId().equals(conversation.getConversationId()) && chatType == 1009) {
                 //Live消息处理
@@ -1285,7 +1284,6 @@ public class WatchLiveActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(String msg) {
-                    UIHelper.toast(getContext(), R.string.net_erro_hint);
                 }
             };
             new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_FEEDBACK, ggHttpInterface).startGet();

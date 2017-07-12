@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -752,14 +753,14 @@ public class StockDetailActivity extends BaseActivity {
         listTreatPopu.add(new StockDetail2Text(treatDescArray[0],
                 StringUtils.parseStringDouble(info.getHigh_price(), 2),
                 StockUtils.getStockRateColor(
-                        StringUtils.parseStringDouble(info.getHigh_price())-
+                        StringUtils.parseStringDouble(info.getHigh_price()) -
                                 StringUtils.parseStringDouble(info.getClose_price()))));
 
         //最低价
         listTreatPopu.add(new StockDetail2Text(treatDescArray[1],
                 StringUtils.parseStringDouble(info.getLow_price(), 2),
                 StockUtils.getStockRateColor(
-                        StringUtils.parseStringDouble(info.getLow_price())-
+                        StringUtils.parseStringDouble(info.getLow_price()) -
                                 StringUtils.parseStringDouble(info.getClose_price()))));
 
         //涨停
@@ -777,7 +778,7 @@ public class StockDetailActivity extends BaseActivity {
                         (stockName.startsWith("*") ||
                                 stockName.contains("ST") ||
                                 stockName.startsWith("N")) ? 0.95 : 0.9)),
-                        StockUtils.getStockSettingColor() ? R.color.stock_green : R.color.stock_red));
+                StockUtils.getStockSettingColor() ? R.color.stock_green : R.color.stock_red));
 
         //内盘
         listTreatPopu.add(new StockDetail2Text(treatDescArray[4],
@@ -806,7 +807,7 @@ public class StockDetailActivity extends BaseActivity {
         //委比
         String commissionRate = StringUtils.parseStringDouble(info.getCommission_rate(), 2);
         listTreatPopu.add(new StockDetail2Text(treatDescArray[8],
-                commissionRate+ "%",
+                commissionRate + "%",
                 StockUtils.getStockRateColor(commissionRate)));
 
         //量比
@@ -972,7 +973,7 @@ public class StockDetailActivity extends BaseActivity {
             holder.setText(R.id.tv_item_stock_detail_info_value, (position == 0 || position == 1) ? (
                     realDouble(data.getValue()) == 0 ? "--" : data.getValue()) : data.getValue());
 
-            holder.setTextColor(R.id.tv_item_stock_detail_info_value,data.getStatusColor()==0? Color.BLACK:
+            holder.setTextColor(R.id.tv_item_stock_detail_info_value, data.getStatusColor() == 0 ? Color.BLACK :
                     getResColor(data.getStatusColor()));
 
 //            switch (position) {
@@ -1023,7 +1024,15 @@ public class StockDetailActivity extends BaseActivity {
      */
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        unReadCount++;
+        Map map = baseMessage.getOthers();
+        AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+        //获取免打扰
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        int chatType = (int) conversation.getAttribute("chat_type");
+        if (!noBother && chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
+            unReadCount++;
+        }
         badge.setBadgeNumber(unReadCount);
     }
 }

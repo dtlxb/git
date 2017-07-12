@@ -74,7 +74,11 @@ public class KChartsFragment extends BaseFragment {
         dayK2 = SPTools.getInt("tv_ln2", 10);
         dayK3 = SPTools.getInt("tv_ln3", 20);
         dayK4 = SPTools.getInt("tv_ln4", 0);
-        width = bundle.getInt("width", 0) - AppDevice.dp2px(getActivity(), 52);
+        if (stockType == StockDetailChartsActivity.STOCK_MARKE_INDEX) {
+            width = bundle.getInt("width", 0);
+        } else {
+            width = bundle.getInt("width", 0) - AppDevice.dp2px(getActivity(), 52);
+        }
         height = bundle.getInt("height", 0);
         GetKLineDataPage(true, false, true);
     }
@@ -125,7 +129,7 @@ public class KChartsFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo, "GetKLineDataPage");
+                //FileUtil.writeRequestResponse(responseInfo, "GetKLineDataPage");
                 if (KChartsFragment.this.isVisible()) {
                     if (is_authroity) mOHLCData.clear();
                     JsonObject result = JsonUtils.toJsonObject(responseInfo);
@@ -135,7 +139,11 @@ public class KChartsFragment extends BaseFragment {
                             handleData(data_array);
                             if (page == 1) {
                                 mGridChart = new KLineGridChart(width, height);
-                                mGridChart.setLeftMargin(AppDevice.dp2px(getActivity(), 40));
+                                if (stockType == StockDetailChartsActivity.STOCK_MARKE_INDEX) {
+                                    mGridChart.setLeftMargin(AppDevice.dp2px(getActivity(), 50));
+                                } else {
+                                    mGridChart.setLeftMargin(AppDevice.dp2px(getActivity(), 45));
+                                }
                                 mGridChart.setRightMargin(AppDevice.dp2px(getActivity(), 0));
                                 mGridChart.setShowDetail(true);
                                 mGridChart.setUperLatitudeNum(1);

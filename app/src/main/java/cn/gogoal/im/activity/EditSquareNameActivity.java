@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
@@ -84,7 +83,7 @@ public class EditSquareNameActivity extends BaseActivity {
                     UIHelper.toast(getActivity(), "群名称修改成功");
                     //刷新conversation
                     AVIMClientManager.getInstance().refreshConversation(conversationID);
-                    MessageListUtils.upDateIMMessageBeanById(conversationID, editSquareName.getText().toString());
+                    MessageListUtils.updateIMMessageBeanById(conversationID, editSquareName.getText().toString());
                     AppManager.getInstance().sendMessage("correct_square_name", editSquareName.getText().toString());
                 } else {
                     UIHelper.toast(getActivity(), "群名称修改失败");

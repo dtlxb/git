@@ -51,6 +51,7 @@ import cn.gogoal.im.common.ICheckItemListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -302,7 +303,8 @@ public class ChooseContactActivity extends BaseActivity {
                                         //头像暂时未保存
                                         IMMessageBean imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
                                                 "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
-                                                String.valueOf(contactBean.getAvatar()), JSON.toJSONString(ChatGroupHelper.getImageMessage(entity)));
+                                                String.valueOf(contactBean.getAvatar()), JSON.toJSONString(ChatGroupHelper.getImageMessage(entity)),
+                                                SPTools.getBoolean(UserUtils.getMyAccountId() + contactBean.getConv_id() + "noBother", false));
                                         MessageListUtils.saveMessageInfo(imMessageBean);
                                         //通知服务器重新获取
                                         AppManager.getInstance().sendMessage("Cache_change");

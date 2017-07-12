@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_container"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <SurfaceView
         android:id="@+id/preview_surface_view"
@@ -17,98 +17,120 @@
         android:layout_height="match_parent"
         android:padding="10dp" />
 
-    <LinearLayout
-        android:id="@+id/liveTelecastDetails"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="7dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/liveTelecastDetails"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:background="@drawable/shape_player_anchor_info"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="7dp"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingBottom="1dp"
-            android:paddingLeft="1dp"
-            android:paddingTop="1dp">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/shape_player_anchor_info"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.hply.roundimage.roundImage.RoundedImageView
-                    android:id="@+id/imgPalyer"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    app:riv_oval="true" />
+                android:orientation="vertical"
+                android:paddingBottom="1dp"
+                android:paddingLeft="1dp"
+                android:paddingTop="1dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="3dp"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textCompany"
+                    <com.hply.roundimage.roundImage.RoundedImageView
+                        android:id="@+id/imgPalyer"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:riv_oval="true" />
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:text="@string/default_char"
-                        android:textColor="@android:color/white"
-                        android:textSize="12dp" />
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textCompany"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="@string/default_char"
+                            android:textColor="@android:color/white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/textOnlineNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:singleLine="true"
+                            android:text="@string/default_char"
+                            android:textColor="@android:color/white"
+                            android:textSize="10dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textOnlineNumber"
+                        android:id="@+id/textAddFriend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:singleLine="true"
-                        android:text="@string/default_char"
+                        android:background="@drawable/shape_player_add_friend"
+                        android:text="@string/add_friend"
                         android:textColor="@android:color/white"
-                        android:textSize="10dp" />
+                        android:textSize="11dp"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textAddFriend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_player_add_friend"
-                    android:text="@string/add_friend"
-                    android:textColor="@android:color/white"
-                    android:textSize="11dp"
-                    android:visibility="gone" />
-
             </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyAudience"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical" />
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyAudience"
-            android:layout_width="0dp"
+        <cn.gogoal.im.common.PlayerUtils.CountDownTimerView
+            android:id="@+id/countDownTimer"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical" />
+            android:layout_above="@+id/recycPortrait"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
 
-    </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycPortrait"
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:layout_above="@+id/bottom_container"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp" />
 
-    <cn.gogoal.im.common.PlayerUtils.CountDownTimerView
-        android:id="@+id/countDownTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="13dp"
-        android:visibility="gone" />
+        <FrameLayout
+            android:id="@+id/bottom_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/iv_abort_chat"
@@ -140,19 +162,5 @@
             android:src="@mipmap/login_loading" />
 
     </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycPortrait"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="65dp"
-        android:layout_marginLeft="15dp" />
-
-    <FrameLayout
-        android:id="@+id/bottom_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
 
 </FrameLayout>

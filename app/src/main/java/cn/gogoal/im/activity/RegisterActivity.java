@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -201,6 +202,7 @@ public class RegisterActivity extends BaseActivity {
                     boolean success = data.getBoolean("success");
                     if (success) {
                         WaitDialog successDialog = WaitDialog.getInstance("密码重置成功,即将跳转登录页面", R.mipmap.login_success, false);
+                        successDialog.show(getSupportFragmentManager());
                         successDialog.dismiss(false, true);
                     } else {
                         showErrorDialog("验证码失效，请重新获取验证码", false);
@@ -251,6 +253,7 @@ public class RegisterActivity extends BaseActivity {
                     int dataCode = data.getInteger("code");
                     if (dataCode == 0) {
                         WaitDialog successDialog = WaitDialog.getInstance("注册成功,即将自动跳转登录页面", R.mipmap.login_success, false);
+                        successDialog.show(getSupportFragmentManager());
                         successDialog.dismiss(false, true);
                     } else if (dataCode == 3) {
                         //账号已存在

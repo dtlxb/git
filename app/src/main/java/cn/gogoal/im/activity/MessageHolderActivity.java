@@ -13,15 +13,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.im.v2.AVIMConversation;
+
 import org.simple.eventbus.Subscriber;
+
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
@@ -139,7 +146,15 @@ public class MessageHolderActivity extends BaseActivity {
      */
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        unReadCount++;
+        Map map = baseMessage.getOthers();
+        AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+        //获取免打扰
+        List<String> muList = (List<String>) conversation.get("mu");
+        boolean noBother = muList.contains(UserUtils.getMyAccountId());
+        int chatType = (int) conversation.getAttribute("chat_type");
+        if (!noBother && chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
+            unReadCount++;
+        }
         badge.setBadgeNumber(unReadCount);
     }
 

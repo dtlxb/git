@@ -171,21 +171,20 @@ public class ChatGroupHelper {
     public static void controlMute(final boolean isSetMute, final String conversationId) {
 
         SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", isSetMute);
-        AVIMClientManager.getInstance().refreshConversation(conversationId);
 
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 JSONObject object = result.getJSONObject("data");
                 boolean success = (boolean) object.get("success");
                 if (success) {
+                    AVIMClientManager.getInstance().refreshConversation(conversationId);
+                    MessageListUtils.updateMuteById(conversationId, isSetMute);
                 }
             }
 
@@ -439,7 +438,8 @@ public class ChatGroupHelper {
                     //头像暂时未保存
                     IMMessageBean imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
                             "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
-                            String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage));
+                            String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage),
+                            SPTools.getBoolean(UserUtils.getMyAccountId() + contactBean.getConv_id() + "noBother", false));
                     MessageListUtils.saveMessageInfo(imMessageBean);
                     //通知服务器重新获取
                     AppManager.getInstance().sendMessage("Cache_change");
@@ -507,7 +507,8 @@ public class ChatGroupHelper {
                         IMMessageBean imMessageBean = new IMMessageBean(shareItemInfo.getImMessageBean().getConversationID(),
                                 shareItemInfo.getImMessageBean().getChatType(), System.currentTimeMillis(), "0",
                                 shareItemInfo.getImMessageBean().getNickname(), String.valueOf(shareItemInfo.getImMessageBean().getFriend_id()),
-                                shareItemInfo.getImMessageBean().getAvatar(), JSON.toJSONString(shareMessage));
+                                shareItemInfo.getImMessageBean().getAvatar(), JSON.toJSONString(shareMessage),
+                                SPTools.getBoolean(UserUtils.getMyAccountId() + shareItemInfo.getImMessageBean().getConversationID() + "noBother", false));
                         MessageListUtils.saveMessageInfo(imMessageBean);
                         //通知服务器重新获取
                         AppManager.getInstance().sendMessage("Cache_change");

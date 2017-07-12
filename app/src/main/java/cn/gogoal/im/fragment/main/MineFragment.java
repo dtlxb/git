@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -45,6 +46,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.MineItem;
 import cn.gogoal.im.bean.ToolData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
@@ -106,9 +108,6 @@ public class MineFragment extends BaseFragment {
 
     private ArrayList<ToolData.Tool> mGridData;
     private InvestmentResearchAdapter toolsAdapter;
-    //消息
-    private BadgeView badge;
-    private int unReadCount;
 
     @Override
     public int bindLayout() {
@@ -118,8 +117,6 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        unReadCount = MessageListUtils.getAllMessageUnreadCount();
-        badge.setBadgeNumber(unReadCount);
         getTouYan();
     }
 
@@ -142,9 +139,6 @@ public class MineFragment extends BaseFragment {
         rvMine.setAdapter(mineAdapter);
 
 //        setViewFlipper();
-
-        badge = new BadgeView(getActivity());
-        initBadge(unReadCount, badge);
     }
 
     private void initools() {
@@ -355,23 +349,4 @@ public class MineFragment extends BaseFragment {
             });
         }
     }
-
-    private void initBadge(int num, BadgeView badge) {
-//        badge.setGravityOffset(10, 7, true);
-//        badge.setShowShadow(false);
-//        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-//        badge.setBadgeTextSize(8, true);
-//        badge.bindTarget(ivMessageTag);
-//        badge.setBadgeNumber(num);
-    }
-
-    /**
-     * 消息接收
-     */
-    @Subscriber(tag = "IM_Message")
-    public void handleMessage(BaseMessage baseMessage) {
-        unReadCount++;
-        badge.setBadgeNumber(unReadCount);
-    }
-
 }

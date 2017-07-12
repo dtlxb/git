@@ -34,6 +34,18 @@
             android:textSize="12sp"
             android:visibility="gone" />
 
+        <View
+            android:id="@+id/view_noBother"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_gravity="top|right"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/shape_message_tag"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
     </FrameLayout>
 
     <RelativeLayout

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -42,6 +43,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
@@ -129,8 +131,19 @@ public class IMSquareChatSetActivity extends BaseActivity {
         the_square.setText(squareName);
 
         //初始化打扰设置
-        boolean noBother = SPTools.getBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", false);
-        botherSwitch.setChecked(noBother);
+        AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
+            @Override
+            public void joinSuccess(AVIMConversation conversation) {
+                //获取免打扰
+                List<String> muList = (List<String>) conversation.get("mu");
+                boolean noBother = muList.contains(UserUtils.getMyAccountId());
+                botherSwitch.setChecked(noBother);
+            }
+
+            @Override
+            public void joinFail(String error) {
+            }
+        });
 
         if (null != getIntent().getExtras().getStringArrayList("group_members")) {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));

@@ -1109,7 +1109,7 @@ public class LiveActivity extends BaseActivity {
                         }
                     });
 
-                    getOnlineCount(room_id);
+                    //getOnlineCount(room_id);
 
                     JSONObject introduce = new JSONObject();
                     introduce.put("screenHeight", screenHeight);
@@ -1118,6 +1118,7 @@ public class LiveActivity extends BaseActivity {
                     introduce.put("introduction_img", data.getString("introduction_img"));
                     introduce.put("introduction", data.getString("introduction"));
                     introduce.put("live_large_img", data.getString("live_large_img"));
+                    introduce.put("channel", "app");
 
                     mBottomFragment = WatchBottomFragment.newInstance(String.valueOf(introduce));
                     mBottomFragment.setRecordUIClickListener(mUIClickListener);
