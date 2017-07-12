@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/img_updata_dialog" />
+
+        <TextView
+            android:id="@+id/tv_dialog_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="发现新版本(v1.0.1)"
+            android:textColor="@color/textColor_333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_dialog_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="7"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:scrollbars="vertical"
+            android:text="1.fsdsaffsdfsf\n2.fkshdfsdfsdffsdfsdfasdfa\n3.jflskdfjslkfasfasdfa\n4.retertwertzf"
+            android:textColor="@color/textColor_333333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/btn_do_updata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:background="@drawable/selector_normal_btn_press_theme"
+            android:text="立即更新"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_dialog_dismis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:contentDescription="@null"
+        android:src="@mipmap/player_close" />
+
+</LinearLayout>

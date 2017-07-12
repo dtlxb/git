@@ -8,7 +8,7 @@
         android:id="@+id/tv_dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_dialog_normal_alert_message"
+        android:background="@drawable/shape_radiu_top"
         android:gravity="center"
         android:paddingBottom="25dp"
         android:paddingEnd="20dp"

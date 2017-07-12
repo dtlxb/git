@@ -38,7 +38,7 @@ public class BigDataAcyivity extends BaseActivity {
     @Override
     public void doBusiness(final Context mContext) {
 
-        setMyTitle("大数据选股", true);
+        setMyTitle(getString(R.string.title_big_data), true);
 
         int index = getIntent().getIntExtra("big_index", 0);
 

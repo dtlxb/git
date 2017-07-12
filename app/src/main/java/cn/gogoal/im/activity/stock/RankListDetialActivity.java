@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.HotIndustryBean;
 import cn.gogoal.im.bean.stock.RankListStockBean;
-import cn.gogoal.im.bean.stock.stockRanklist.StockRankBean;
+import cn.gogoal.im.bean.stock.stockRanklist.StockRankData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -47,11 +48,11 @@ import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_SWIPEREFRESH;
  */
 public class RankListDetialActivity extends BaseActivity {
 
-    public static final int MODULE_TYPE_TITLE_HOT_INDUSTRY = 0x6001;//热门行业 标题
+    public static final int MODULE_TYPE_HOT_INDUSTRY_TITLE = 0x6001;//热门行业 标题//24577
 
-    public static final int MODULE_TYPE_HOT_INDUSTRY = 0x6002;//热门行业 子模块
+    public static final int MODULE_TYPE_HOT_INDUSTRY_GRID = 0x6002;//热门行业 子模块//24578
 
-    public static final int MODULE_TYPE_TTILE_RANK_LIST = 0x6003;//[涨跌换振] 模块
+    public static final int MODULE_TYPE_TTILE_RANK_LIST = 0x6003;//[涨跌换振] 模块//24579
 
     private int refreshType = REFRESH_TYPE_AUTO;
 
@@ -77,9 +78,9 @@ public class RankListDetialActivity extends BaseActivity {
 
     private RankAdapter rankAdapter;
 
-    private List<StockRankBean> rankDatas = new ArrayList<>();
+    private List<StockRankData> rankDatas = new ArrayList<>();
 
-    private IndustryAdapter hotIndustryAdapter;
+    private IndustryAdapter hotIndustryAdapter;//热门行业适配器
 
     private List<HotIndustryBean.DataBean> hotIndustryDatas = new ArrayList<>();
 
@@ -92,25 +93,27 @@ public class RankListDetialActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-//        initRecycleView(recyclerView, R.drawable.shape_divider_1px);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         
         setMyTitle(getIntent().getStringExtra("MODULE_TITLE"), true);
 
         moduleType = getIntent().getIntExtra("MODULE_TYPE", 0);
 
+        KLog.e(moduleType);
+        KLog.e(getIntent().getIntExtra("RANK_LIST_TYPE", -1));
+
         switch (moduleType) {
-            case MODULE_TYPE_TITLE_HOT_INDUSTRY:
+            case MODULE_TYPE_HOT_INDUSTRY_TITLE://热门话题title
                 getHotIndustryList(null);
                 hotIndustryAdapter = new IndustryAdapter(hotIndustryDatas);
                 recyclerView.setAdapter(hotIndustryAdapter);
                 break;
-            case MODULE_TYPE_HOT_INDUSTRY:
+            case MODULE_TYPE_HOT_INDUSTRY_GRID://热门行业grid
                 getHotIndustryList(getIntent().getStringExtra("INDUSTRY_NAME"));
                 hotIndustryAdapter = new IndustryAdapter(hotIndustryDatas);
                 recyclerView.setAdapter(hotIndustryAdapter);
                 break;
-            case MODULE_TYPE_TTILE_RANK_LIST:
+            case MODULE_TYPE_TTILE_RANK_LIST://涨跌振换
                 listType = getIntent().getIntExtra("RANK_LIST_TYPE", -1);
                 getRanKList();
                 rankAdapter = new RankAdapter(rankDatas);
@@ -120,34 +123,15 @@ public class RankListDetialActivity extends BaseActivity {
 
         iniHead();//详情头部
 
-//        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                refreshType = REFRESH_TYPE_SWIPEREFRESH;
-//                switch (moduleType) {
-//                    case MODULE_TYPE_TITLE_HOT_INDUSTRY:
-//                        getHotIndustryList(null);
-//                        break;
-//                    case MODULE_TYPE_HOT_INDUSTRY:
-//                        getHotIndustryList(getIntent().getStringExtra("INDUSTRY_NAME"));
-//                        break;
-//                    case MODULE_TYPE_TTILE_RANK_LIST:
-//                        listType = getIntent().getIntExtra("RANK_LIST_TYPE", -1);
-//                        getRanKList();
-//                        break;
-//                }
-//                refreshlayout.setRefreshing(false);
-//            }
-//        });
         refreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 refreshType = REFRESH_TYPE_SWIPEREFRESH;
                 switch (moduleType) {
-                    case MODULE_TYPE_TITLE_HOT_INDUSTRY:
+                    case MODULE_TYPE_HOT_INDUSTRY_TITLE:
                         getHotIndustryList(null);
                         break;
-                    case MODULE_TYPE_HOT_INDUSTRY:
+                    case MODULE_TYPE_HOT_INDUSTRY_GRID:
                         getHotIndustryList(getIntent().getStringExtra("INDUSTRY_NAME"));
                         break;
                     case MODULE_TYPE_TTILE_RANK_LIST:
@@ -162,11 +146,11 @@ public class RankListDetialActivity extends BaseActivity {
     }
 
     private void iniHead() {
-        if (moduleType == MODULE_TYPE_TITLE_HOT_INDUSTRY) {
+        if (moduleType == MODULE_TYPE_HOT_INDUSTRY_TITLE) {
             tvHeaderGroup.setText("行业名称");
             tvHeaderValue.setText("涨跌幅");
             tvHeaderType.setText("领涨股");
-        } else if (moduleType == MODULE_TYPE_HOT_INDUSTRY) {
+        } else if (moduleType == MODULE_TYPE_HOT_INDUSTRY_GRID) {
             tvHeaderGroup.setText("股票名称");
             tvHeaderValue.setText("股价");
             tvHeaderType.setText("涨跌幅");
@@ -203,17 +187,16 @@ public class RankListDetialActivity extends BaseActivity {
         Map<String, String> param = new HashMap<String, String>();
         param.put("category_type", "1");
 
-        if (moduleType == MODULE_TYPE_HOT_INDUSTRY) {
-            param.put("industry_name", industryName + "");
+        if (moduleType == MODULE_TYPE_HOT_INDUSTRY_GRID) {
+            param.put("industry_name", industryName);
         }
 
         new GGOKHTTP(param,
-                moduleType == MODULE_TYPE_TITLE_HOT_INDUSTRY ?
+                moduleType == MODULE_TYPE_HOT_INDUSTRY_TITLE ?
                         GGOKHTTP.GET_HOT_INDUSTRY : GGOKHTTP.GET_HOT_INDUSTRY_DETAIL_LIST, new GGOKHTTP.GGHttpInterface() {
 
             @Override
             public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
                 int responseCode = JSONObject.parseObject(responseInfo).getIntValue("code");
 
                 if (responseCode == 0) {
@@ -291,16 +274,16 @@ public class RankListDetialActivity extends BaseActivity {
     }
 
     //    [涨跌换振] TITLE
-    private class RankAdapter extends CommonAdapter<StockRankBean
+    private class RankAdapter extends CommonAdapter<StockRankData
             , BaseViewHolder> {
 
-        RankAdapter(List<StockRankBean> datas) {
+        RankAdapter(List<StockRankData> datas) {
             super(R.layout.item_stock_rank_list, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder,
-                               final StockRankBean data, int position) {
+                               final StockRankData data, int position) {
 
             TextView tv_price = holder.getView(R.id.tv_mystock_price);
             tv_price.setPadding(0, 0, 0, 0);
@@ -357,7 +340,7 @@ public class RankListDetialActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder holder, final HotIndustryBean.DataBean data, int position) {
 
-            if (moduleType == MODULE_TYPE_TITLE_HOT_INDUSTRY) {//from 热门行业标题
+            if (moduleType == MODULE_TYPE_HOT_INDUSTRY_TITLE) {//from 热门行业标题
                 holder.setText(R.id.tv_mystock_stockname, data.getIndustry_name());
                 holder.getView(R.id.tv_mystock_stockcode).setVisibility(View.GONE);
 
@@ -382,7 +365,7 @@ public class RankListDetialActivity extends BaseActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), RankListDetialActivity.class);
                         intent.putExtra("MODULE_TITLE", data.getIndustry_name());
-                        intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY);
+                        intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY_GRID);
                         intent.putExtra("INDUSTRY_NAME", data.getIndustry_name());
                         v.getContext().startActivity(intent);
                     }

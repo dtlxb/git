@@ -45,5 +45,4 @@ public class RefreshLayout extends PtrFrameLayout {
 //        resistance
         setResistance(2.5f);
     }
-
 }

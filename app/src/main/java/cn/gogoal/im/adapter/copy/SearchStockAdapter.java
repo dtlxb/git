@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -30,7 +31,7 @@ import hply.com.niugu.bean.SearchStockData;
  */
 public class SearchStockAdapter extends MyBaseAdapter<SearchStockData> {
 
-    private final ArrayList<String> myStockSet;
+    private final LinkedHashSet<String> myStockSet;
 
     private ArrayList<SearchStockData> list;
     private SearchView editText;

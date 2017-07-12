@@ -85,7 +85,7 @@ public class EditMyStockActivity extends BaseActivity {
 
         BaseActivity.initRecycleView(rvEditDrag, 0);
 
-        myStockList = StockUtils.getMyStock();
+        myStockList = (ArrayList<MyStockData>) getIntent().getSerializableExtra("my_stock_list");
 
         setData();
 

@@ -39,6 +39,7 @@ public class GreatScrollView extends NestedScrollView {
     }
 
     private void init(Context context) {
+        this.setFillViewport(true);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 

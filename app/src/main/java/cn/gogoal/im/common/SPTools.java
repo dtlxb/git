@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -96,8 +97,8 @@ public class SPTools {
         return JSONObject.toJSONString(siteno);
     }
 
-    public static Set<String> getSetData(String key, Set<String> defSet) {
-        return mPreference.getStringSet(key, defSet);
+    public static LinkedHashSet<String> getSetData(String key, Set<String> defSet) {
+        return new LinkedHashSet<>(mPreference.getStringSet(key, defSet));
     }
 
 

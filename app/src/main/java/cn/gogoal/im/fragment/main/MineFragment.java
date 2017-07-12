@@ -125,7 +125,7 @@ public class MineFragment extends BaseFragment {
 
         moreTools = getMoreTools();
 
-        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.message_dark)) {
+        new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.message_dark)) {
             @Override
             public void actionClick(View view) {
                 startActivity(new Intent(getActivity(), MessageHolderActivity.class));
