@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_item_stock_detail_news"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="65dp"
     android:background="@android:color/white"
-    android:gravity="center_vertical|right"
     android:orientation="vertical"
     android:paddingBottom="10dp"
     android:paddingEnd="15dp"
@@ -27,12 +26,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/big_event_tittle_tv"
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="3dp"
         android:gravity="bottom"
-        android:text="2015-06-08"
+        android:layout_margin="3dp"
         android:textColor="@color/gray"
-        android:textSize="13dp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/big_event_organ_andr_author"
@@ -41,11 +38,11 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/big_event_tittle_tv"
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="3dp"
+        android:layout_margin="3dp"
+        android:layout_toStartOf="@+id/big_event_date"
         android:gravity="bottom"
-        android:text="华泰证券  王尼玛"
         android:textColor="@color/gray"
         android:textSize="13sp" />
+
 </RelativeLayout>
 
