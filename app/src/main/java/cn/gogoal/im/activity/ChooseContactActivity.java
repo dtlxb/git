@@ -492,7 +492,15 @@ public class ChooseContactActivity extends BaseActivity {
 
         private void initMap() {
             for (ContactBean bean : datas) {
-                map.put(bean.getFriend_id(), false);
+                if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+                    if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(bean)) {
+                        map.put(bean.getFriend_id(), null);
+                    } else {
+                        map.put(bean.getFriend_id(), false);
+                    }
+                } else {
+                    map.put(bean.getFriend_id(), false);
+                }
             }
         }
 
@@ -511,18 +519,9 @@ public class ChooseContactActivity extends BaseActivity {
 
             if (String.valueOf(data.getFriend_id()).equals(UserUtils.getMyAccountId())) {
                 checkBox.setChecked(true);
+                checkBox.setEnabled(false);
                 holder.itemView.setClickable(false);
                 holder.itemView.setEnabled(false);
-                checkBox.setEnabled(false);
-            }
-            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                //判断当前的联系人是否已经在群中，是则显示灰色勾选图标
-                if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(data)) {
-                    checkBox.setChecked(true);
-                    checkBox.setEnabled(false);
-                    holder.itemView.setClickable(false);
-                    holder.itemView.setEnabled(false);
-                }
             }
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -534,9 +533,16 @@ public class ChooseContactActivity extends BaseActivity {
 
             // 设置CheckBox的状态
             if (map.get(data.getFriend_id()) == null) {
-                map.put(data.getFriend_id(), false);
+                KLog.e(data.getFriend_id());
+                checkBox.setEnabled(false);
+                holder.itemView.setClickable(false);
+                holder.itemView.setEnabled(false);
+            } else {
+                holder.itemView.setClickable(true);
+                holder.itemView.setEnabled(true);
+                checkBox.setEnabled(true);
+                checkBox.setChecked(map.get(data.getFriend_id()));
             }
-            checkBox.setChecked(map.get(data.getFriend_id()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -549,7 +555,6 @@ public class ChooseContactActivity extends BaseActivity {
                     setSelectItem(data.getFriend_id(), position);
                 }
             });
-
         }
 
         private void setSelectItem(String selectItemId, int position) {
@@ -559,7 +564,7 @@ public class ChooseContactActivity extends BaseActivity {
             } else {
                 map.put(selectItemId, true);
             }
-            notifyDataSetChanged();
+            notifyItemChanged(position);
         }
 
         private int dataGetPosition(ContactBean contactBean) {
