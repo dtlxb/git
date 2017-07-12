@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -167,8 +166,6 @@ public class MarketFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
-
                 UIHelper.toastError(getActivity(), msg, xLayout);
 
             }

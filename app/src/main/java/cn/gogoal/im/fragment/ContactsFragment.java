@@ -11,15 +11,12 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -39,10 +36,8 @@ import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
-import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -237,7 +232,6 @@ public class ContactsFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     UIHelper.toast(getActivity(), "此人删除成功");
                     upDataFootCount(UserUtils.getUserContacts());
@@ -285,7 +279,6 @@ public class ContactsFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
                 UIHelper.toastError(getActivity(), msg);
             }
         };

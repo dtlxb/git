@@ -5,8 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,7 +146,7 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
         if (onItemTouchCallbackListener != null && !ArrayUtils.isEmpty(fromPositions)) {
-            KLog.e(fromPositions.get(0)+":;;"+viewHolder.getAdapterPosition());
+//            KLog.e(fromPositions.get(0)+":;;"+viewHolder.getAdapterPosition());
             onItemTouchCallbackListener.onSelectedChanged(fromPositions.get(0),
                     viewHolder.getAdapterPosition());
         }

@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
@@ -80,8 +79,6 @@ public class UIHelper {
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
 
-        KLog.e(cont.getClass().getSimpleName());
-
         mToast.show();
     }
 
@@ -99,7 +96,6 @@ public class UIHelper {
             mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
-        KLog.e(cont.getClass().getSimpleName());
         mToast.show();
     }
 
@@ -112,7 +108,6 @@ public class UIHelper {
 
     public static void toastError(Context cont, String msg, XLayout xLayout) {
         if (cont == null || msg == null || xLayout == null) {
-            KLog.e("执行空");
             return;
         }
         if (mToast == null) {
@@ -133,7 +128,6 @@ public class UIHelper {
             }
             mToast.setDuration(Toast.LENGTH_LONG);
         }
-        KLog.e(cont.getClass().getSimpleName());
         mToast.show();
     }
 
@@ -151,7 +145,6 @@ public class UIHelper {
             mToast.setText("服务器开小差了...");
             mToast.setDuration(Toast.LENGTH_LONG);
         }
-        KLog.e(cont.getClass().getSimpleName());
 
         mToast.show();
     }

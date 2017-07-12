@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -207,7 +206,7 @@ public class InfomationTabFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
+//                KLog.e(msg);
                 if (xLayout != null && refreshlayout != null) {
                     xLayout.setStatus(XLayout.Error);
                 }
@@ -217,7 +216,7 @@ public class InfomationTabFragment extends BaseFragment {
 
     @Subscriber(tag = "double_click_2_top")
     void doubleClick2Top(String index) {
-        KLog.e(index);
+//        KLog.e(index);
         if (StringUtils.parseStringDouble(index) == tabType - 110) {//是本Tab
             mRvInfomation.smoothScrollToPosition(0);
         }

@@ -8,10 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 import org.simple.eventbus.EventBus;
@@ -51,12 +48,11 @@ public class MessageSaveService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         EventBus.getDefault().register(this);
 
-        flags = START_STICKY;
         IMMessageBeans = new ArrayList<>();
         IMMessageBeans.clear();
         //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
-        return super.onStartCommand(intent, flags, startId);
+        return super.onStartCommand(intent, START_FLAG_REDELIVERY, startId);
     }
 
     @Override
@@ -94,7 +90,7 @@ public class MessageSaveService extends Service {
         }
         SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", noBother);
         //股票消息不缓存
-        KLog.e(chatType);
+//        KLog.e(chatType);
         if (chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             Long rightNow = CalendarUtils.getCurrentTime();
             String nickName = "";

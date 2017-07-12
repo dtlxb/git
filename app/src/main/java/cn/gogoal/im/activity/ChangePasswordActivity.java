@@ -70,7 +70,6 @@ public class ChangePasswordActivity extends BaseActivity {
                 new GGOKHTTP(map, GGOKHTTP.RESET_PASSWORD, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-
                         JSONObject object = JSONObject.parseObject(responseInfo);
                         if (object.getIntValue("code") == 0) {
                             boolean success = object.getJSONObject("data").getBoolean("success");

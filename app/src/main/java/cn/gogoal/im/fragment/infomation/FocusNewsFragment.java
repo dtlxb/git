@@ -8,8 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.socks.library.KLog;
-
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -189,7 +187,7 @@ public class FocusNewsFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
+//                KLog.e(msg);
 //                if (xLayout != null && refreshLayout != null) {
 //                    xLayout.setStatus(XLayout.Error);
 //                    re

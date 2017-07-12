@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 
-import com.socks.library.KLog;
 
 import junit.framework.Assert;
 
@@ -85,7 +84,6 @@ public class WXUtil {
 
 		File file = new File(fileName);
 		if (!file.exists()) {
-			KLog.i("readFromFile: file not found");
 			return null;
 		}
 

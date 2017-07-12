@@ -1,6 +1,5 @@
 package cn.gogoal.im.common;
 
-import com.socks.library.KLog;
 
 import org.litepal.LitePal;
 import org.litepal.LitePalDB;
