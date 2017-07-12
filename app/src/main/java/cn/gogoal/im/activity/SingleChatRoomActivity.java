@@ -110,8 +110,6 @@ public class SingleChatRoomActivity extends BaseActivity {
 
             @Override
             public void joinFail(String error) {
-                KLog.e(error);
-                UIHelper.toast(SingleChatRoomActivity.this, error);
             }
         });
     }

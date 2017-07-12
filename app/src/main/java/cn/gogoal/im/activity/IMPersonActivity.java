@@ -28,8 +28,6 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 /**
