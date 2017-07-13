@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
-
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -99,6 +98,7 @@
         <activity
             android:name=".activity.TypeLoginActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <service
@@ -123,59 +123,104 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.EditPersonInfoActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.FunctionActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.CompanyTagActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SquareChatRoomActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.SingleChatRoomActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.IMRegisterActivity" />
+        <activity
+            android:name=".activity.IMRegisterActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChatRoomActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".activity.DemoActivity" />
-        <activity android:name=".activity.IMNewFriendActivity" />
-        <activity android:name=".activity.IMPersonDetailActivity" />
+        <activity
+            android:name=".activity.DemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.IMNewFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.IMPersonDetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SearchPersonSquareActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".activity.MyGroupsActivity" />
-        <activity android:name=".activity.OfficialAccountsActivity" />
-        <activity android:name=".activity.EditSquareBriefActivity" />
+        <activity
+            android:name=".activity.MyGroupsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OfficialAccountsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EditSquareBriefActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.EditSquareNameActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".activity.IMPersonActivity" />
-        <activity android:name=".activity.IMSquareChatSetActivity" />
-        <activity android:name=".activity.IMGroupContactsActivity" />
-        <activity android:name=".activity.IMSearchLocalActivity" />
-        <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".activity.SearchMessagesActivity" />
-        <activity android:name=".wxapi.WXPayEntryActivity" />
-        <activity android:name=".activity.IMAddFriendActivity" />
-        <activity android:name=".wxapi.WXEntryActivity" />
-        <activity android:name=".activity.AddFriendListActivity" />
+        <activity
+            android:name=".activity.IMPersonActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.IMSquareChatSetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.IMGroupContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.IMSearchLocalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchMessagesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.IMAddFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddFriendListActivity"
+            android:screenOrientation="portrait" />
 
         <uses-library
             android:name="com.google.android.maps"
@@ -183,23 +228,36 @@
 
         <activity
             android:name=".activity.PdfDisplayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChooseContactActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.LiveActivity" />
+        <activity
+            android:name=".activity.LiveActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WatchLiveActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.stock.RankListDetialActivity" />
-        <activity android:name=".activity.stock.MyStockNewsActivity" />
-        <activity android:name=".activity.ContactsActivity" />
-        <activity android:name=".activity.stock.EditMyStockActivity" />
-        <activity android:name=".activity.stock.StockDetailActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.stock.RankListDetialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.MyStockNewsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.EditMyStockActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.StockDetailActivity"
+            android:screenOrientation="portrait" />
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
-
         <activity
             android:name=".activity.copy.StockDetailChartsActivity"
             android:configChanges="orientation|screenSize|keyboard"
@@ -208,45 +266,112 @@
         <activity
             android:name=".activity.copy.StockDetailMarketIndexActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.copy.StockSearchActivity" />
-        <activity android:name=".activity.EditMyInfoActivity" />
-        <activity android:name=".activity.ImageDetailActivity" />
-        <activity android:name=".activity.CreateLiveActivity" />
-        <activity android:name=".activity.SquareCardActivity" />
-        <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.SetStockRefreshActivity" />
+        <activity
+            android:name=".activity.copy.StockSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EditMyInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ImageDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CreateLiveActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SquareCardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SetStockRefreshActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.KlineSettingActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".activity.SingleEditActivity" />
-        <activity android:name=".activity.RedGreenSettingActivity" />
-        <activity android:name=".activity.ChangePhoneNumberActivity" />
-        <activity android:name=".activity.PhoneContactsActivity" />
-        <activity android:name=".activity.stock.StockNewsAllListActivity" />
-        <activity android:name=".activity.ShareMessageActivity" />
-        <activity android:name=".activity.ScreenActivity" />
-        <activity android:name=".activity.ToolsSettingActivity" />
-        <activity android:name=".activity.ToolsListActivity" />
-        <activity android:name=".activity.MyAdvisersActivity" />
-        <activity android:name=".activity.stock.InteractiveInvestorActivity" />
-        <activity android:name=".activity.AccountSafeActivity" />
-        <activity android:name=".activity.ChangePasswordActivity" />
-        <activity android:name=".activity.SettingStockActivity" />
-        <activity android:name=".activity.ScanQRCodeActivity" />
-        <activity android:name=".activity.Face2FaceActivity" />
-        <activity android:name=".activity.QrcodeProcessActivity" />
-        <activity android:name=".activity.stock.stockften.FinancialAnalysisActivity" />
-        <activity android:name=".activity.QrCodeActivity" />
-        <activity android:name=".activity.stock.stockften.FinancialStatementsActivity" />
-
-        <activity android:name=".activity.stock.BigDataAcyivity"/>
-        <activity android:name=".activity.stock.SubjectDetailActivity"/>
-        <activity android:name=".activity.stock.EventDetailActivity"/>
-
-        <activity android:name=".activity.stock.stockften.CompanyExecutivesActivity" />
-        <activity android:name=".activity.stock.stockften.CompanyProfileActivity" />
-        <activity android:name=".activity.stock.stockften.ShareholderResearchActivity" />
-        <activity android:name=".activity.stock.stockften.CapitalStructureActivity" />
+        <activity
+            android:name=".activity.SingleEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RedGreenSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChangePhoneNumberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PhoneContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.StockNewsAllListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ShareMessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ScreenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ToolsSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ToolsListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyAdvisersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.InteractiveInvestorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AccountSafeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChangePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingStockActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ScanQRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Face2FaceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.QrcodeProcessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.stockften.FinancialAnalysisActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.QrCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.stockften.FinancialStatementsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.BigDataAcyivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.SubjectDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.EventDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.stockften.CompanyExecutivesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.stockften.CompanyProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.stockften.ShareholderResearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.stock.stockften.CapitalStructureActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
