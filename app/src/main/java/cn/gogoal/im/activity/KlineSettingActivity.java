@@ -106,7 +106,7 @@ public class KlineSettingActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         SPTools.saveInt("authority_type", 0);
                         SPTools.saveBoolean("hollow", false);
-                        SPTools.saveBoolean("follow", false);
+                        SPTools.saveBoolean("follow", true);
                         SPTools.saveInt("et_ln1", 5);
                         SPTools.saveInt("et_ln2", 10);
                         SPTools.saveInt("et_ln3", 20);
@@ -124,7 +124,7 @@ public class KlineSettingActivity extends BaseActivity {
         //输入框输入设置
         authority_type = SPTools.getInt("authority_type", 0);
         hollow = SPTools.getBoolean("hollow", false);
-        follow = SPTools.getBoolean("follow", false);
+        follow = SPTools.getBoolean("follow", true);
         filters = new InputFilter[]{new EditInputFilter()};
         et_ln1.setFilters(filters);
         et_ln2.setFilters(filters);
