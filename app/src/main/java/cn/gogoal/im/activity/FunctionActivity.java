@@ -32,7 +32,6 @@ import cn.gogoal.im.bean.PdfData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -235,7 +234,7 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(final String data, ValueCallback<String> function) {
 
-                FileUtil.writeRequestResponse(data, "pdf");
+//                FileUtil.writeRequestResponse(data, "pdf");
 
                 showPdf(data.replaceAll("\\s", ""));
 

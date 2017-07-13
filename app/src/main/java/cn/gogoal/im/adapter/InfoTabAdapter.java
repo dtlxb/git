@@ -1,16 +1,9 @@
 package cn.gogoal.im.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import cn.gogoal.im.R;
 import cn.gogoal.im.fragment.infomation.FocusNewsFragment;
 import cn.gogoal.im.fragment.infomation.InfomationTabFragment;
 import cn.gogoal.im.fragment.infomation.SevenBy24Fragment;
@@ -26,12 +19,9 @@ public class InfoTabAdapter extends FragmentPagerAdapter {
     private int[] tabTypes;
     private String[] infoArrays;
 
-    private Context context;
-
-    public InfoTabAdapter(FragmentManager fm, Context context, int[] tabTypes, String[] infoArrays) {
+    public InfoTabAdapter(FragmentManager fm, int[] tabTypes, String[] infoArrays) {
         super(fm);
         this.tabTypes = tabTypes;
-        this.context = context;
         this.infoArrays = infoArrays;
     }
 
@@ -52,14 +42,14 @@ public class InfoTabAdapter extends FragmentPagerAdapter {
         return infoArrays[position];
     }
 
-    public View getTabView(int pos) {
-        TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.layout_tab_infomation, new LinearLayout(context), false);
-        textView.setText(infoArrays[pos]);
-        if (textView.isSelected()) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        } else {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        }
-        return textView;
-    }
+//    public View getTabView(int pos) {
+//        TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.layout_tab_infomation, new LinearLayout(context), false);
+//        textView.setText(infoArrays[pos]);
+//        if (textView.isSelected()) {
+//            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+//        } else {
+//            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+//        }
+//        return textView;
+//    }
 }

@@ -30,7 +30,6 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_below="@+id/tv_item_normal_header_title"
-        android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="@color/textColor_333333"/>
 

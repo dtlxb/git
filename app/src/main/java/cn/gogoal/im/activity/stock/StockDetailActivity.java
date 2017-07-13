@@ -312,9 +312,9 @@ public class StockDetailActivity extends BaseActivity {
             public void onTakeTools(boolean sueecss, ArrayList<ToolData.Tool> tools) {
                 if (sueecss) {
                     for (ToolData.Tool tool : tools) {
-                        if (tool.getIsShow() == 1) {
+//                        if (tool.getIsShow() == 1) {
                             diagnoseStockTools.add(tool);
-                        }
+//                        }
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment.stock.news_report.bean;
+package cn.gogoal.im.bean.stock;
 
 import java.util.List;
 

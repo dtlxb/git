@@ -7,6 +7,8 @@
     android:background="@android:color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".activity.stock.StockDetailActivity">
 
     <RelativeLayout

@@ -25,7 +25,7 @@ import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.DashlineItemDivider;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -35,7 +35,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * author wangjd on 2017/6/19 0019.
  * Staff_id 1375
  * phone 18930640263
- * description :资讯-自选股
+ * description :资讯-自选股==废弃
  */
 public class InfoMyStockTabFragment extends BaseFragment {
 
@@ -62,7 +62,8 @@ public class InfoMyStockTabFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addItemDecoration(new DashlineItemDivider());
+//        recyclerView.addItemDecoration(new DashlineItemDivider());
+        recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
 
         dataList = new ArrayList<>();
         adapter = new InfoMyStockAdapter(dataList);

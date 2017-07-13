@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
 
@@ -87,7 +85,6 @@ public class InfomationFragment extends BaseFragment {
                 InfomationTabFragment.INFOMATION_TYPE_POLICY_DYNAMICS};
 
         infoTabAdapter = new InfoTabAdapter(getChildFragmentManager(),
-                mContext,
                 tabTypes,
                 infoArrays);
 
@@ -97,31 +94,14 @@ public class InfomationFragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 ivCalendar.setVisibility(tab.getPosition() == 1 ? View.VISIBLE : View.GONE);
-                TextView tabTextView = (TextView) tab.getCustomView();
-                if (tabTextView!=null){
-                    tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
-                }
             }
-
             public void onTabUnselected(TabLayout.Tab tab) {
-                TextView tabTextView = (TextView) tab.getCustomView();
-                if (tabTextView!=null){
-                    tabTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
-                }
             }
-
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
 
         tabInfomation.setupWithViewPager(vpInfomation);
-
-        for (int i=0;i<infoArrays.length;i++){
-            TabLayout.Tab tab = tabInfomation.getTabAt(i);
-            if (tab != null) {
-                tab.setCustomView(infoTabAdapter.getTabView(i));
-            }
-        }
 
         vpInfomation.setOffscreenPageLimit(7);
 
