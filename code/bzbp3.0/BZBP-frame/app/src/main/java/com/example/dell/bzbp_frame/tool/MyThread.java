@@ -33,6 +33,16 @@ public class MyThread extends Thread {
     private ArrayList<Posto> Postos ;
     private Route route;
 
+
+    private int rid ;
+
+    public int getRid() {
+        return rid;
+    }
+
+    public void setRid(int rid) {
+        this.rid = rid;
+    }
     public Route getRoute() {
         return route;
     }
@@ -96,6 +106,7 @@ public class MyThread extends Thread {
         }
         if(what==3){
            result= sendRoute (getUrl,route);
+            rid = Integer.parseInt(result);
         }
     }
 
