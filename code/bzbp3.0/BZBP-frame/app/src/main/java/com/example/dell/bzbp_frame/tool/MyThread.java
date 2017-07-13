@@ -34,7 +34,7 @@ public class MyThread extends Thread {
     private Route route;
 
 
-    private int rid ;
+    private Integer rid ;
 
     public int getRid() {
         return rid;
