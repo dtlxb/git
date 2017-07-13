@@ -130,7 +130,10 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             //route.location_list.add(new LatLng(31.03,121.43));
             route.location_list.add(new MyLatlng(31.03,121.44));
 
-            //在这里把route发送过去，并拿回rid
+            //把rid初始化成-1，后台可以知道这是一个新route。
+            //route.setRid(-1);
+
+            //在这里把route发送过去，并拿回真正的rid
             MyThread myThread1 = new MyThread();
             myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
             myThread1.setWhat(3);
@@ -150,6 +153,8 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             //赋值username
             User u = (User) this.getIntent().getExtras().getSerializable("user");
             route.setUsername(u.getUsername());
+
+
 
         }
         else{//若在bundle里找到了route，则需要重新画一次
