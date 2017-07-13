@@ -55,7 +55,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
             jniDebuggable false
-            minifyEnabled true
+            minifyEnabled false
             zipAlignEnabled true
             // 移除无用的resource文件
             shrinkResources true
