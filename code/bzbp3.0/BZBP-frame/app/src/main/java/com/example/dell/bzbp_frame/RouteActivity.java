@@ -1,5 +1,6 @@
 package com.example.dell.bzbp_frame;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -46,6 +47,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     private LocationSource.OnLocationChangedListener mListener;
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
+    private Bundle bundle;
 
     //记录上次定位的位置，在用户点击复位按钮时移到这里
     private MyLatlng last_location = null;
@@ -103,6 +105,20 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
         setContentView(R.layout.activity_route);
 
+        bundle = this.getIntent().getExtras();
+        if (bundle.getSerializable("route")!=null){
+            //拿出route，并加入新的pid
+            route = (Route)bundle.getSerializable("route");
+            if ((Integer)bundle.getInt("last_pid")!=-1){
+                route.getPids().add((Integer)bundle.getInt("last_pid"));
+            }
+
+            //拿出user，然后把其他的都删掉
+            User u = (User) bundle.getSerializable("user");
+            bundle.clear();
+            bundle.putSerializable("user",u);
+            //若是从posto回来的，就取出route，然后把bundle里的route删掉。避免把它带到别的地方去。
+        }
 
         //继承地图的状态
         mapView = (MapView) findViewById(R.id.map);
@@ -278,7 +294,12 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         mButton_posto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                Intent i = new Intent(RouteActivity.this,CameraActivity.class);
+                bundle.putBoolean("is_in_route",true);
+                bundle.putInt("rid",route.getRid());
+                bundle.putSerializable("route",route);
+                i.putExtras(bundle);
+                startActivity(i);
             }
         });
 
@@ -326,9 +347,9 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                     draw();
                 }
 
-                //测试用：显示当前的list<position>的大小
-                TextView v = (TextView) findViewById(R.id.aalert);
-                v.setText(Integer.toString(route.location_list.size()));
+                //测试用：显示当前关于route对象的信息
+                alert();
+
 
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
@@ -337,6 +358,15 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 mLocationErrText.setText(errText);
             }
         }
+    }
+
+    private void alert() {//更改前台界面上的debug信息
+        TextView v = (TextView) findViewById(R.id.aalert);
+        String text = "location list size : " + Integer.toString(route.location_list.size());
+        text += '\n';
+        text += "posto list size : " + Integer.toString(route.getPids().size());
+        v.setText(text);
+
     }
 
     //在地图上绘制当前route对象的路线

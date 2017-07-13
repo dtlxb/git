@@ -10,17 +10,26 @@ import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.model.TResult;
 
 import java.io.File;
+import java.sql.Timestamp;
 
 public class CameraActivity extends TakePhotoActivity {
    //private static String intent_url= Environment.getExternalStorageDirectory()+ "/temp/"+System.currentTimeMillis() + ".jpg";
     //final private String lo = intent_url;
     private Bundle bundle;
+    private boolean is_in_route = false;    //是否在route里
+    private int rid;                        //如果在，则获得rid
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        //获得bundle
         this.bundle = this.getIntent().getExtras();
+
+        //判断这次posto是否在route里，若在，则取出rid
+        if (bundle.getBoolean("is_in_route")){
+            rid = bundle.getInt("rid");
+        }
+
         Long time = (Long)bundle.getLong("time");
         String location= Environment.getExternalStorageDirectory()+ "/temp/"+time+ ".jpg";
         //String location= lo;
@@ -34,6 +43,13 @@ public class CameraActivity extends TakePhotoActivity {
 
     @Override
     public void takeCancel() {
+        //在route中拍照的流程
+        if (this.bundle.getBoolean("is_in_route")){
+            CameraActivity.this.finish();
+        }
+
+
+        //默认拍照的流程
         Intent i = new Intent(CameraActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         Bundle intent_bundle = new Bundle();
         //test
@@ -57,6 +73,14 @@ public class CameraActivity extends TakePhotoActivity {
 
         this.bundle.putString("images",s);
         //this.bundle.putSerializable("time",time);
+
+        //route
+
+        //设置拍摄的时间
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        long time = timestamp.getTime();// 直接转换成long
+        bundle.putLong("time",time);
+
         i.putExtras(this.bundle);
         startActivity(i);
     }

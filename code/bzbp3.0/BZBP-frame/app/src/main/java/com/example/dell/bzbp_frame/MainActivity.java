@@ -102,9 +102,6 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
 
              // intent_bundle.putDouble("latitude",last_location.latitude);
             //    intent_bundle.putDouble("longitude",last_location.longitude);
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                long time = timestamp.getTime();// 直接转换成long
-                intent_bundle.putLong("time",time);
                 i.putExtras(intent_bundle);
                 startActivity(i);
             }
