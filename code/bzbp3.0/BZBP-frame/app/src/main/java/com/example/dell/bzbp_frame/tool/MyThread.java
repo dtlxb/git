@@ -36,7 +36,7 @@ public class MyThread extends Thread {
 
     private Integer rid ;
 
-    public int getRid() {
+    public Integer getRid() {
         return rid;
     }
 
