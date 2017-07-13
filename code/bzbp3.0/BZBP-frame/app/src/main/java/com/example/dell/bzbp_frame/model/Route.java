@@ -13,6 +13,8 @@ public class Route implements Serializable {
 
     public int rid;
     public String username;
+    public String name;
+
     public ArrayList<MyLatlng> location_list;
     public String comment;
     public Long start_time, end_time;
@@ -37,6 +39,14 @@ public class Route implements Serializable {
 
     public void setLocation_list(ArrayList<MyLatlng> location_list) {
         this.location_list = location_list;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {
