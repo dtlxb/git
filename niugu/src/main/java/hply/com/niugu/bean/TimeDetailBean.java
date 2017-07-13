@@ -5,14 +5,14 @@ import java.util.List;
 /**
  * Created by wangjd on 2016/6/22 0022.
  */
-public class TimeDetialBean {
+public class TimeDetailBean {
 
-    public TimeDetialBean() {
+    public TimeDetailBean() {
     }
 
     private int code;
 
-    private List<TimeDetialData> data ;
+    private List<TimeDetailData> data ;
 
     private String message;
 
@@ -22,10 +22,10 @@ public class TimeDetialBean {
     public int getCode(){
         return this.code;
     }
-    public void setData(List<TimeDetialData> data){
+    public void setData(List<TimeDetailData> data){
         this.data = data;
     }
-    public List<TimeDetialData> getData(){
+    public List<TimeDetailData> getData(){
         return this.data;
     }
     public void setMessage(String message){

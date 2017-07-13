@@ -5,9 +5,9 @@ import java.io.Serializable;
 /**
  * Created by wangjd on 2016/6/22 0022.
  */
-public class TimeDetialData implements Serializable {
+public class TimeDetailData implements Serializable {
 
-    public TimeDetialData() {
+    public TimeDetailData() {
     }
 
     private double last_price_change;

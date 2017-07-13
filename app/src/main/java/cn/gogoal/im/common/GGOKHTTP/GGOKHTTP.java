@@ -218,12 +218,12 @@ public class GGOKHTTP {
     public static final String DM_GET_ROE_BASE = "v1/dm/get_eps_base";
     public static final String DM_GET_ROE_RANG = "v1/dm/get_pe_range";
 
-    /*
-      * 自选股的删除
-      * group_id=0
-      * params token=4967b285a82244d296b807a8fea9bc77
-      * params full_codes:sh600340
-      * */
+    /**
+     * 自选股的删除
+     * group_id=0
+     * params token=4967b285a82244d296b807a8fea9bc77
+     * params full_codes:sh600340
+     */
     public static final String DELETE_MY_STOCKS = "v1/mystock/delete_stocks";
 
     /**
