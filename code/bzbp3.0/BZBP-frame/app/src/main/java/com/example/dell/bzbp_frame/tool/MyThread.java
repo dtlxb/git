@@ -312,7 +312,7 @@ public class MyThread extends Thread {
             urlConnection.connect();// 连接，从上述至此的配置必须要在connect之前完成，实际上它只是建立了一个与服务器的TCP连接
             Gson gson = new Gson();
             String jsonstr = gson.toJson(route);
-
+            LogUtil.d("1",jsonstr);
             //------------字符流写入数据------------
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流

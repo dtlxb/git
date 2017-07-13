@@ -16,11 +16,11 @@ public class Route implements Serializable {
     public ArrayList<MyLatlng> location_list;
     public String comment;
     public Long start_time, end_time;
-    public ArrayList<Posto> postos;
+    public ArrayList<Integer> pids;
 
     public Route(){
         location_list = new ArrayList<MyLatlng>();
-        postos = new ArrayList<Posto>();
+        pids = new ArrayList<Integer>();
     }
 
     public int getRid() {
@@ -59,6 +59,14 @@ public class Route implements Serializable {
         return start_time;
     }
 
+    public ArrayList<Integer> getPids() {
+        return pids;
+    }
+
+    public void setPids(ArrayList<Integer> pids) {
+        this.pids = pids;
+    }
+
     public void setStart_time(Long start_time) {
         this.start_time = start_time;
     }
@@ -71,12 +79,5 @@ public class Route implements Serializable {
         this.end_time = end_time;
     }
 
-    public ArrayList<Posto> getPostos() {
-        return postos;
-    }
-
-    public void setPostos(ArrayList<Posto> postos) {
-        this.postos = postos;
-    }
 
 }
