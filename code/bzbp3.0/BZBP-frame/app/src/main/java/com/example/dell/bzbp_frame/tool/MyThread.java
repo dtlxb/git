@@ -112,6 +112,7 @@ public class MyThread extends Thread {
         if(what==0){
             result= sendHttpPost_posto(getUrl,posto);
             rid = Integer.parseInt(result);
+
         }
         if(what==1){
             result= sendHttpPost (getUrl, user);
