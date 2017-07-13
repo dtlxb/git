@@ -5,11 +5,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 
 import org.simple.eventbus.Subscriber;
 
@@ -28,6 +30,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -179,8 +182,7 @@ public class InfomationTabFragment extends BaseFragment {
         new GGOKHTTP(params, apis.get(tabType), new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                /*int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         dataList.clear();
@@ -201,12 +203,32 @@ public class InfomationTabFragment extends BaseFragment {
                     xLayout.setStatus(XLayout.Empty);
                 } else {
                     xLayout.setStatus(XLayout.Error);
+                }*/
+                int code = JsonUtils.getIntValue(responseInfo, "code");
+                if (code == 0) {
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                        dataList.clear();
+                    }
+
+                    List<InfomationData.Data> datas =
+                            JsonUtils.parseJsonObject(responseInfo, InfomationData.class).getData();
+
+                    dataList.addAll(datas);
+                    adapter.setEnableLoadMore(true);
+                    adapter.loadMoreComplete();
+
+                    adapter.notifyDataSetChanged();
+
+                    xLayout.setStatus(XLayout.Success);
+                } else if (code == 1001) {
+                    xLayout.setStatus(XLayout.Empty);
+                } else {
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-//                KLog.e(msg);
                 if (xLayout != null && refreshlayout != null) {
                     xLayout.setStatus(XLayout.Error);
                 }

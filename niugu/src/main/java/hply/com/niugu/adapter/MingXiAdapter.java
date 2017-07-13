@@ -11,15 +11,15 @@ import java.util.List;
 
 import hply.com.niugu.R;
 import hply.com.niugu.StringUtils;
-import hply.com.niugu.bean.TimeDetialData;
+import hply.com.niugu.bean.TimeDetailData;
 
 /**
  * Created by wangjd on 2016/7/29 0029.
  */
 public class MingXiAdapter extends BaseAdapter {
-    List<TimeDetialData> lists;
+    List<TimeDetailData> lists;
 
-    public MingXiAdapter(List<TimeDetialData> lists) {
+    public MingXiAdapter(List<TimeDetailData> lists) {
         this.lists = lists;
     }
 

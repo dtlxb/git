@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 
 import org.simple.eventbus.Subscriber;
 
@@ -43,14 +44,15 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.fragment.copy.TimesFragment;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.PieView;
 import cn.gogoal.im.ui.view.ProgressBarView;
 import cn.gogoal.im.ui.view.XLayout;
-import hply.com.niugu.bean.TimeDetialBean;
-import hply.com.niugu.bean.TimeDetialData;
+import hply.com.niugu.bean.TimeDetailBean;
+import hply.com.niugu.bean.TimeDetailData;
 
 
 /**
@@ -80,7 +82,7 @@ public class TreatFragment extends BaseFragment {
 
     //===================明细=====================
     private MingxiAdapter mingxiAdapter;
-    private List<TimeDetialData> timeDetailDatas;
+    private List<TimeDetailData> timeDetailDatas;
     private boolean fromStockDetail;
     private int type;
 
@@ -229,7 +231,7 @@ public class TreatFragment extends BaseFragment {
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
 
-                    if (isAdded() && progressView!=null) {
+                    if (isAdded() && progressView != null) {
                         progressView.setTextSize(AppDevice.dp2px(9));
                         progressView.setChartData(chartBeanList, needAnim);
                     }
@@ -300,9 +302,9 @@ public class TreatFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    timeDetailDatas.clear();
-                    List<TimeDetialData> cacheData =
-                            JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
+                    //timeDetailDatas.clear();
+                    List<TimeDetailData> cacheData =
+                            JSONObject.parseObject(responseInfo, TimeDetailBean.class).getData();
                     if (fromStockDetail && cacheData.size() >= 8) {
                         timeDetailDatas.addAll(cacheData.subList(0, 8));
                     } else {
@@ -310,6 +312,17 @@ public class TreatFragment extends BaseFragment {
                     }
                     mingxiAdapter.notifyDataSetChanged();
                 }
+//                JsonObject result = JsonUtils.toJsonObject(responseInfo);
+//                if (JsonUtils.getIntValue(result, "code") == 0) {
+//                    List<TimeDetailData> cacheData =
+//                            JsonUtils.parseJsonObject(responseInfo, TimeDetailBean.class).getData();
+//                    if (fromStockDetail && cacheData.size() >= 8) {
+//                        timeDetailDatas.addAll(cacheData.subList(0, 8));
+//                    } else {
+//                        timeDetailDatas.addAll(cacheData);
+//                    }
+//                    mingxiAdapter.notifyDataSetChanged();
+//                }
             }
 
             public void onFailure(String msg) {
@@ -378,10 +391,10 @@ public class TreatFragment extends BaseFragment {
         }
 
         int width = (int) (percent * AppDevice.getWidth(getActivity()));
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, width - AppDevice.dp2px( 22));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, width - AppDevice.dp2px(22));
         pieView.setLayoutParams(params);
-        pieView.setMarginLeft(AppDevice.dp2px( 16));
-        pieView.setMarginRight(AppDevice.dp2px( 18));
+        pieView.setMarginLeft(AppDevice.dp2px(16));
+        pieView.setMarginRight(AppDevice.dp2px(18));
 
         pieDatas.clear();
         for (int i = moneyDatas.size() - 1; i > -1; i--) {
@@ -486,14 +499,14 @@ public class TreatFragment extends BaseFragment {
         }
     }
 
-    private class MingxiAdapter extends CommonAdapter<TimeDetialData, BaseViewHolder> {
+    private class MingxiAdapter extends CommonAdapter<TimeDetailData, BaseViewHolder> {
 
-        private MingxiAdapter(List<TimeDetialData> data) {
+        private MingxiAdapter(List<TimeDetailData> data) {
             super(R.layout.item_treat_3_text, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, TimeDetialData data, int position) {
+        protected void convert(BaseViewHolder holder, TimeDetailData data, int position) {
             View view = holder.getView(R.id.item_view);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

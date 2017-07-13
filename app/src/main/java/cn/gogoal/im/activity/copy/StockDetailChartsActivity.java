@@ -39,8 +39,8 @@ import cn.gogoal.im.fragment.copy.TimesFragment;
 import cn.gogoal.im.ui.stock.KChartsView;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.ProgressWheel;
-import hply.com.niugu.bean.TimeDetialBean;
-import hply.com.niugu.bean.TimeDetialData;
+import hply.com.niugu.bean.TimeDetailBean;
+import hply.com.niugu.bean.TimeDetailData;
 import hply.com.niugu.stock.StockMinuteData;
 
 
@@ -438,8 +438,8 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             @Override
             public void onSuccess(String responseInfo) {
                 if (responseInfo != null && JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-//                    setListview(JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData());
-                    List<TimeDetialData> data = JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
+//                    setListview(JSONObject.parseObject(responseInfo, TimeDetailBean.class).getData());
+                    List<TimeDetailData> data = JSONObject.parseObject(responseInfo, TimeDetailBean.class).getData();
                     String time = data.get(0).getUpdate_time();
                     tv_time.setText(time.substring(10, time.lastIndexOf(":")));
                     AppManager.getInstance().sendMessage("updata_list", responseInfo);

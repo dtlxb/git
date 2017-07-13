@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
@@ -89,6 +90,7 @@ public class MyStockNewsFragment extends BaseFragment {
                 getStockNews(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.refreshComplete();
             }
+
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
 //                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
@@ -150,10 +152,10 @@ public class MyStockNewsFragment extends BaseFragment {
                     xLayout.setStatus(XLayout.Success);
 
                 } else if (code == 1001) {
-                    if (refreshType!=AppConst.REFRESH_TYPE_LOAD_MORE) {
+                    if (refreshType != AppConst.REFRESH_TYPE_LOAD_MORE) {
                         xLayout.setStatus(XLayout.Empty);
-                    }else {
-                        UIHelper.toast(getActivity(),"没有更多");
+                    } else {
+                        UIHelper.toast(getActivity(), "没有更多");
                     }
                 } else {
                     xLayout.setStatus(XLayout.Error);
@@ -162,8 +164,8 @@ public class MyStockNewsFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                if (xLayout!=null)
-                xLayout.setStatus(XLayout.Error);
+                if (xLayout != null)
+                    xLayout.setStatus(XLayout.Error);
             }
         }).startGet();
 
@@ -178,13 +180,13 @@ public class MyStockNewsFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final MyStockNewsBean.MyStockNews data, int position) {
-            holder.setText(R.id.tv_mystock_news_title,data.getTitle());
+            holder.setText(R.id.tv_mystock_news_title, data.getTitle());
             holder.setText(R.id.tv_mystock_news_stockInfo,
                     data.getStock_name() + " (" + data.getStock_code() + ")");
             holder.setText(R.id.tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
             UIHelper.setRippBg(holder.itemView);
 
-            holder.setText(R.id.tv_mystock_news_source,data.getOrigin());
+            holder.setText(R.id.tv_mystock_news_source, data.getOrigin());
 
             holder.setText(R.id.tv_mystock_news_stockRate,
                     StringUtils.save2Significand(data.getPrice()) + "\u3000\u3000" +
@@ -199,7 +201,7 @@ public class MyStockNewsFragment extends BaseFragment {
                 public void onClick(View v) {
                     NormalIntentUtils.go2WebActivity(
                             v.getContext(),
-                            AppConst.WEB_NEWS + data.getOrigin_id() + "?source="+AppConst.SOURCE_TYPE_NEWS,
+                            AppConst.WEB_NEWS + data.getOrigin_id() + "?source=" + AppConst.SOURCE_TYPE_NEWS,
                             null,
                             true);
                 }
