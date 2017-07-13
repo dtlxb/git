@@ -22,7 +22,7 @@ public class CameraActivity extends TakePhotoActivity {
 
         this.bundle = this.getIntent().getExtras();
         Long time = (Long)bundle.getLong("time");
-       String location= Environment.getExternalStorageDirectory()+ "/temp/"+time+ ".jpg";
+        String location= Environment.getExternalStorageDirectory()+ "/temp/"+time+ ".jpg";
         //String location= lo;
 
         File file=new File(location);

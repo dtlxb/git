@@ -47,7 +47,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                //改到了main。为了方便不登录就测试功能。
                 Intent i = new Intent(LoginActivity.this,RegisterActivity.class);
+                //Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                //Bundle b = new Bundle();
+                //b.putSerializable("user",new User(-1,"developer","d","d"));
+                //i.putExtras(b);
                 startActivity(i);
             }
         });

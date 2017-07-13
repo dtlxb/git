@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
 import com.example.dell.bzbp_frame.model.MyLatlng;
 import com.example.dell.bzbp_frame.model.Route;
+import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
 import java.sql.Timestamp;
@@ -58,9 +60,15 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     //这次route所形成的Route对象
     private Route route = null;
 
+    //在地图上绘制的路线
+    private Polyline polyline = null;
+
     //信号值，只有在该值为true的时候才会记录位置。用户通过操作ui可以进行开|关。
-    private boolean is_locating = true;
+    private boolean is_locating = false;
+
+
     public static String ip="192.168.1.97:8080/BookStore";
+
     //定位功能所用
     private TextView mLocationErrText;
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
@@ -118,16 +126,35 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         if (route==null){
             route = new Route();
 
-            //要在这里初始化Route的start（开始时间）。
-            route.setStart_time(new Timestamp(System.currentTimeMillis()).getTime());
-
             //测试用：为route插入初始值
             //route.location_list.add(new LatLng(31.03,121.43));
             route.location_list.add(new MyLatlng(31.03,121.44));
+
+            //在这里把route发送过去，并拿回rid
+            MyThread myThread1 = new MyThread();
+            myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
+            myThread1.setWhat(3);
+            myThread1.setRoute(route);
+            myThread1.start();
+            try {
+                myThread1.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //赋值rid
+            if (myThread1.getRid()!=null){
+                route.setRid(myThread1.getRid());
+            }
+
+            //赋值username
+            User u = (User) this.getIntent().getExtras().getSerializable("user");
+            route.setUsername(u.getUsername());
+
         }
         else{//若在bundle里找到了route，则需要重新画一次
 
-            draw();
+            //draw();
         }
 
         //初始化按钮
@@ -199,6 +226,9 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             @Override
             public void onClick(View v){
                 is_locating = true;
+                if (route.getStart_time()==null){//第一次时，要在这里初始化Route的start（开始时间）。
+                    route.setStart_time(new Timestamp(System.currentTimeMillis()).getTime());
+                }
             }
         });
 
@@ -213,11 +243,14 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
                 //在这里设置结束时间（route.end）
                 //
+                if (route.getEnd_time()==null){//第一次时，要在这里初始化Route的start（开始时间）。
+                    route.setEnd_time(new Timestamp(System.currentTimeMillis()).getTime());
+                }
 
                 //Route对象在这里传到下个Activity，并在那里设置comment和name
                 // （name是不是要在一开始的时候先设置一下？）
                 //
-              MyThread myThread1 = new MyThread();
+                MyThread myThread1 = new MyThread();
                 myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
                 myThread1.setWhat(3);
                 myThread1.setRoute(route);
@@ -284,6 +317,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                     route.location_list.add(last_location);
 
                     //在地图上更新route的绘制
+
                     draw();
                 }
 
@@ -302,14 +336,21 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
     //在地图上绘制当前route对象的路线
     public void draw(){
+
+        if (polyline!=null)polyline.remove();
+
         ArrayList<LatLng> draw_list = new ArrayList<LatLng>();
         for (int i = 0;i<route.location_list.size();i++){
             draw_list.add(route.location_list.get(i).toLatlng());
         }
-        Polyline polyline = aMap.addPolyline(new PolylineOptions().
+        polyline = aMap.addPolyline(new PolylineOptions().
                 addAll(draw_list).width(10).color(Color.argb(100, 1, 80, 255)));
     }
 
+    public void drawOne(LatLng location){//在现有路线基础上追加一个点
+        Polyline polyline = aMap.addPolyline(new PolylineOptions().
+                add(location).width(10).color(Color.argb(100, 1, 80, 255)));
+    }
 
     /**
      * 激活定位并进行相关设置（不要改！！
