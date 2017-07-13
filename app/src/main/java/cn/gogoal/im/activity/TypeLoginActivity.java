@@ -31,6 +31,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.LaunchRequest;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
@@ -85,6 +86,13 @@ public class TypeLoginActivity extends BaseActivity {
         loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
         UIHelper.passwordToggle(loginPassWord, chToggle);
         initLoginInfo();
+
+        String name = SPTools.getString("USER_LOGIN_HISTORY_NAME", "");
+        String psw = SPTools.getString("USER_LOGIN_HISTORY_PSW", "");
+        if (!StringUtils.isActuallyEmpty(name) && !StringUtils.isActuallyEmpty(psw)) {
+            loginUserName.setText(name);
+            loginPassWord.setText(StringUtils.decode(psw));
+        }
     }
 
     private void initLoginInfo() {
@@ -133,8 +141,8 @@ public class TypeLoginActivity extends BaseActivity {
         loginDialog.show(getSupportFragmentManager());
         loginDialog.setCancelable(false);
 
-        String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
-        String word = loginPassWord.getText().toString();
+        final String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
+        final String word = loginPassWord.getText().toString();
 
         if (TextUtils.isEmpty(word) || TextUtils.isEmpty(name)) {
             UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
@@ -193,8 +201,8 @@ public class TypeLoginActivity extends BaseActivity {
                                     if (e == null) {
 
                                         LaunchRequest.init();//初始化缓存数据
-
                                         startActivity(intent);
+                                        saveUserLoginHistory(name, word);
                                         PushService.subscribe(TypeLoginActivity.this, data.getString("account_id"), MainActivity.class);
                                         finish();
                                     } else {
@@ -247,6 +255,14 @@ public class TypeLoginActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_USER_LOGIN, ggHttpInterface).startGet();
+    }
+
+
+    private void saveUserLoginHistory(String name, String paw) {
+        //保存用户名到本地
+        SPTools.saveString("USER_LOGIN_HISTORY_NAME", name);
+        //加密保存用户密码
+        SPTools.saveString("USER_LOGIN_HISTORY_PSW", StringUtils.encryption(paw));
     }
 
 }

@@ -27,7 +27,7 @@ import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.DashlineItemDivider;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -65,13 +65,10 @@ public class FocusNewsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(final Context mContext) {
-        iniList();
-    }
-
-    private void iniList() {
         rvNews.setBackgroundColor(Color.WHITE);
         rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvNews.addItemDecoration(new DashlineItemDivider());
+//        rvNews.addItemDecoration(new DashlineItemDivider());
+        rvNews.addItemDecoration(new NormalItemDecoration(mContext));
 
         dataList = new ArrayList<>();
         adapter = new FocusNewsAdapter(dataList);

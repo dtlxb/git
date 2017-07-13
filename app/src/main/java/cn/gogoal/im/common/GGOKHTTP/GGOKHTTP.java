@@ -5,10 +5,12 @@ import android.util.Log;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
+import cn.gogoal.im.common.FileUtil;
 import okhttp3.Call;
 
 /**
@@ -1081,7 +1083,7 @@ public class GGOKHTTP {
     }
 
     public void startGet() {
-        String baseUrl;
+        final String baseUrl;
         try {
             baseUrl = GGAPI.get(url, param);
             OkHttpUtils.get()
@@ -1097,15 +1099,17 @@ public class GGOKHTTP {
                         @Override
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
-                                JSONObject jsonObject;
+
                                 try {
-                                    jsonObject = new JSONObject(response);
+                                    JSONObject jsonObject = new JSONObject(response);
                                     if (!jsonObject.isNull("code")) {
                                         httpInterface.onSuccess(response);
                                     } else {
                                         httpInterface.onFailure("最外层没有code字段");
                                     }
-                                } catch (Exception e) {
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    FileUtil.writeRequestResponse(e.getMessage(), "gogoal_" + baseUrl + "_" + System.currentTimeMillis() + ".txt");
                                     Log.e("TAG", "==操作出错==" + e.getMessage() + "==出错接口：" + url + "==");
                                     httpInterface.onFailure("出错了！");
                                     e.printStackTrace();
@@ -1115,6 +1119,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
+            FileUtil.writeRequestResponse("出错接口="+url+"；异常"+e.getMessage(), "gogoal_"+ + System.currentTimeMillis() + ".txt");
             Log.e("TAG", "==出错日志==" + e.getMessage() + "==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }

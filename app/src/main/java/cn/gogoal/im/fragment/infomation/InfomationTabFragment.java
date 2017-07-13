@@ -34,7 +34,7 @@ import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.DashlineItemDivider;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -99,7 +99,8 @@ public class InfomationTabFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         mRvInfomation.setBackgroundColor(Color.WHITE);
         mRvInfomation.setLayoutManager(new LinearLayoutManager(mContext));
-        mRvInfomation.addItemDecoration(new DashlineItemDivider());
+//        mRvInfomation.addItemDecoration(new DashlineItemDivider());
+        mRvInfomation.addItemDecoration(new NormalItemDecoration(mContext));
 
         dataList = new ArrayList<>();
         adapter = new NormalInfoTabAdapter(dataList);

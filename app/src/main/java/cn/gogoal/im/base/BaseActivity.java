@@ -83,7 +83,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-//        catcher();
+        catcher();
 
         ButterKnife.bind(this);
 

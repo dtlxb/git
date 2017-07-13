@@ -382,7 +382,6 @@
     </style>
 
     <style name="InfomationTabTextStyle" parent="TextAppearance.AppCompat">
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">15sp</item>
     </style>
 </resources>

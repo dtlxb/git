@@ -100,7 +100,11 @@ public class SevenBy24Fragment extends BaseFragment {
             public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+                if (tvNewMessageCount != null && tvNewMessageCount.getVisibility() == View.VISIBLE) {
+                    tvNewMessageCount.setVisibility(View.GONE);
+                }
             }
+
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
 //                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
@@ -172,6 +176,7 @@ public class SevenBy24Fragment extends BaseFragment {
                     adapter.setEnableLoadMore(true);
                     adapter.loadMoreComplete();
                     adapter.notifyDataSetChanged();
+
                     xLayout.setStatus(XLayout.Success);
 
                 } else if (code == 1001) {
@@ -189,14 +194,14 @@ public class SevenBy24Fragment extends BaseFragment {
                     public void run() {
                         refreshlayout.refreshComplete();
                     }
-                },800);
+                }, 800);
 
             }
 
             @Override
             public void onFailure(String msg) {
-                if (refreshlayout!=null)
-                refreshlayout.refreshComplete();
+                if (refreshlayout != null)
+                    refreshlayout.refreshComplete();
                 UIHelper.toastError(getContext(), msg, xLayout);
             }
         }).startGet();
@@ -216,7 +221,7 @@ public class SevenBy24Fragment extends BaseFragment {
                     long oldCount = SPTools.getLong("new_message_count", 0);
 
                     //首次存储
-                    if (oldCount==0){
+                    if (oldCount == 0) {
                         SPTools.saveLong("new_message_count", count);
                     }
 

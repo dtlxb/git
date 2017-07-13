@@ -25,8 +25,8 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.stock.news_report.bean.MyStockReportBean;
-import cn.gogoal.im.ui.DashlineItemDivider;
+import cn.gogoal.im.bean.stock.MyStockReportBean;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -78,7 +78,8 @@ public class MyStockReportFragment extends BaseFragment {
                         LinearLayoutManager.VERTICAL,
                         false));
 
-        recyclerView.addItemDecoration(new DashlineItemDivider());
+//        recyclerView.addItemDecoration(new DashlineItemDivider());
+        recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
 
         reportList = new ArrayList<>();
         reportAdapter = new MyStockReportAdapter(reportList);

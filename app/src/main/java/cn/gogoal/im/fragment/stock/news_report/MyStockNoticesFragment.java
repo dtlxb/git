@@ -26,8 +26,8 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.stock.news_report.bean.MyStockNoticeBean;
-import cn.gogoal.im.ui.DashlineItemDivider;
+import cn.gogoal.im.bean.stock.MyStockNoticeBean;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -76,7 +76,8 @@ public class MyStockNoticesFragment extends BaseFragment {
 
         noticeDatas = new ArrayList<>();
         noticeAdapter = new MyStockNoticeAdapter(noticeDatas);
-        rvNotices.addItemDecoration(new DashlineItemDivider());
+//        rvNotices.addItemDecoration(new DashlineItemDivider());
+        rvNotices.addItemDecoration(new NormalItemDecoration(mContext));
         rvNotices.setLayoutManager(new LinearLayoutManager(mContext));
         rvNotices.setAdapter(noticeAdapter);
         xLayout.setEmptyText("暂无公告数据\n请添加自选股后重试!");

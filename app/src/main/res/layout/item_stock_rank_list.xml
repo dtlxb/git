@@ -19,13 +19,15 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <TextView
+        <hply.com.niugu.autofixtext.AutofitTextView
             android:id="@+id/tv_mystock_stockname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/default_char"
+            android:singleLine="true"
             android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:sizeToFit="true"/>
 
         <TextView
             android:id="@+id/tv_mystock_stockcode"

@@ -27,8 +27,8 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.stock.news_report.bean.MyStockNewsBean;
-import cn.gogoal.im.ui.DashlineItemDivider;
+import cn.gogoal.im.bean.stock.MyStockNewsBean;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -75,7 +75,8 @@ public class MyStockNewsFragment extends BaseFragment {
         groupId = getArguments().getInt("group_id");
         stockNewsDatas = new ArrayList<>();
         newsAdapter = new MyStockNewsAdapter(stockNewsDatas);
-        rvNews.addItemDecoration(new DashlineItemDivider());
+//        rvNews.addItemDecoration(new DashlineItemDivider());
+        rvNews.addItemDecoration(new NormalItemDecoration(mContext));
         rvNews.setLayoutManager(new LinearLayoutManager(mContext));
         rvNews.setAdapter(newsAdapter);
 
@@ -143,7 +144,6 @@ public class MyStockNewsFragment extends BaseFragment {
                     }
                     List<MyStockNewsBean.MyStockNews> myStockNewses =
                             JSONObject.parseObject(responseInfo, MyStockNewsBean.class).getData();
-
                     stockNewsDatas.addAll(myStockNewses);
 
                     newsAdapter.notifyDataSetChanged();

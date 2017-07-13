@@ -106,7 +106,7 @@ public class StringUtils {
     public static String encryption(String str) {
         StringBuilder stringBuffer = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
-            char c = (char) (str.charAt(i) ^ 'G');
+            char c = (char) (str.charAt(i) ^ 'W');
             stringBuffer.append(c);
         }
         return stringBuffer.toString();
@@ -118,7 +118,7 @@ public class StringUtils {
     public static String decode(String str) {
         StringBuilder stringBuffer = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
-            char c = (char) (str.charAt(i) ^ 'w');
+            char c = (char) (str.charAt(i) ^ 'W');
             stringBuffer.append(c);
         }
         return stringBuffer.toString();
