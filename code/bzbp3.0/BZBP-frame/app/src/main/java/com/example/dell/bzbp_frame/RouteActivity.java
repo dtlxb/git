@@ -320,7 +320,8 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 bundle.putBoolean("is_in_route",true);
                 bundle.putInt("rid",route.getRid());
                 bundle.putSerializable("route",route);
-
+                bundle.putDouble("latitude",last_location.latitude);
+                bundle.putDouble("longitude",last_location.longitude);
                 //时间
                 bundle.putLong("time",new Timestamp(System.currentTimeMillis()).getTime());
 
