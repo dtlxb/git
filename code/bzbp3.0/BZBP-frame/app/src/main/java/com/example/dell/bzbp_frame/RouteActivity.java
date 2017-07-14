@@ -1,5 +1,7 @@
 package com.example.dell.bzbp_frame;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -106,6 +108,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         setContentView(R.layout.activity_route);
 
         bundle = this.getIntent().getExtras();
+
         if (bundle.getSerializable("route")!=null){
             //拿出route，并加入新的pid
             route = (Route)bundle.getSerializable("route");
@@ -184,6 +187,21 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         //保持高亮，禁止自动锁屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //TODO something
+        new AlertDialog.Builder(this).setTitle("Warnning").setMessage("route信息将不会被保存，确认退出？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog,int whichButton){
+                        Intent i = new Intent(RouteActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Bundle intent_bundle = new Bundle();
+                        intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                        i.putExtras(intent_bundle);
+                        startActivity(i);
+                    }
+                }).show();
     }
 
     /**、
