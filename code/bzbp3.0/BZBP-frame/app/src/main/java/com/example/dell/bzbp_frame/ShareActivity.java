@@ -118,6 +118,7 @@ public class ShareActivity extends Activity {
                 temp.setImage(url);
 
 
+
                 temp.setLatitude((Double)bundle.getDouble("latitude"));
                 temp.setLongitude((Double)bundle.getDouble("longitude"));
 
