@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <Button
+ <!--   <Button
         android:id="@+id/button_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test"/>
+        android:text="test"/> -->
     <Button
         android:id="@+id/button_menu_search_posto"
         android:layout_width="match_parent"

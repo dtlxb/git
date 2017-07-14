@@ -67,14 +67,16 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
 
         //用户信息
         final Bundle bundle = this.getIntent().getExtras();
-        //测试
+        //测试用户信息
+
         User user = new User();
         user.setUsername(((User)bundle.getSerializable("user")).getUsername());
         user.setPassword(((User)bundle.getSerializable("user")).getPassword());
+/*
         TextView test_username = (TextView) findViewById(R.id.test_username);
         TextView test_password = (TextView) findViewById(R.id.test_password);
         test_username.setText(user.getUsername());
-        test_password.setText(user.getPassword());
+        test_password.setText(user.getPassword());*/
 
 
         this.findViewById(R.id.button_main_menu).setOnClickListener(new View.OnClickListener() {
@@ -85,8 +87,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 intent_bundle.putSerializable("user",bundle.getSerializable("user"));
                 //获取位置信息 Double latitude,longitude
 
-                //intent_bundle.putDouble("latitude",last_location.latitude);
-                //intent_bundle.putDouble("longitude",last_location.longitude);
+                intent_bundle.putDouble("latitude",last_location.latitude);
+                intent_bundle.putDouble("longitude",last_location.longitude);
                 i.putExtras(intent_bundle);
                 startActivity(i);
             }

@@ -282,17 +282,24 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
                 //在这里设置结束时间（route.end）
                 //
-                if (route.getEnd_time()==null){//第一次时，要在这里初始化Route的start（开始时间）。
+                if (route.getEnd_time()==null){
                     route.setEnd_time(new Timestamp(System.currentTimeMillis()).getTime());
                 }
 
                 //Route对象在这里传到下个Activity，并在那里设置comment和name
                 // （name是不是要在一开始的时候先设置一下？）
                 //
+                Intent i = new Intent(RouteActivity.this,RouteConfirmActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("route",route);
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                i.putExtras(intent_bundle);
+                startActivity(i);
 
 
                 //测试：把route发给服务器
                 //已成功
+                /*
                 MyThread myThread1 = new MyThread();
                 myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
                 myThread1.setWhat(3);
@@ -304,7 +311,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                */
 
 
             }
