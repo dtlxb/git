@@ -30,6 +30,7 @@ public class CameraActivity extends TakePhotoActivity {
             rid = bundle.getInt("rid");
         }
 
+        //为了命名方便，从之前的activity里获得time
         Long time = (Long)bundle.getLong("time");
         String location= Environment.getExternalStorageDirectory()+ "/temp/"+time+ ".jpg";
         //String location= lo;
@@ -76,7 +77,7 @@ public class CameraActivity extends TakePhotoActivity {
 
         //route
 
-        //设置拍摄的时间
+        //设置拍摄的时间,这个时间替换掉之前的time，它将会被存进数据库。
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         long time = timestamp.getTime();// 直接转换成long
         bundle.putLong("time",time);

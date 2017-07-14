@@ -99,9 +99,12 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 Bundle intent_bundle = new Bundle();
                 intent_bundle.putSerializable("user",bundle.getSerializable("user"));
                 //获取位置信息 Double latitude,longitude
+                //intent_bundle.putDouble("latitude",last_location.latitude);
+                //intent_bundle.putDouble("longitude",last_location.longitude);
 
-             // intent_bundle.putDouble("latitude",last_location.latitude);
-            //    intent_bundle.putDouble("longitude",last_location.longitude);
+                //时间
+                intent_bundle.putLong("time",new Timestamp(System.currentTimeMillis()).getTime());
+
                 i.putExtras(intent_bundle);
                 startActivity(i);
             }

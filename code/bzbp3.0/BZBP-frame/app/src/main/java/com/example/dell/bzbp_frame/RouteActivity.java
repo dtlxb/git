@@ -191,7 +191,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
     @Override
     public void onBackPressed() {
-        //TODO something
+        //重写back键，增加确认步骤
         new AlertDialog.Builder(this).setTitle("Warnning").setMessage("route信息将不会被保存，确认退出？")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog,int whichButton){
@@ -289,6 +289,10 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 //Route对象在这里传到下个Activity，并在那里设置comment和name
                 // （name是不是要在一开始的时候先设置一下？）
                 //
+
+
+                //测试：把route发给服务器
+                //已成功
                 MyThread myThread1 = new MyThread();
                 myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
                 myThread1.setWhat(3);
@@ -316,6 +320,10 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 bundle.putBoolean("is_in_route",true);
                 bundle.putInt("rid",route.getRid());
                 bundle.putSerializable("route",route);
+
+                //时间
+                bundle.putLong("time",new Timestamp(System.currentTimeMillis()).getTime());
+
                 i.putExtras(bundle);
                 startActivity(i);
             }
