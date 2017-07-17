@@ -94,11 +94,6 @@ public class SearchPostoActivity extends ListActivity{
 
     }
 
-    /**
-     * listview中点击按键弹出对话框
-     */
-
-
     public final class ViewHolder{
         public ImageView img;
         public TextView name;
