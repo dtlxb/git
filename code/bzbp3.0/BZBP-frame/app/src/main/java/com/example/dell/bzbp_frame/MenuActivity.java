@@ -48,5 +48,20 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        this.findViewById(R.id.button_menu_search_route).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent i = new Intent(MenuActivity.this,SearchRouteActivity.class);
+                Bundle intent_bundle = new Bundle();
+
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                //intent_bundle.putDouble("latitude",bundle.getDouble("latitude"));
+                //intent_bundle.putDouble("longitude",bundle.getDouble("longitude"));
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
     }
 }

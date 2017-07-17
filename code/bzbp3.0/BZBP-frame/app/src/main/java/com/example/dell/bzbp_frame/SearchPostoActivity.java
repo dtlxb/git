@@ -1,14 +1,23 @@
 package com.example.dell.bzbp_frame;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.tool.MyThread;
@@ -23,14 +32,15 @@ public class SearchPostoActivity extends ListActivity{
     public static String ip = "192.168.1.97:8080/BookStore";
 
     private ListView listview;
+    private List<Map<String, Object>> mData;
     private ArrayList<Posto> resultlist = new ArrayList<Posto>();
-
+    private Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        final Bundle bundle = this.getIntent().getExtras();
+        bundle = this.getIntent().getExtras();
 
         Posto temp = new Posto();
 
@@ -50,84 +60,10 @@ public class SearchPostoActivity extends ListActivity{
         }
         final String a = "/storage/emulated/0/temp/1111.jpg";
         resultlist = myThread1.getPostos();
-        //Bitmap bit;
-        //String picture = resultlist.get(0).getImage();
-        //byte[] decodedString = Base64.decode(picture, Base64.DEFAULT);
-        //bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-
-
-       /* FileOutputStream foutput = null;
-        try {
-
-            File fileImg = new File(a);
-            if (fileImg.exists()) {
-                fileImg.delete();
-            }
-
-            foutput = new FileOutputStream(fileImg);
-            bit.compress(Bitmap.CompressFormat.PNG, 100, foutput); // 压缩图片
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Bitmap bmap = BitmapFactory.decodeFile(a);*/
-        //test_image = (ImageView) findViewById(R.id.test_search);
-        //test_image.setImageBitmap(bit);
-    //}
-
-
-/*
-        Posto temp = new Posto();
-
-
-        Bitmap bitmap = BitmapFactory.decodeFile("/storage/emulated/0/temp/1499672062863.jpg");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        try {
-            baos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        byte[] appicon =  baos.toByteArray();// 转为byte数组
-        temp.setImage(Base64.encodeToString(appicon, 0, appicon.length,Base64.NO_WRAP));
-        temp.setName("name");
-        temp.setComment("comment");
-        temp.setUsername("username");
-        temp.setDate(123L);
-        resultlist.add(temp);*/
-
-            SimpleAdapter adapter = new SimpleAdapter(this,getData(),R.layout.postolist,
-                    new String[]{"postolist_image",
-                            "postolist_name","postolist_comment",
-                            "postolist_username","postolist_date"},
-                    new int[]{
-                            R.id.postolist_image,
-                            R.id.postolist_name,
-                            R.id.postolist_comment,
-                            R.id.postolist_username,
-                            R.id.postolist_date
-                            });
-
-            adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-
-                @Override
-                public boolean setViewValue(View view, Object data,
-                                            String textRepresentation) {
-                    if (view instanceof ImageView && data instanceof Bitmap) {
-                        ImageView iv = (ImageView) view;
-
-                        iv.setImageBitmap((Bitmap) data);
-                        return true;
-                    }
-                    return false;
-                }
-            });
+        mData = getData();
+        MyAdapter adapter = new MyAdapter(this);
         setListAdapter(adapter);
-        }
-
-
+    }
 
     private List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -151,5 +87,102 @@ public class SearchPostoActivity extends ListActivity{
 
         return list;
     }
+
+    // ListView 中某项被选中后的逻辑
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+
+    }
+
+    /**
+     * listview中点击按键弹出对话框
+     */
+
+
+    public final class ViewHolder{
+        public ImageView img;
+        public TextView name;
+        public TextView comment;
+        public TextView username;
+        public TextView date;
+        public Button viewBtn;
+    }
+
+
+    public class MyAdapter extends BaseAdapter {
+
+        private LayoutInflater mInflater;
+
+
+        public MyAdapter(Context context){
+            this.mInflater = LayoutInflater.from(context);
+        }
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return mData.size();
+        }
+
+        @Override
+        public Object getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final Posto temp = resultlist.get(position);
+            ViewHolder holder = null;
+            if (convertView == null) {
+
+                holder=new ViewHolder();
+
+                convertView = mInflater.inflate(R.layout.postolist, null);
+                holder.img = (ImageView)convertView.findViewById(R.id.postolist_image);
+                holder.name = (TextView)convertView.findViewById(R.id.postolist_name);
+                holder.comment = (TextView)convertView.findViewById(R.id.postolist_comment);
+                holder.username = (TextView)convertView.findViewById(R.id.postolist_username);
+                holder.viewBtn = (Button)convertView.findViewById(R.id.postolist_button);
+                convertView.setTag(holder);
+
+            }else {
+
+                holder = (ViewHolder)convertView.getTag();
+            }
+
+
+            holder.img.setImageBitmap((Bitmap)mData.get(position).get("postolist_image"));
+            holder.name.setText((String)mData.get(position).get("postolist_name"));
+            holder.comment.setText((String)mData.get(position).get("postolist_comment"));
+            holder.username.setText((String)mData.get(position).get("postolist_username"));
+            holder.viewBtn.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(SearchPostoActivity.this,PostoDetailActivity.class);
+                    Bundle intent_bundle = new Bundle();
+
+                    intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                    intent_bundle.putSerializable("posto",temp);
+                    i.putExtras(intent_bundle);
+                    startActivity(i);
+                }
+            });
+
+
+            return convertView;
+        }
+
+    }
+
+
+
+
 
 }

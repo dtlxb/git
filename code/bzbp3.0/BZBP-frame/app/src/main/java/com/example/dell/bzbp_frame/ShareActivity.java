@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dell.bzbp_frame.model.Posto;
+import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
@@ -38,7 +39,7 @@ public class ShareActivity extends Activity {
         //获取user
         User user = (User)bundle.getSerializable("user");
         //获取照片在手机中的路径并生成bitmap
-     String image_path = (String) bundle.getString("images");
+        String image_path = (String) bundle.getString("images");
        // String image_path = Environment.getExternalStorageDirectory()+"/temp/1499824307256.jpg";
         FileInputStream fis = null;
         try {
@@ -101,6 +102,8 @@ public class ShareActivity extends Activity {
                 temp.setName(editText_name.getText().toString());
                 temp.setComment(editText_comment.getText().toString());
 
+                //对于route过程中的posto，设置其belong_rid
+                if (bundle.getBoolean("is_in_route"))temp.setBelong_rid(bundle.getInt("rid"));
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -113,6 +116,7 @@ public class ShareActivity extends Activity {
                 byte[] appicon =  baos.toByteArray();// 转为byte数组
                 String url = Base64.encodeToString(appicon, Base64.NO_WRAP);
                 temp.setImage(url);
+
 
 
                 temp.setLatitude((Double)bundle.getDouble("latitude"));
@@ -132,6 +136,11 @@ public class ShareActivity extends Activity {
                     e.printStackTrace();
                 }
 
+                int last_pid = -1;
+                if (myThread1.getRid()!=null){
+                    last_pid = myThread1.getRid().intValue();//本次新posto的id
+                }
+
                 //------------------------------------------------
                 //测试
                 //Intent i = new Intent(ShareActivity.this,Test2Activity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -139,11 +148,30 @@ public class ShareActivity extends Activity {
                 //intent_bundle.putSerializable("temp",temp);
                 //i.putExtras(intent_bundle);
                 //
-                Intent i = new Intent(ShareActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                Bundle intent_bundle = new Bundle();
-                intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
-                i.putExtras(intent_bundle);
-                startActivity(i);
+                //对于route中的posto,返回之前的route
+                if (bundle.getBoolean("is_in_route")){
+                    Intent i = new Intent(ShareActivity.this,RouteActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Bundle intent_bundle = new Bundle();
+                    //user还是之前的user
+                    intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
+                    //route对象的pid list里加进本次新的pid
+                    intent_bundle.putInt("last_pid",last_pid);
+                    //Route r = (Route) bundle.getSerializable("route");
+                    //r.getPids().add(last_pid);
+                    //intent_bundle.putSerializable("route",r);
+
+                    //把route对象传回routeactivity，以恢复拍照前的状态
+                    intent_bundle.putSerializable("route",(Route)bundle.getSerializable("route"));
+                    i.putExtras(intent_bundle);
+                    startActivity(i);
+                }
+                else{
+                    Intent i = new Intent(ShareActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Bundle intent_bundle = new Bundle();
+                    intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
+                    i.putExtras(intent_bundle);
+                    startActivity(i);
+                }
             }
         });
     }

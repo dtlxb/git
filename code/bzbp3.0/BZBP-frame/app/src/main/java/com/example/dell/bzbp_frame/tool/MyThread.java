@@ -473,6 +473,7 @@ public class MyThread extends Thread {
 
                 in.close();
                 br.close();
+                int test = Routes.size();
                 return  Routes;
             }
 

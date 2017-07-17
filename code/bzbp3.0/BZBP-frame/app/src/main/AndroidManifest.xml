@@ -43,16 +43,15 @@
         <!-- map key & service -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
+<<<<<<< HEAD
             android:value="a7945ca5681eb0f6620bb50895c63249"/>
+=======
+            android:value="825fccdfaf26f5a59cbbcdaed69e3f15"/>
+>>>>>>> 520d0286531547c83b7bf5448b0c8a9646ed67ce
 
-        <activity android:name=".MainActivity">
-        </activity>
-        <activity android:name=".MenuActivity">
-        </activity>
-        <activity android:name=".CameraActivity">
-
-
-        </activity>
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".MenuActivity"/>
+        <activity android:name=".CameraActivity"/>
         <activity android:name=".ShareActivity">
             android:launchMode="singleInstance" >
         </activity>
@@ -63,18 +62,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity">
-        </activity>
-        <activity android:name=".RouteActivity">
-        </activity>
-        <activity android:name=".Test2Activity">
-        </activity>
-        <activity android:name=".SearchPostoActivity">
-        </activity>
-
-
+        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".RouteActivity"/>
+        <activity android:name=".Test2Activity"/>
+        <activity android:name=".SearchPostoActivity"/>
         //gps定位服务
-        <service android:name="com.amap.api.location.APSService" />
+        <service android:name="com.amap.api.location.APSService"/>
+
+        <activity android:name=".RouteConfirmActivity"/>
+        <activity android:name=".SearchRouteActivity">
+        </activity>
+        <activity android:name=".PostoDetailActivity">
+        </activity>
     </application>
 
 </manifest>

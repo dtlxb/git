@@ -1,5 +1,8 @@
 package com.example.dell.bzbp_frame;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -46,6 +49,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     private LocationSource.OnLocationChangedListener mListener;
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
+    private Bundle bundle;
 
     //记录上次定位的位置，在用户点击复位按钮时移到这里
     private MyLatlng last_location = null;
@@ -103,6 +107,21 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
         setContentView(R.layout.activity_route);
 
+        bundle = this.getIntent().getExtras();
+
+        if (bundle.getSerializable("route")!=null){
+            //拿出route，并加入新的pid
+            route = (Route)bundle.getSerializable("route");
+            if ((Integer)bundle.getInt("last_pid")!=-1){
+                route.getPids().add((Integer)bundle.getInt("last_pid"));
+            }
+
+            //拿出user，然后把其他的都删掉
+            User u = (User) bundle.getSerializable("user");
+            bundle.clear();
+            bundle.putSerializable("user",u);
+            //若是从posto回来的，就取出route，然后把bundle里的route删掉。避免把它带到别的地方去。
+        }
 
         //继承地图的状态
         mapView = (MapView) findViewById(R.id.map);
@@ -168,6 +187,21 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         //保持高亮，禁止自动锁屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //重写back键，增加确认步骤
+        new AlertDialog.Builder(this).setTitle("Warnning").setMessage("route信息将不会被保存，确认退出？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog,int whichButton){
+                        Intent i = new Intent(RouteActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Bundle intent_bundle = new Bundle();
+                        intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                        i.putExtras(intent_bundle);
+                        startActivity(i);
+                    }
+                }).show();
     }
 
     /**、
@@ -248,13 +282,24 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
                 //在这里设置结束时间（route.end）
                 //
-                if (route.getEnd_time()==null){//第一次时，要在这里初始化Route的start（开始时间）。
+                if (route.getEnd_time()==null){
                     route.setEnd_time(new Timestamp(System.currentTimeMillis()).getTime());
                 }
 
                 //Route对象在这里传到下个Activity，并在那里设置comment和name
                 // （name是不是要在一开始的时候先设置一下？）
                 //
+                Intent i = new Intent(RouteActivity.this,RouteConfirmActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("route",route);
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                i.putExtras(intent_bundle);
+                startActivity(i);
+
+
+                //测试：把route发给服务器
+                //已成功
+                /*
                 MyThread myThread1 = new MyThread();
                 myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
                 myThread1.setWhat(3);
@@ -266,7 +311,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                */
 
 
             }
@@ -278,7 +323,17 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         mButton_posto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Intent i = new Intent(RouteActivity.this,CameraActivity.class);
+                bundle.putBoolean("is_in_route",true);
+                bundle.putInt("rid",route.getRid());
+                bundle.putSerializable("route",route);
+                bundle.putDouble("latitude",last_location.latitude);
+                bundle.putDouble("longitude",last_location.longitude);
+                //时间
+                bundle.putLong("time",new Timestamp(System.currentTimeMillis()).getTime());
 
+                i.putExtras(bundle);
+                startActivity(i);
             }
         });
 
@@ -326,9 +381,9 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                     draw();
                 }
 
-                //测试用：显示当前的list<position>的大小
-                TextView v = (TextView) findViewById(R.id.aalert);
-                v.setText(Integer.toString(route.location_list.size()));
+                //测试用：显示当前关于route对象的信息
+                alert();
+
 
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
@@ -337,6 +392,15 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 mLocationErrText.setText(errText);
             }
         }
+    }
+
+    private void alert() {//更改前台界面上的debug信息
+        TextView v = (TextView) findViewById(R.id.aalert);
+        String text = "location list size : " + Integer.toString(route.location_list.size());
+        text += '\n';
+        text += "posto list size : " + Integer.toString(route.getPids().size());
+        v.setText(text);
+
     }
 
     //在地图上绘制当前route对象的路线
