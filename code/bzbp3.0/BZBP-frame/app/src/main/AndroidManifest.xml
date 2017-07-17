@@ -43,7 +43,11 @@
         <!-- map key & service -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
+<<<<<<< HEAD
+            android:value="a7945ca5681eb0f6620bb50895c63249"/>
+=======
             android:value="825fccdfaf26f5a59cbbcdaed69e3f15"/>
+>>>>>>> 520d0286531547c83b7bf5448b0c8a9646ed67ce
 
         <activity android:name=".MainActivity"/>
         <activity android:name=".MenuActivity"/>
