@@ -68,6 +68,8 @@
         <activity android:name=".RouteConfirmActivity"/>
         <activity android:name=".SearchRouteActivity">
         </activity>
+        <activity android:name=".PostoDetailActivity">
+        </activity>
     </application>
 
 </manifest>
