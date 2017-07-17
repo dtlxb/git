@@ -462,9 +462,9 @@ public class MyThread extends Thread {
                     ArrayList<Integer> Pids= new ArrayList<Integer>();
                     for (int j = 0; j < pids.length(); j++) {
 
-                        JSONObject thisPid = (JSONObject)pids.getJSONObject(i);
+                        int thisPid = pids.getInt(j);
 
-                        Pids.add(Integer.parseInt(thisPid.toString()));
+                        Pids.add(thisPid);
                     }
                     routetmp.setPids(Pids);
                    Routes.add(routetmp);
