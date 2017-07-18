@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -391,11 +392,22 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         //提取出posto对象内部的经纬度信息
         LatLng position = new LatLng(posto.getLatitude(),posto.getLongitude());
 
+        //取出posto内部的图片
+        Bitmap bit;
+        BitmapDescriptor bitmapDescriptor;
+        BitmapDescriptorFactory bitmapDescriptorFactory = new BitmapDescriptorFactory();
+
+        byte[] decodedString = Base64.decode(posto.getImage(), Base64.DEFAULT);
+        bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        bitmapDescriptor = bitmapDescriptorFactory.fromBitmap(bit);
+
+        //设置marker的信息
         MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .position(position)         //Marker的位置就是posto的位置
                 .draggable(false)           //不能拖动
-                .title(Integer.toString(posto.getPid()));    //Marker的名字是pid
+                .title(Integer.toString(posto.getPid()))    //Marker的名字是pid
+                .icon(bitmapDescriptor);                    //图标是图片
         aMap.addMarker(markerOption);
     }
 
