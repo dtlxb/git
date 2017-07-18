@@ -11,7 +11,7 @@ public class Comment {
 
 
 	private String context;
-    private Double date;
+    private Long date;
 
 	public Comment() {
 	}
@@ -63,12 +63,12 @@ public class Comment {
 	}
 
 
-	public Double getDate() {
+	public Long getDate() {
 		return date;
 	}
 
 
-	public void setDate(Double date) {
+	public void setDate(Long date) {
 		this.date = date;
 	}
  
