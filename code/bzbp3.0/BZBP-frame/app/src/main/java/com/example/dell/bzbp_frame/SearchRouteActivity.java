@@ -60,11 +60,6 @@ public class SearchRouteActivity extends ListActivity {
                         R.id.routelist_comment,
                         R.id.routelist_username,
                 });
-
-
-
-
-
         setListAdapter(adapter);
 
     }

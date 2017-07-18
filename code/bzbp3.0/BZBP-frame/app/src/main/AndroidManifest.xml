@@ -43,14 +43,14 @@
         <!-- map key & service -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="407893eda4d71fb31a854ef55441ebab"/>
-
+            android:value="825fccdfaf26f5a59cbbcdaed69e3f15"/>
 
 
         <activity android:name=".MainActivity"/>
         <activity android:name=".MenuActivity"/>
         <activity android:name=".CameraActivity"/>
         <activity android:name=".ShareActivity">
+            android:launchMode="singleInstance" >
         </activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
