@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,16 +42,14 @@ public class SearchPostoActivity extends ListActivity{
         super.onCreate(savedInstanceState);
 
 
-        bundle = this.getIntent().getExtras();
-
+        bundle = this.getIntent().getExtras();//获取前一activity传递的信息
+        //将用户位置写入posto中上传
         Posto temp = new Posto();
-
-
-        //temp.setLatitude((Double) bundle.getDouble("latitude"));
-        //temp.setLongitude((Double) bundle.getDouble("longitude"));
+        temp.setLatitude((Double) bundle.getDouble("latitude"));
+        temp.setLongitude((Double) bundle.getDouble("longitude"));
 
         MyThread myThread1 = new MyThread();
-        myThread1.setGetUrl("http://" + ip + "/rest/getPostosBy");
+        myThread1.setGetUrl("http://" + ip + "/rest/getPostosByLocation");
         myThread1.setPosto(temp);
         myThread1.setWhat(2);
         myThread1.start();
@@ -58,13 +58,14 @@ public class SearchPostoActivity extends ListActivity{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        final String a = "/storage/emulated/0/temp/1111.jpg";
+        //获得posto列表
         resultlist = myThread1.getPostos();
+
         mData = getData();
         MyAdapter adapter = new MyAdapter(this);
         setListAdapter(adapter);
     }
-
+    //将获得的posto拆分
     private List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
@@ -143,6 +144,7 @@ public class SearchPostoActivity extends ListActivity{
                 holder.name = (TextView)convertView.findViewById(R.id.postolist_name);
                 holder.comment = (TextView)convertView.findViewById(R.id.postolist_comment);
                 holder.username = (TextView)convertView.findViewById(R.id.postolist_username);
+                holder.date=(TextView)convertView.findViewById(R.id.postolist_date);
                 holder.viewBtn = (Button)convertView.findViewById(R.id.postolist_button);
                 convertView.setTag(holder);
 
@@ -153,9 +155,14 @@ public class SearchPostoActivity extends ListActivity{
 
 
             holder.img.setImageBitmap((Bitmap)mData.get(position).get("postolist_image"));
-            holder.name.setText((String)mData.get(position).get("postolist_name"));
-            holder.comment.setText((String)mData.get(position).get("postolist_comment"));
-            holder.username.setText((String)mData.get(position).get("postolist_username"));
+            holder.name.setText("name:"+(String)mData.get(position).get("postolist_name"));
+            //holder.comment.setText((String)mData.get(position).get("postolist_comment"));
+            //holder.username.setText((String)mData.get(position).get("postolist_username"));
+
+            DateFormat format= new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+            String time = format.format((Long)mData.get(position).get("postolist_date"));
+            holder.date.setText("time:"+time);
+
             holder.viewBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
