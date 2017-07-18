@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                     popupWindow.dismiss();
                     return;
                 } else {
-                    initPopuptWindow();
+                    initPopuptWindow_menu();
                 }
                 popupWindow.showAsDropDown(view);
 
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         mLocationErrText.setVisibility(View.GONE);
     }
 
-    protected void initPopuptWindow() {
+    protected void initPopuptWindow_menu() {
 
         // 获取menu的布局
         View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
@@ -491,11 +491,37 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         if (aMap != null) {
             jumpPoint(marker);
         }
-
-
         Toast.makeText(MainActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
-
+        if (null != popupWindow) {
+            popupWindow.dismiss();
+            return true;
+        } else {
+            initPopuptWindow_posto();
+        }
+        popupWindow.showAsDropDown(findViewById(R.id.marker_pop));
         return true;
+    }
+
+    protected void initPopuptWindow_posto() {
+
+        // 获取布局
+        View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
+                false);
+        // 创建PopupWindow实例
+        popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.AnimationFade);
+        //点击其他地方消失
+        popupWindow_view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+                return false;
+            }
+        });
     }
 
 

@@ -10,8 +10,7 @@
         android:id="@+id/button_menu_search_posto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="search posto"
-        android:background="@drawable/login_button"/>
+        android:text="search posto"/>
 
     <Button
         android:id="@+id/button_menu_search_route"
