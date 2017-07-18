@@ -18,6 +18,8 @@ import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -260,7 +262,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                     mCircle.setRadius(amapLocation.getAccuracy());
                     mLocMarker.setPosition(location);
                 }
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
+                //是否把镜头固定在定位的位置？
+                //aMap.moveCamera(CameraUpdateFactory.newLatLng(location));
                 last_location = new MyLatlng(location.latitude,location.longitude);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
@@ -392,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .position(position)         //Marker的位置就是posto的位置
                 .draggable(false)           //不能拖动
-                .title(posto.getName());    //Marker的名字就是posto的名字
+                .title(Integer.toString(posto.getPid()));    //Marker的名字是pid
         aMap.addMarker(markerOption);
     }
 
@@ -403,7 +406,10 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         if (aMap != null) {
             jumpPoint(marker);
         }
+
+
         Toast.makeText(MainActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
+
         return true;
     }
 
