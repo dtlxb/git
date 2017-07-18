@@ -305,12 +305,12 @@ public class MyThread extends Thread {
 
 
 
-                 //   postotmp.setLatitude(thisposto.getDouble("latitude"));
-                   // postotmp.setLongitude(thisposto.getDouble("longitude"));
-                  //  postotmp.setPid(Integer.parseInt(thisposto.getString("pid")));
-                  postotmp.setImage(thisposto.getString("image"));
-                  //  postotmp.setBelong_rid(thisposto.getInt("belong_rid"));
-                     postotmp.setDate(thisposto.getLong("date"));
+                    postotmp.setLatitude(thisposto.getDouble("latitude"));
+                    postotmp.setLongitude(thisposto.getDouble("longitude"));
+                    postotmp.setPid(Integer.parseInt(thisposto.getString("pid")));
+                    postotmp.setImage(thisposto.getString("image"));
+                    postotmp.setBelong_rid(thisposto.getInt("belong_rid"));
+                    postotmp.setDate(thisposto.getLong("date"));
                     Postos.add(postotmp);
                 }
 
