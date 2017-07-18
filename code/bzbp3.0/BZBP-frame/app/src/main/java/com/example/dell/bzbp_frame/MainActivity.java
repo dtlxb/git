@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -18,6 +19,8 @@ import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
     private Button mCameraButton;
     private Button mStartRouteButton;
 
-    private MyLatlng last_location;
+    private MyLatlng last_location = new MyLatlng(-1.0,-1.0);
 
     public static String ip = "192.168.1.97:8080/BookStore";
 
@@ -260,7 +263,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                     mCircle.setRadius(amapLocation.getAccuracy());
                     mLocMarker.setPosition(location);
                 }
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
+                //是否把镜头固定在定位的位置？
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,17));
                 last_location = new MyLatlng(location.latitude,location.longitude);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
@@ -388,11 +392,22 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         //提取出posto对象内部的经纬度信息
         LatLng position = new LatLng(posto.getLatitude(),posto.getLongitude());
 
+        //取出posto内部的图片
+        Bitmap bit;
+        BitmapDescriptor bitmapDescriptor;
+        BitmapDescriptorFactory bitmapDescriptorFactory = new BitmapDescriptorFactory();
+
+        byte[] decodedString = Base64.decode(posto.getImage(), Base64.DEFAULT);
+        bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        bitmapDescriptor = bitmapDescriptorFactory.fromBitmap(bit);
+
+        //设置marker的信息
         MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .position(position)         //Marker的位置就是posto的位置
                 .draggable(false)           //不能拖动
-                .title(posto.getName());    //Marker的名字就是posto的名字
+                .title(Integer.toString(posto.getPid()))    //Marker的名字是pid
+                .icon(bitmapDescriptor);                    //图标是图片
         aMap.addMarker(markerOption);
     }
 
@@ -403,7 +418,10 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         if (aMap != null) {
             jumpPoint(marker);
         }
+
+
         Toast.makeText(MainActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
+
         return true;
     }
 
