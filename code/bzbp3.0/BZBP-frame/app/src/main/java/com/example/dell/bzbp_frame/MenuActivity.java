@@ -42,8 +42,8 @@ public class MenuActivity extends AppCompatActivity {
                 Bundle intent_bundle = new Bundle();
 
                 intent_bundle.putSerializable("user",bundle.getSerializable("user"));
-                //intent_bundle.putDouble("latitude",bundle.getDouble("latitude"));
-                //intent_bundle.putDouble("longitude",bundle.getDouble("longitude"));
+                intent_bundle.putDouble("latitude",bundle.getDouble("latitude"));
+                intent_bundle.putDouble("longitude",bundle.getDouble("longitude"));
                 i.putExtras(bundle);
                 startActivity(i);
             }
