@@ -6,15 +6,22 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -24,6 +31,7 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.Projection;
 import com.amap.api.maps2d.model.BitmapDescriptor;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.Circle;
@@ -34,15 +42,17 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
 import com.example.dell.bzbp_frame.model.MyLatlng;
+import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RouteActivity extends AppCompatActivity implements LocationSource,
-        AMapLocationListener {
+        AMapLocationListener, AMap.OnMarkerClickListener {
 
     private AMap aMap;
     private MapView mapView;
@@ -109,12 +119,15 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
         bundle = this.getIntent().getExtras();
 
-        if (bundle.getSerializable("route")!=null){
-            //拿出route，并加入新的pid
+        if (bundle.getSerializable("route")!=null){//从posto回来的
+            //拿出之前的route对象，并在location list里加入最新的pid
             route = (Route)bundle.getSerializable("route");
             if ((Integer)bundle.getInt("last_pid")!=-1){
                 route.getPids().add((Integer)bundle.getInt("last_pid"));
             }
+
+            //把posto画在地图上
+            //addMarkerToMap((Posto)bundle.getSerializable("last_posto"));
 
             //拿出user，然后把其他的都删掉
             User u = (User) bundle.getSerializable("user");
@@ -539,4 +552,112 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         }
     }
 
+
+    private List<Posto> getNearbyPostos(){
+        //把自己的位置发送给服务器，得到一个与自己临近的posto的List。（计算过程在服务器上完成）
+
+        //传一个posto。事实上，服务器只需要得到一个位置信息即可。
+        Posto temp = new Posto();
+        temp.setLatitude(0.0);
+        temp.setLongitude(0.0);
+
+        //
+        MyThread myThread1 = new MyThread();
+        myThread1.setGetUrl("http://" + ip + "/rest/getPostosBy");
+        myThread1.setPosto(temp);
+        myThread1.setWhat(2);
+        myThread1.start();
+        try {
+            myThread1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<Posto> resultlist = myThread1.getPostos();
+
+        return resultlist;
+    }
+
+    private int showPostos(List<Posto> postos){
+        //从服务器获得自己附近的posto之后，在地图上显示成为Marker。返回显示的个数（？）
+
+        if (postos==null)return -1;     //空指针检查
+
+        for (int i = 0;i<postos.size();++i){
+            addMarkerToMap(postos.get(i));
+        }
+
+        return postos.size();
+    }
+
+    private void addMarkerToMap(Posto posto) {
+        if (posto==null)return;
+
+        //提取出posto对象内部的经纬度信息
+        LatLng position = new LatLng(posto.getLatitude(),posto.getLongitude());
+
+        //取出posto内部的图片
+        Bitmap bit;
+        BitmapDescriptor bitmapDescriptor;
+        BitmapDescriptorFactory bitmapDescriptorFactory = new BitmapDescriptorFactory();
+
+        byte[] decodedString = Base64.decode(posto.getImage(), Base64.DEFAULT);
+        bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        bitmapDescriptor = bitmapDescriptorFactory.fromBitmap(bit);
+
+        //设置marker的信息
+        MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
+                .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                .position(position)         //Marker的位置就是posto的位置
+                .draggable(false)           //不能拖动
+                .title(Integer.toString(posto.getPid()))    //Marker的名字是pid
+                .icon(bitmapDescriptor);                    //图标是图片
+        aMap.addMarker(markerOption);
+    }
+
+
+    //点击marker的回调函数
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (aMap != null) {
+            jumpPoint(marker);
+        }
+
+
+        Toast.makeText(RouteActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
+
+        return true;
+    }
+
+
+    /**
+     * marker点击时跳动一下
+     */
+    public void jumpPoint(final Marker marker) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = aMap.getProjection();
+        final LatLng markerLatlng = marker.getPosition();
+        Point markerPoint = proj.toScreenLocation(markerLatlng);
+        markerPoint.offset(0, -100);
+        final LatLng startLatLng = proj.fromScreenLocation(markerPoint);
+        final long duration = 1500;
+
+        final Interpolator interpolator = new BounceInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * markerLatlng.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * markerLatlng.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+                if (t < 1.0) {
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
+    }
 }

@@ -156,6 +156,7 @@ public class ShareActivity extends Activity {
                     intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
                     //route对象的pid list里加进本次新的pid
                     intent_bundle.putInt("last_pid",last_pid);
+                    //intent_bundle.putSerializable("last_posto",temp);
                     //Route r = (Route) bundle.getSerializable("route");
                     //r.getPids().add(last_pid);
                     //intent_bundle.putSerializable("route",r);

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
     private Button mCameraButton;
     private Button mStartRouteButton;
 
-    private MyLatlng last_location;
+    private MyLatlng last_location = new MyLatlng(-1.0,-1.0);
 
     public static String ip = "192.168.1.97:8080/BookStore";
 
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                     mLocMarker.setPosition(location);
                 }
                 //是否把镜头固定在定位的位置？
-                //aMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,17));
                 last_location = new MyLatlng(location.latitude,location.longitude);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
