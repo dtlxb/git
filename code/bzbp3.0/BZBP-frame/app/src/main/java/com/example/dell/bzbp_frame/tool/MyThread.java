@@ -325,11 +325,8 @@ public class MyThread extends Thread {
                     postotmp.setPid(Integer.parseInt(thisposto.getString("pid")));
                     postotmp.setImage(thisposto.getString("image"));
                     postotmp.setBelong_rid(thisposto.getInt("belong_rid"));
-<<<<<<< HEAD
                      postotmp.setDate(thisposto.getLong("date"));
-=======
                     postotmp.setDate(thisposto.getLong("date"));
->>>>>>> ddc0416e882b7789418366c9113f699360657207
                     Postos.add(postotmp);
                 }
 
