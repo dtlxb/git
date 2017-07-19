@@ -84,6 +84,8 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     private boolean is_locating = false;
     //用户是否按下了暂停键
     private boolean customer_paused = true;
+    //用户是否按下了stop，决定离开界面
+    private boolean customer_stopped = false;
 
     public static String ip="192.168.1.97:8080/BookStore";
 
@@ -298,6 +300,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
                 //停止记录
                 is_locating = false;
+                customer_stopped = true;
 
                 //在这里设置结束时间（route.end）
                 //
@@ -558,6 +561,10 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
         //pause时不停止定位
         //deactivate();
+
+        if (customer_stopped){//如果是因为用户结束路线，就不执行下面的功能
+            return;
+        }
 
         //pause时停止记录，转由service记录
         final boolean locating_status = is_locating;

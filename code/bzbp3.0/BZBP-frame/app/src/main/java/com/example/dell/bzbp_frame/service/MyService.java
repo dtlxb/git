@@ -53,9 +53,9 @@ public class MyService extends Service implements AMapLocationListener{
                 //设置小图标
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //设置通知标题
-                .setContentTitle("最简单的Notification")
+                .setContentTitle("记录路线中...")
                 //设置通知内容
-                .setContentText("只有小图标、标题、内容");
+                .setContentText("若");
         //设置通知时间，默认为系统发出通知的时间，通常不用设置
         //.setWhen(System.currentTimeMillis());
         //通过builder.build()方法生成Notification对象,并发送通知,id=1
