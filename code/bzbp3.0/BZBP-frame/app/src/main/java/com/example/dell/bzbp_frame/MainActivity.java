@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 intent_bundle.putDouble("longitude",last_location.longitude);
                 i.putExtras(intent_bundle);
                 startActivity(i);
-                popupWindow.dismiss();
+                //popupWindow.dismiss();
             }
         });
         //
@@ -246,9 +246,9 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 intent_bundle.putSerializable("user",bundle.getSerializable("user"));
                 intent_bundle.putDouble("latitude",last_location.latitude);
                 intent_bundle.putDouble("longitude",last_location.longitude);
-                i.putExtras(bundle);
+                i.putExtras(intent_bundle);
                 startActivity(i);
-                popupWindow.dismiss();
+                //popupWindow.dismiss();
             }
         });
 
