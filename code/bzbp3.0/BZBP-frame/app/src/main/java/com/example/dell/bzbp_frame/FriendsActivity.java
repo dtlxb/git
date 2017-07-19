@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Route;
@@ -109,7 +110,9 @@ public class FriendsActivity extends AppCompatActivity {
                 String apply_result = myThread1.getResult();
                 int apply_result_int = Integer.parseInt(apply_result);
                 if(apply_result_int<0){
-                    
+                    Toast.makeText(FriendsActivity.this,"已经存在的好友或自己", Toast.LENGTH_LONG).show();
+                }else{
+
                 }
 
 
