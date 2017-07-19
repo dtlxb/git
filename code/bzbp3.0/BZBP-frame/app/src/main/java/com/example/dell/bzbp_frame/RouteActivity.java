@@ -1,16 +1,18 @@
 package com.example.dell.bzbp_frame;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -45,6 +47,7 @@ import com.example.dell.bzbp_frame.model.MyLatlng;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
+import com.example.dell.bzbp_frame.service.MyService;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
 import java.sql.Timestamp;
@@ -79,7 +82,8 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
     //信号值，只有在该值为true的时候才会记录位置。用户通过操作ui可以进行开|关。
     private boolean is_locating = false;
-
+    //用户是否按下了暂停键
+    private boolean customer_paused = true;
 
     public static String ip="192.168.1.97:8080/BookStore";
 
@@ -269,6 +273,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             @Override
             public void onClick(View v){
                 is_locating = false;
+                customer_paused = true;
             }
         });
 
@@ -278,6 +283,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             @Override
             public void onClick(View v){
                 is_locating = true;
+                customer_paused = false;
                 if (route.getStart_time()==null){//第一次时，要在这里初始化Route的start（开始时间）。
                     route.setStart_time(new Timestamp(System.currentTimeMillis()).getTime());
                 }
@@ -476,6 +482,9 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     }
 
     private void addCircle(LatLng latlng, double radius) {
+        //自己加的，避免重复画。
+        if (mCircle!=null)mCircle.remove();
+
         CircleOptions options = new CircleOptions();
         options.strokeWidth(1f);
         options.fillColor(FILL_COLOR);
@@ -507,12 +516,31 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
      */
     @Override
     protected void onResume() {
+        //在这里结束service，拿回route对象
+        if (last_location!=null){
+            //拿回route
+            route = ss.getRoute();
+
+            //结束service
+            Intent stopIntent = new Intent(this, MyService.class);
+            stopService(stopIntent);
+
+            unbindService(mSc);
+        }
+
         super.onResume();
         mapView.onResume();
         if (mSensorHelper != null) {
             mSensorHelper.registerSensorListener();
         }
+        if (last_location!=null){
+            if (customer_paused)is_locating = false;
+            else is_locating = true;
+        }
     }
+
+    private MyService ss;
+    private ServiceConnection mSc;
 
     /**
      * 方法必须重写
@@ -531,7 +559,30 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         //pause时不停止定位
         //deactivate();
 
+        //pause时停止记录，转由service记录
+        final boolean locating_status = is_locating;
+        is_locating = false;
+
+        //在这里开始service，传走route对象
+        Intent startIntent = new Intent(this, MyService.class);
+
+        mSc = new ServiceConnection(){
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                ss = ((MyService.LocalBinder)service).getService();
+                ss.setRoute(route);
+                if (locating_status)ss.Doit();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+        };
+
+        this.bindService(startIntent,mSc,BIND_AUTO_CREATE);
+
     }
+
 
     /**
      * 方法必须重写
