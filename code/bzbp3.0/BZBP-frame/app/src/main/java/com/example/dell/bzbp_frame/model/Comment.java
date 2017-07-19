@@ -4,7 +4,7 @@ public class Comment {
 
 	private int id;
 	private int pid;
-	private int uid;
+	private int rid;
 	private String username;
     
 
@@ -43,13 +43,13 @@ public class Comment {
 	}
 
 
-	public int getUid() {
-		return uid;
+	public int getRid() {
+		return rid;
 	}
 
 
-	public void setUid(int uid) {
-		this.uid = uid;
+	public void setRid(int rid) {
+		this.rid = rid;
 	}
 
 

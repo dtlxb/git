@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 thisuser=new User();
                 thisuser.setUsername(temp_username);
                 thisuser.setPassword(temp_password);
-/*
+
                 MyThread myThread1 = new MyThread();
                 myThread1.setGetUrl("http://"+ip+"/rest/checkUser");
                 myThread1.setUser(thisuser);
@@ -89,13 +89,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(result.equals("fail")){
                     msgbox("用户名或密码错误");
-                } else{*/
+                } else{
                     Intent i = new Intent(LoginActivity.this,MainActivity.class);
                     Bundle intent_bundle = new Bundle();
                     intent_bundle.putSerializable("user",thisuser);
                     i.putExtras(intent_bundle);
                     startActivity(i);
-                //}
+                }
 
             }
         });
