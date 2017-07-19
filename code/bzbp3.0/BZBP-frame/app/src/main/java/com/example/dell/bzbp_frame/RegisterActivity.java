@@ -77,14 +77,16 @@ public class RegisterActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                msgbox( myThread1.getResult());
+                //msgbox( myThread1.getResult());
 
                 String result = myThread1.getResult();
+                Integer result_int=Integer.parseInt(result);
                 //msgbox(result);
 
-                if(result.equals("fail")){
+                if(result_int<=0){
                     msgbox("用户名重复");
                 } else{
+                    thisuser.setId(result_int);
                     Intent i = new Intent(RegisterActivity.this,MainActivity.class);
                     Bundle intent_bundle = new Bundle();
                     intent_bundle.putSerializable("user",thisuser);

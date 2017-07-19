@@ -86,10 +86,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 String result = myThread1.getResult();
-
-                if(result.equals("fail")){
+                Integer result_int=Integer.parseInt(result);
+                if(result_int<=0){
                     msgbox("用户名或密码错误");
                 } else{
+                    thisuser.setId(result_int);
                     Intent i = new Intent(LoginActivity.this,MainActivity.class);
                     Bundle intent_bundle = new Bundle();
                     intent_bundle.putSerializable("user",thisuser);

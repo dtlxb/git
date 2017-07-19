@@ -61,6 +61,13 @@ public class SearchPostoActivity extends ListActivity{
         //获得posto列表
         resultlist = myThread1.getPostos();
 
+        if(resultlist.size() == 0){
+            Posto emptyPosto = new Posto();
+            emptyPosto.setName("无符合条件的搜索结果");
+            resultlist.add(emptyPosto);
+        }
+
+
         mData = getData();
         MyAdapter adapter = new MyAdapter(this);
         setListAdapter(adapter);

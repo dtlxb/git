@@ -18,4 +18,10 @@
         android:layout_height="wrap_content"
         android:text="search route"/>
 
+    <Button
+        android:id="@+id/button_menu_friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="frineds"/>
+
 </LinearLayout>

@@ -13,17 +13,6 @@
         android:text="menu"/>
 
 
-<!--
-        <TextView
-            android:id="@+id/test_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/test_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
--->
-
     <com.amap.api.maps2d.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"

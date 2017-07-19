@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
 
         //用户信息
         bundle = this.getIntent().getExtras();
+        //Toast.makeText(MainActivity.this,"id:"+((User)bundle.getSerializable("user")).getId(), Toast.LENGTH_LONG).show();
         //测试用户信息
 
         User user = new User();
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
                 false);
         // 创建PopupWindow实例
-        popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
+        popupWindow = new PopupWindow(popupWindow_view, 400, 600, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.AnimationFade);
         //点击其他地方消失
@@ -221,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         // menu视图里面的控件
         Button search_posto = (Button) popupWindow_view.findViewById(R.id.button_menu_search_posto);
         Button search_route = (Button) popupWindow_view.findViewById(R.id.button_menu_search_route);
+        Button friends = (Button) popupWindow_view.findViewById(R.id.button_menu_friends);
         // menu视图里面的控件触发的事件
         //
         search_posto.setOnClickListener(new View.OnClickListener() {
@@ -246,6 +248,18 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 intent_bundle.putSerializable("user",bundle.getSerializable("user"));
                 intent_bundle.putDouble("latitude",last_location.latitude);
                 intent_bundle.putDouble("longitude",last_location.longitude);
+                i.putExtras(intent_bundle);
+                startActivity(i);
+                //popupWindow.dismiss();
+            }
+        });
+
+        friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,FriendsActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
                 i.putExtras(intent_bundle);
                 startActivity(i);
                 //popupWindow.dismiss();
