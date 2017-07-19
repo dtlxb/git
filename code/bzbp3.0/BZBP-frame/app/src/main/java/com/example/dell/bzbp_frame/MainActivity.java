@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
                 false);
         // 创建PopupWindow实例
-        popupWindow = new PopupWindow(popupWindow_view, 400, 600, true);
+        popupWindow = new PopupWindow(popupWindow_view, 600, 600, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.AnimationFade);
         //点击其他地方消失
