@@ -11,13 +11,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.PopupWindow;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -43,15 +48,17 @@ import com.example.dell.bzbp_frame.tool.MyThread;
 import java.sql.Timestamp;
 import java.util.List;
 
+import static com.amap.api.mapcore.util.ag.v;
+
 public class MainActivity extends AppCompatActivity implements LocationSource,
         AMapLocationListener, OnMarkerClickListener {
 
 
     private Button mCameraButton;
     private Button mStartRouteButton;
-
-    private MyLatlng last_location;
-
+    private PopupWindow popupWindow;
+    private MyLatlng last_location = new MyLatlng(-1.0,-1.0);
+    private Bundle bundle;
     public static String ip = "192.168.1.97:8080/BookStore";
 
     private AMap aMap;
@@ -77,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
 
 
         //用户信息
-        final Bundle bundle = this.getIntent().getExtras();
+        bundle = this.getIntent().getExtras();
         //测试用户信息
 
         User user = new User();
@@ -89,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         test_username.setText(user.getUsername());
         test_password.setText(user.getPassword());*/
 
-
+/*
         this.findViewById(R.id.button_main_menu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,6 +109,20 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 intent_bundle.putDouble("longitude",last_location.longitude);
                 i.putExtras(intent_bundle);
                 startActivity(i);
+            }
+        });*/
+
+        this.findViewById(R.id.button_main_menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != popupWindow) {
+                    popupWindow.dismiss();
+                    return;
+                } else {
+                    initPopuptWindow_menu();
+                }
+                popupWindow.showAsDropDown(view);
+
             }
         });
 
@@ -177,6 +198,61 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         mLocationErrText.setVisibility(View.GONE);
     }
 
+    protected void initPopuptWindow_menu() {
+
+        // 获取menu的布局
+        View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
+                false);
+        // 创建PopupWindow实例
+        popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.AnimationFade);
+        //点击其他地方消失
+        popupWindow_view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+                return false;
+            }
+        });
+        // menu视图里面的控件
+        Button search_posto = (Button) popupWindow_view.findViewById(R.id.button_menu_search_posto);
+        Button search_route = (Button) popupWindow_view.findViewById(R.id.button_menu_search_route);
+        // menu视图里面的控件触发的事件
+        //
+        search_posto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,SearchPostoActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                //获取位置信息 Double latitude,longitude
+                intent_bundle.putDouble("latitude",last_location.latitude);
+                intent_bundle.putDouble("longitude",last_location.longitude);
+                i.putExtras(intent_bundle);
+                startActivity(i);
+                //popupWindow.dismiss();
+            }
+        });
+        //
+        search_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,SearchRouteActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                intent_bundle.putDouble("latitude",last_location.latitude);
+                intent_bundle.putDouble("longitude",last_location.longitude);
+                i.putExtras(intent_bundle);
+                startActivity(i);
+                //popupWindow.dismiss();
+            }
+        });
+
+    }
     /**
      * 设置一些amap的属性
      */
@@ -260,7 +336,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                     mCircle.setRadius(amapLocation.getAccuracy());
                     mLocMarker.setPosition(location);
                 }
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
+                //是否把镜头固定在定位的位置？
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,17));
                 last_location = new MyLatlng(location.latitude,location.longitude);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
@@ -388,11 +465,22 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         //提取出posto对象内部的经纬度信息
         LatLng position = new LatLng(posto.getLatitude(),posto.getLongitude());
 
+        //取出posto内部的图片
+        Bitmap bit;
+        BitmapDescriptor bitmapDescriptor;
+        BitmapDescriptorFactory bitmapDescriptorFactory = new BitmapDescriptorFactory();
+
+        byte[] decodedString = Base64.decode(posto.getImage(), Base64.DEFAULT);
+        bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        bitmapDescriptor = bitmapDescriptorFactory.fromBitmap(bit);
+
+        //设置marker的信息
         MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .position(position)         //Marker的位置就是posto的位置
                 .draggable(false)           //不能拖动
-                .title(posto.getName());    //Marker的名字就是posto的名字
+                .title(Integer.toString(posto.getPid()))    //Marker的名字是pid
+                .icon(bitmapDescriptor);                    //图标是图片
         aMap.addMarker(markerOption);
     }
 
@@ -404,7 +492,36 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
             jumpPoint(marker);
         }
         Toast.makeText(MainActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
+        if (null != popupWindow) {
+            popupWindow.dismiss();
+            return true;
+        } else {
+            initPopuptWindow_posto();
+        }
+        popupWindow.showAsDropDown(findViewById(R.id.marker_pop));
         return true;
+    }
+
+    protected void initPopuptWindow_posto() {
+
+        // 获取布局
+        View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
+                false);
+        // 创建PopupWindow实例
+        popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.AnimationFade);
+        //点击其他地方消失
+        popupWindow_view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+                return false;
+            }
+        });
     }
 
 
