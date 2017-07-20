@@ -28,6 +28,9 @@ import com.example.dell.bzbp_frame.model.MyLatlng;
 import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
 
+/*
+ *  用户从route界面离开app的时候，此Service启动，在后台继续记录路线。
+ */
 public class MyService extends Service implements AMapLocationListener{
 
     public static final String TAG = "MyService";
@@ -61,6 +64,7 @@ public class MyService extends Service implements AMapLocationListener{
         Intent i = new Intent(this, RouteActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("user",user);
+        b.putBoolean("service_back",true);
         i.putExtras(b);
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 

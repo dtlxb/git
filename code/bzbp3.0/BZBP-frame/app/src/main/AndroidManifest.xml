@@ -58,9 +58,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".RouteActivity" android:launchMode="singleTop"/>
+        <activity android:name=".RouteActivity" android:launchMode="singleTask"/>
 
         <activity android:name=".Test2Activity" />
+        <activity android:name=".FriendsActivity"/>
+        <activity android:name=".RouteDetailActivity"/>
         <activity android:name=".SearchPostoActivity" />
         //gps定位服务
         <service android:name="com.amap.api.location.APSService" />

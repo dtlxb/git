@@ -118,6 +118,23 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        // TODO Auto-generated method stub
+        Bundle b = intent.getExtras();
+
+        if (b.getBoolean("service_back"))return;
+
+        if ((Integer)b.getInt("last_pid")!=-1){
+            route.getPids().add((Integer)b.getInt("last_pid"));
+
+            //把最后一个posto画在地图上
+            addLastMarkerToMap();
+        }
+
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -126,6 +143,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
         bundle = this.getIntent().getExtras();
 
+        /*
         if (bundle.getSerializable("route")!=null){//从posto回来的
             //拿出之前的route对象，并在location list里加入最新的pid
             route = (Route)bundle.getSerializable("route");
@@ -133,8 +151,8 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 route.getPids().add((Integer)bundle.getInt("last_pid"));
             }
 
-            //把posto画在地图上
-            //addMarkerToMap((Posto)bundle.getSerializable("last_posto"));
+            //把最后一个posto画在地图上
+            addLastMarkerToMap();
 
             //拿出user，然后把其他的都删掉
             User u = (User) bundle.getSerializable("user");
@@ -144,6 +162,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             bundle.putSerializable("user",u);
             //若是从posto回来的，就取出route，然后把bundle里的route删掉。避免把它带到别的地方去。
         }
+        */
 
         //继承地图的状态
         mapView = (MapView) findViewById(R.id.map);
@@ -617,18 +636,15 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     }
 
 
-    private List<Posto> getNearbyPostos(){
-        //把自己的位置发送给服务器，得到一个与自己临近的posto的List。（计算过程在服务器上完成）
+    private void addLastMarkerToMap() {
 
-        //传一个posto。事实上，服务器只需要得到一个位置信息即可。
-        Posto temp = new Posto();
-        temp.setLatitude(0.0);
-        temp.setLongitude(0.0);
+        //拿到route.posto_list里最后一个posto的实体
+        Posto posto = new Posto();
+        posto.setPid(route.getPids().get(route.getPids().size()-1));
 
-        //
         MyThread myThread1 = new MyThread();
-        myThread1.setGetUrl("http://" + ip + "/rest/getPostosBy");
-        myThread1.setPosto(temp);
+        myThread1.setGetUrl("http://" + ip + "/rest/getPostoById");
+        myThread1.setPosto(posto);
         myThread1.setWhat(2);
         myThread1.start();
         try {
@@ -636,24 +652,9 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        List<Posto> resultlist = myThread1.getPostos();
+        //if (myThread1.getPostos()==null)return;
 
-        return resultlist;
-    }
-
-    private int showPostos(List<Posto> postos){
-        //从服务器获得自己附近的posto之后，在地图上显示成为Marker。返回显示的个数（？）
-
-        if (postos==null)return -1;     //空指针检查
-
-        for (int i = 0;i<postos.size();++i){
-            addMarkerToMap(postos.get(i));
-        }
-
-        return postos.size();
-    }
-
-    private void addMarkerToMap(Posto posto) {
+        posto = myThread1.getPostos().get(0);
         if (posto==null)return;
 
         //提取出posto对象内部的经纬度信息

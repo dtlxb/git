@@ -150,7 +150,7 @@ public class ShareActivity extends Activity {
                 //
                 //对于route中的posto,返回之前的route
                 if (bundle.getBoolean("is_in_route")){
-                    Intent i = new Intent(ShareActivity.this,RouteActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent i = new Intent(ShareActivity.this,RouteActivity.class);
                     Bundle intent_bundle = new Bundle();
                     //user还是之前的user
                     intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
