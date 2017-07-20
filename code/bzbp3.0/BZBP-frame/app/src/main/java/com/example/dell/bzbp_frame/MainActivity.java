@@ -119,9 +119,9 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 if (null != popupWindow) {
                     popupWindow.dismiss();
                     //return;
-                } else {
-                    initPopuptWindow_menu();
                 }
+                    initPopuptWindow_menu();
+
                 popupWindow.showAsDropDown(view);
 
             }
@@ -174,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
 
     @Override
     public void onBackPressed() {
-        //TODO something
         new AlertDialog.Builder(this).setTitle("Warnning").setMessage("Are you sure left?")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog,int whichButton){
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
     protected void initPopuptWindow_posto() {
 
         // 获取布局
-        View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
+        View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_main_posto_marker, null,
                 false);
         // 创建PopupWindow实例
         popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
@@ -296,7 +295,11 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 return false;
             }
         });
+
     }
+
+
+
     /**
      * 设置一些amap的属性
      */
@@ -539,9 +542,9 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
             jumpPoint(marker);
         }
         Toast.makeText(MainActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
-        if (null == popupWindow){
+        //if (null == popupWindow){
             initPopuptWindow_posto();
-        }
+
         popupWindow.showAsDropDown(findViewById(R.id.marker_pop));
         return true;
     }
