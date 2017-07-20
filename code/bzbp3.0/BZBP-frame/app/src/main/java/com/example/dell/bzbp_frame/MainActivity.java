@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
             public void onClick(View view) {
                 if (null != popupWindow) {
                     popupWindow.dismiss();
-                    return;
+                    //return;
                 } else {
                     initPopuptWindow_menu();
                 }
@@ -168,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         init();
 
         //测试：显示附近posto
-        showPostos(getNearbyPostos());
+        //已通过。接下来应该改成通过点击按钮触发。
+        //showPostos(getNearbyPostos());
     }
 
     @Override
@@ -223,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         Button search_posto = (Button) popupWindow_view.findViewById(R.id.button_menu_search_posto);
         Button search_route = (Button) popupWindow_view.findViewById(R.id.button_menu_search_route);
         Button friends = (Button) popupWindow_view.findViewById(R.id.button_menu_friends);
+        Button nearby_posto = (Button) popupWindow_view.findViewById(R.id.button_menu_nearby_posto);
         // menu视图里面的控件触发的事件
         //
         search_posto.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +268,34 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
             }
         });
 
+        nearby_posto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPostos(getNearbyPostos());
+            }
+        });
+    }
+
+    protected void initPopuptWindow_posto() {
+
+        // 获取布局
+        View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
+                false);
+        // 创建PopupWindow实例
+        popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
+        // 设置动画效果
+        popupWindow.setAnimationStyle(R.style.AnimationFade);
+        //点击其他地方消失
+        popupWindow_view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+                return false;
+            }
+        });
     }
     /**
      * 设置一些amap的属性
@@ -345,13 +375,16 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                     addCircle(location, amapLocation.getAccuracy());//添加定位精度圆
                     addMarker(location);//添加定位图标
                     mSensorHelper.setCurrentMarker(mLocMarker);//定位图标旋转
+
+                    //第一次定位时，把镜头移到定位点
+                    aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,17));
                 } else {
                     mCircle.setCenter(location);
                     mCircle.setRadius(amapLocation.getAccuracy());
                     mLocMarker.setPosition(location);
                 }
                 //是否把镜头固定在定位的位置？
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,17));
+                //aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,17));
                 last_location = new MyLatlng(location.latitude,location.longitude);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
@@ -493,8 +526,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
                 .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .position(position)         //Marker的位置就是posto的位置
                 .draggable(false)           //不能拖动
-                .title(Integer.toString(posto.getPid()))    //Marker的名字是pid
-                .icon(bitmapDescriptor);                    //图标是图片
+                .title(Integer.toString(posto.getPid()));    //Marker的名字是pid
+                //.icon(bitmapDescriptor);                    //图标是图片
         aMap.addMarker(markerOption);
     }
 
@@ -506,37 +539,14 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
             jumpPoint(marker);
         }
         Toast.makeText(MainActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
-        if (null != popupWindow) {
-            popupWindow.dismiss();
-            return true;
-        } else {
+        if (null == popupWindow){
             initPopuptWindow_posto();
         }
         popupWindow.showAsDropDown(findViewById(R.id.marker_pop));
         return true;
     }
 
-    protected void initPopuptWindow_posto() {
 
-        // 获取布局
-        View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
-                false);
-        // 创建PopupWindow实例
-        popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
-        // 设置动画效果
-        popupWindow.setAnimationStyle(R.style.AnimationFade);
-        //点击其他地方消失
-        popupWindow_view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                    popupWindow = null;
-                }
-                return false;
-            }
-        });
-    }
 
 
     /**
