@@ -218,11 +218,12 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         new AlertDialog.Builder(this).setTitle("Warnning").setMessage("route信息将不会被保存，确认退出？")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog,int whichButton){
-                        Intent i = new Intent(RouteActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        RouteActivity.this.finish();
+                        /*Intent i = new Intent(RouteActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         Bundle intent_bundle = new Bundle();
                         intent_bundle.putSerializable("user",bundle.getSerializable("user"));
                         i.putExtras(intent_bundle);
-                        startActivity(i);
+                        startActivity(i);*/
                     }
                 }).show();
     }

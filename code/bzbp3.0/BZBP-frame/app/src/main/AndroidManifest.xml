@@ -45,11 +45,10 @@
             android:name="com.amap.api.v2.apikey"
             android:value="407893eda4d71fb31a854ef55441ebab" />
 
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:launchMode="singleTop"/>
         <activity android:name=".MenuActivity" />
         <activity android:name=".CameraActivity" />
         <activity android:name=".ShareActivity">
-            android:launchMode="singleInstance" >
         </activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -60,7 +59,7 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".RouteActivity" android:launchMode="singleTop"/>
-        
+
         <activity android:name=".Test2Activity" />
         <activity android:name=".SearchPostoActivity" />
         //gps定位服务
