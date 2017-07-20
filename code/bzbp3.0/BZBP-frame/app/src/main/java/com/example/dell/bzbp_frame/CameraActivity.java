@@ -42,8 +42,13 @@ public class CameraActivity extends TakePhotoActivity {
         LogUtil.d("1",location+"location");
     }
 
+
     @Override
     public void takeCancel() {
+
+        CameraActivity.this.finish();
+
+        /*
         //在route中拍照的流程
         if (this.bundle.getBoolean("is_in_route")){
             CameraActivity.this.finish();
@@ -51,6 +56,7 @@ public class CameraActivity extends TakePhotoActivity {
 
 
         //默认拍照的流程
+
         Intent i = new Intent(CameraActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         Bundle intent_bundle = new Bundle();
         //test
@@ -61,6 +67,7 @@ public class CameraActivity extends TakePhotoActivity {
         intent_bundle.putSerializable("user",this.bundle.getSerializable("user"));
         i.putExtras(intent_bundle);
         startActivity(i);
+        */
     }
 
     @Override
