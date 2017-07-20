@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.IntDef;
@@ -25,14 +26,24 @@ import com.example.dell.bzbp_frame.R;
 import com.example.dell.bzbp_frame.RouteActivity;
 import com.example.dell.bzbp_frame.model.MyLatlng;
 import com.example.dell.bzbp_frame.model.Route;
+import com.example.dell.bzbp_frame.model.User;
 
 public class MyService extends Service implements AMapLocationListener{
 
     public static final String TAG = "MyService";
     private NotificationManager mNotifyManager;
     private Route route;
+    private User user;
 
     public MyService() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Route getRoute() {
@@ -47,15 +58,23 @@ public class MyService extends Service implements AMapLocationListener{
     public void onCreate() {
         super.onCreate();
 
+        Intent i = new Intent(this, RouteActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("user",user);
+        i.putExtras(b);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+
         //通知栏提醒
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                //设置点击功能
+                .setContentIntent(pi)
                 //设置小图标
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //设置通知标题
                 .setContentTitle("记录路线中...")
                 //设置通知内容
-                .setContentText("若");
+                .setContentText("若离开界面之前已暂停，则不会记录");
         //设置通知时间，默认为系统发出通知的时间，通常不用设置
         //.setWhen(System.currentTimeMillis());
         //通过builder.build()方法生成Notification对象,并发送通知,id=1

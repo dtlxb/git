@@ -76,6 +76,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
     //这次route所形成的Route对象
     private Route route = null;
+    private User user = null;
 
     //在地图上绘制的路线
     private Polyline polyline = null;
@@ -137,6 +138,8 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
             //拿出user，然后把其他的都删掉
             User u = (User) bundle.getSerializable("user");
+            user = u;
+
             bundle.clear();
             bundle.putSerializable("user",u);
             //若是从posto回来的，就取出route，然后把bundle里的route删掉。避免把它带到别的地方去。
@@ -190,6 +193,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
 
             //赋值username
             User u = (User) this.getIntent().getExtras().getSerializable("user");
+            user = u;
             route.setUsername(u.getUsername());
 
 
@@ -578,6 +582,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             public void onServiceConnected(ComponentName name, IBinder service) {
                 ss = ((MyService.LocalBinder)service).getService();
                 ss.setRoute(route);
+                ss.setUser(user);
                 if (locating_status)ss.Doit();
             }
 

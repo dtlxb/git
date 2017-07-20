@@ -42,7 +42,7 @@ public class PostoDetailActivity extends AppCompatActivity {
     KeyMapDailog dialog;
     private ArrayList<Comment> resultlist = new ArrayList<Comment>();
     private Integer result_praise;
-    private TextView view_praise ;
+    private TextView view_praise;
     public static String ip="192.168.1.97:8080/BookStore";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
