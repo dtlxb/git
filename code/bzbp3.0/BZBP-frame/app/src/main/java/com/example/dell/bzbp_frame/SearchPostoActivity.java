@@ -43,7 +43,7 @@ public class SearchPostoActivity extends ListActivity{
 
 
         bundle = this.getIntent().getExtras();//获取前一activity传递的信息
-        
+
         //从routedetail中查看包含的posto会传一个“route”,否则为直接按位置搜索
         if(null==bundle.getSerializable("route")){
             //将用户位置写入posto中上传
