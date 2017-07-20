@@ -7,10 +7,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Route;
@@ -27,6 +30,7 @@ public class ShareActivity extends Activity {
     private ImageView imageview_image;
     private Button mCancelButton;
     private Button mShareButton;
+    private String share_choice;
     //public static String ip="50.78.0.134:8080/BookStore";
      public static String ip="192.168.1.97:8080/BookStore";
     @Override
@@ -78,7 +82,20 @@ public class ShareActivity extends Activity {
         imageview_image = (ImageView) findViewById(R.id.imageview_share_image);
         imageview_image.setImageBitmap(bitmap);
 
+        Spinner spinner = (Spinner) findViewById(R.id.share_spinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
 
+                String[] share = getResources().getStringArray(R.array.share);
+                share_choice = share[pos];
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                share_choice = "public";
+            }
+        });
 
 
         this.findViewById(R.id.button_share_cancel).setOnClickListener(new View.OnClickListener() {
@@ -121,7 +138,8 @@ public class ShareActivity extends Activity {
 
                 temp.setLatitude((Double)bundle.getDouble("latitude"));
                 temp.setLongitude((Double)bundle.getDouble("longitude"));
-
+                String test = share_choice;
+                temp.setPath_local(share_choice);
                 temp.setDate((Long) bundle.getSerializable("time"));
                 temp.setBelong_rid(-1);
                 MyThread myThread1 = new MyThread();

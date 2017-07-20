@@ -1,5 +1,6 @@
 package com.example.dell.bzbp_frame;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -185,6 +186,20 @@ public class RouteDetailActivity extends AppCompatActivity {
                     view_praise.setText("praise:"+abs(result_praise));
 
                 }
+            }
+        });
+
+
+        this.findViewById(R.id.routedetail_postos).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(RouteDetailActivity.this,SearchPostoActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("user",user);
+                intent_bundle.putSerializable("Route",route);
+                i.putExtras(intent_bundle);
+                startActivity(i);
+                //popupWindow.dismiss();
             }
         });
 
