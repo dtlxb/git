@@ -25,6 +25,13 @@
         android:layout_height="100dp"
         android:maxLength="100"
         android:hint="请输入comment"/>
+    <Spinner
+        android:id="@+id/share_spinner"
+        android:entries="@array/share"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+    </Spinner>
 
     <LinearLayout
         android:layout_width="match_parent"

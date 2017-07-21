@@ -92,6 +92,8 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //-----------------------------------------------
+
+                if(editText_username.getText().toString().equals("")) return;
                 Posto temp = new Posto();//pid为自己，rid为输入的目标id
                 temp.setPid(user.getId());
                 temp.setBelong_rid(Integer.parseInt(editText_username.getText().toString()));
@@ -110,13 +112,24 @@ public class FriendsActivity extends AppCompatActivity {
                 String apply_result = myThread1.getResult();
                 int apply_result_int = Integer.parseInt(apply_result);
                 if(apply_result_int<0){
-                    Toast.makeText(FriendsActivity.this,"已经存在的好友或自己", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FriendsActivity.this,"不合法的对象", Toast.LENGTH_LONG).show();
                 }else{
-
+                    Toast.makeText(FriendsActivity.this,"申请已提交", Toast.LENGTH_LONG).show();
                 }
 
 
 
+            }
+        });
+
+        this.findViewById(R.id.button_application_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FriendsActivity.this,FriendsApplyActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("user",user);
+                i.putExtras(intent_bundle);
+                startActivity(i);
             }
         });
 

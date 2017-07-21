@@ -43,23 +43,30 @@ public class SearchPostoActivity extends ListActivity{
 
 
         bundle = this.getIntent().getExtras();//获取前一activity传递的信息
-        //将用户位置写入posto中上传
-        Posto temp = new Posto();
-        temp.setLatitude((Double) bundle.getDouble("latitude"));
-        temp.setLongitude((Double) bundle.getDouble("longitude"));
 
-        MyThread myThread1 = new MyThread();
-        myThread1.setGetUrl("http://" + ip + "/rest/getPostosByLocation");
-        myThread1.setPosto(temp);
-        myThread1.setWhat(2);
-        myThread1.start();
-        try {
-            myThread1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        //从routedetail中查看包含的posto会传一个“route”,否则为直接按位置搜索
+        if(null==bundle.getSerializable("route")){
+            //将用户位置写入posto中上传
+            Posto temp = new Posto();
+            temp.setLatitude((Double) bundle.getDouble("latitude"));
+            temp.setLongitude((Double) bundle.getDouble("longitude"));
+
+            MyThread myThread1 = new MyThread();
+            myThread1.setGetUrl("http://" + ip + "/rest/getPostosByLocation");
+            myThread1.setPosto(temp);
+            myThread1.setWhat(2);
+            myThread1.start();
+            try {
+                myThread1.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //获得posto列表
+            resultlist = myThread1.getPostos();
+
+        }else{
+
         }
-        //获得posto列表
-        resultlist = myThread1.getPostos();
 
         if(resultlist.size() == 0){
             Posto emptyPosto = new Posto();
