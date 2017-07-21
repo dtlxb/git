@@ -1,6 +1,7 @@
 package com.example.dell.bzbp_frame;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +11,16 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.AMapException;
+import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.LatLngBounds;
+import com.amap.api.maps2d.model.Polyline;
+import com.amap.api.maps2d.model.PolylineOptions;
 import com.example.dell.bzbp_frame.model.Comment;
+import com.example.dell.bzbp_frame.model.MyLatlng;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Praise;
 import com.example.dell.bzbp_frame.model.Route;
@@ -28,13 +38,17 @@ import static com.example.dell.bzbp_frame.R.id.postodetail_praise;
 import static com.example.dell.bzbp_frame.R.id.routedetail_praise;
 import static java.lang.Math.abs;
 
-public class RouteDetailActivity extends AppCompatActivity {
+public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMapLoadedListener{
     private Bundle bundle;
     KeyMapDailog dialog;
     private ArrayList<Comment> resultlist = new ArrayList<Comment>();
     private Integer result_praise;
     private TextView view_praise ;
     public static String ip="192.168.1.97:8080/BookStore";
+    private MapView mapView;
+    private Route route;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +58,7 @@ public class RouteDetailActivity extends AppCompatActivity {
         bundle = this.getIntent().getExtras();
         view_praise = (TextView)this.findViewById(R.id.routedetail_praise);
         //获取posto,user
-        final Route route = (Route) bundle.getSerializable("route");
+        route = (Route) bundle.getSerializable("route");
         final User user = (User) bundle.getSerializable("user");
         //显示route信息
         ((TextView)this.findViewById(R.id.routedetail_name)).setText("name:"+route.getName());
@@ -52,6 +66,15 @@ public class RouteDetailActivity extends AppCompatActivity {
         ((TextView)this.findViewById(R.id.routedetail_username)).setText("user:"+route.getUsername());
         ((TextView)this.findViewById(R.id.routedetail_date)).setText("time:"+route.getStart_time());
         //显示地图
+
+
+        //继承地图的状态
+        mapView = (MapView) findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);// 此方法必须重写
+        init(); //初始化地图
+        //draw();
+        aMap.setOnMapLoadedListener(this);
+
 
         //获取评论
         Posto posto_getcomments = new Posto();
@@ -226,4 +249,89 @@ public class RouteDetailActivity extends AppCompatActivity {
     }
 
 
+
+    private AMap aMap;
+
+    /**、
+     * 初始化地图
+     */
+    private void init() {
+        if (aMap == null) {
+            aMap = mapView.getMap();
+            setUpMap();
+        }
+        //mLocationErrText = (TextView)findViewById(R.id.location_errInfo_text);
+        //mLocationErrText.setVisibility(View.GONE);
+    }
+
+    /**
+     * 设置一些amap的属性
+     */
+    private void setUpMap() {
+        //aMap.setLocationSource(this);// 设置定位监听
+        //aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+        //aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+
+        //my codes
+        //显示比例尺
+        aMap.getUiSettings().setScaleControlsEnabled(true);
+        //去掉缩放按钮
+        aMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+
+    private Polyline polyline;
+
+    //在地图上绘制当前route对象的路线
+    public void draw() {
+
+        if (polyline!=null)polyline.remove();
+
+        ArrayList<LatLng> draw_list = new ArrayList<LatLng>();
+        for (int i = 0;i<route.location_list.size();i++){
+            draw_list.add(route.location_list.get(i).toLatlng());
+        }
+
+        polyline = aMap.addPolyline(new PolylineOptions().
+                addAll(draw_list).width(10).color(Color.argb(100, 1, 80, 255)));
+
+
+        LatLngBounds latLngBounds = null;
+        try {
+            latLngBounds = new LatLngBounds(draw_list.get(0),draw_list.get(0));
+        } catch (AMapException e) {
+            e.printStackTrace();
+        }
+        for (int i = 1;i<draw_list.size();i++){
+            latLngBounds = latLngBounds.including(draw_list.get(i));
+        }
+        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds,0));
+
+
+
+    /*
+    //计算显示的范围
+        ArrayList<MyLatlng> location_list = new ArrayList<MyLatlng>(route.getLocation_list());
+        MyLatlng northeast = new MyLatlng(location_list.get(0).latitude,location_list.get(0).longitude);
+        MyLatlng southwest = new MyLatlng(location_list.get(0).latitude,location_list.get(0).longitude);
+        MyLatlng buf;
+
+        for (int i = 1;i<location_list.size();i++){
+            buf = location_list.get(i);
+            if (buf.latitude>northeast.latitude) northeast.latitude = buf.latitude;
+            if (buf.longitude>northeast.longitude) northeast.longitude = buf.longitude;
+            if (buf.latitude<southwest.latitude) southwest.latitude = buf.latitude;
+            if (buf.longitude<southwest.longitude) southwest.longitude = buf.longitude;
+        }
+     */
+    }
+
+
+    @Override
+    public void onMapLoaded() {
+
+        draw();
+    }
 }
+
+
