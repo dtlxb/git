@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_main_posto_marker, null,
                 false);
         // 创建PopupWindow实例
-        popupWindow = new PopupWindow(popupWindow_view, 400, 300, true);
+        popupWindow = new PopupWindow(popupWindow_view, 400, 500, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.AnimationFade);
         //点击其他地方消失
@@ -504,6 +504,10 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
     //它要和地图上显示的posto同步
     private ArrayList<Posto> posto_list = null;
 
+    //最后一次点击查看详细信息的posto。其生命周期不能长于点击函数！
+    private Posto temp = null;
+
+
 
     //把自己的位置发送给服务器，得到一个与自己临近的posto的List。（计算过程在服务器上完成）
     private List<Posto> getNearbyPostos(){
@@ -528,7 +532,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         List<Posto> resultlist = myThread1.getPostos();
 
         //更新posto_list
-        posto_list = (ArrayList<Posto>) ((ArrayList<Posto>) resultlist).clone();
+        posto_list = new ArrayList<Posto>(resultlist);
         return resultlist;
     }
 
@@ -596,10 +600,9 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
 
         ImageView imageView = (ImageView) popupWindow.getContentView().findViewById(R.id.main_posto_marker_image);
         TextView textView = (TextView) popupWindow.getContentView().findViewById((R.id.main_posto_marker_name));
-
+        Button button = (Button) popupWindow.getContentView().findViewById(R.id.button_main_posto_marker_detail);
         //找出marker对应的posto
         Integer pid = Integer.parseInt(marker.getTitle());
-        Posto temp = null;
 
         if (posto_list==null)return false;//当前地图上没有posto
         for (int i = 0;i<posto_list.size();i++){
@@ -614,8 +617,26 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         imageView.setImageBitmap(ImageStringToBitmap(temp.getImage()).getBitmap());
         textView.setText(temp.getName());
 
+        //final Posto this_button = temp;
+
+        //按按钮跳转到详情页面
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,PostoDetailActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("user",user);
+                b.putSerializable("posto",temp);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
+
         //弹出菜单
         popupWindow.showAsDropDown(findViewById(R.id.marker_pop));
+
+        //重置posto：temp
+        //temp = null;
 
         return true;
     }
