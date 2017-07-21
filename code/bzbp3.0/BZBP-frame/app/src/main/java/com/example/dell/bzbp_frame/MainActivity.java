@@ -348,6 +348,10 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         nearby_posto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //隐藏定位marker
+                mLocMarker.setVisible(false);
+                mCircle.setVisible(false);
+
                 showPostos(getNearbyPostos());
             }
         });
@@ -356,6 +360,10 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
             @Override
             public void onClick(View v) {
                 removeAllPostos();
+
+                //显示被隐藏的定位marker
+                mLocMarker.setVisible(true);
+                mCircle.setVisible(true);
             }
         });
     }
@@ -585,6 +593,9 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
     //点击marker的回调函数
     @Override
     public boolean onMarkerClick(Marker marker) {
+
+        if (marker.getTitle().equalsIgnoreCase("mylocation"))return true;
+
         if (aMap != null) {
             jumpPoint(marker);
         }
