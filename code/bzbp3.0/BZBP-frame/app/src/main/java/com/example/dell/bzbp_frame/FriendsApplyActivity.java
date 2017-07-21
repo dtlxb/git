@@ -64,6 +64,7 @@ public class FriendsApplyActivity extends ListActivity {
         if(resultlist.size() == 0){
             User emptyUser = new User();
             emptyUser.setUsername("暂无申请QAQ");
+            emptyUser.setId(-1);
             resultlist.add(emptyUser);
         }
 
@@ -132,6 +133,7 @@ public class FriendsApplyActivity extends ListActivity {
                 convertView = mInflater.inflate(R.layout.friendapplylist, null);
                 holder.username = (TextView)convertView.findViewById(R.id.friendapplylist_username);
                 holder.viewBtn = (Button)convertView.findViewById(R.id.friendapplylist_button);
+                if(temp.getId()==-1) holder.viewBtn.setText("返回");
                 convertView.setTag(holder);
 
             }else {
@@ -144,7 +146,7 @@ public class FriendsApplyActivity extends ListActivity {
 
                 @Override
                 public void onClick(View v) {
-
+                    if(temp.getId()==-1) FriendsApplyActivity.this.finish();
                     Posto agreeapply = new Posto();
                     agreeapply.setPid(temp.getId());
                     agreeapply.setBelong_rid(user.getId());

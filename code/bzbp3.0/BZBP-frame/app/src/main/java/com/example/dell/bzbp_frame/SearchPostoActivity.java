@@ -194,7 +194,7 @@ public class SearchPostoActivity extends ListActivity{
 
                 holder = (ViewHolder)convertView.getTag();
             }
-            
+
             holder.name.setText("name:" + (String) mData.get(position).get("postolist_name"));
             if(temp.getPid()!=-1) {
                 holder.img.setImageBitmap((Bitmap) mData.get(position).get("postolist_image"));
@@ -214,7 +214,7 @@ public class SearchPostoActivity extends ListActivity{
                         Bundle intent_bundle = new Bundle();
 
                         intent_bundle.putSerializable("user", bundle.getSerializable("user"));
-                        intent_bundle.putSerializable("posto", temp);
+                        intent_bundle.putSerializable("posto",temp);
                         i.putExtras(intent_bundle);
                         startActivity(i);
                     }
