@@ -101,11 +101,8 @@ public class ShareActivity extends Activity {
         this.findViewById(R.id.button_share_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ShareActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                Bundle intent_bundle = new Bundle();
-                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
-                i.putExtras(intent_bundle);
-                startActivity(i);
+             ShareActivity.this.finish();
+
             }
         });
 
