@@ -88,9 +88,10 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
 
         //用户信息
         bundle = this.getIntent().getExtras();
-        //Toast.makeText(MainActivity.this,"id:"+((User)bundle.getSerializable("user")).getId(), Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this,"id:"+((User)bundle.getSerializable("user")).getId(), Toast.LENGTH_LONG).show();
         //测试用户信息
-
+        TextView test_userid = (TextView)findViewById(R.id.main_userid);
+        test_userid.setText("ID:"+((User)bundle.getSerializable("user")).getId());
         user = new User();
         user.setUsername(((User)bundle.getSerializable("user")).getUsername());
         user.setPassword(((User)bundle.getSerializable("user")).getPassword());
