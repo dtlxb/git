@@ -30,4 +30,10 @@
         android:layout_height="wrap_content"
         android:text="show nearby postos"/>
 
+    <Button
+        android:id="@+id/button_menu_remove_posto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="remove all postos"/>
+
 </LinearLayout>
