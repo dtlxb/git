@@ -159,7 +159,7 @@ public class PostoDetailActivity extends AppCompatActivity {
                                 Toast.makeText(PostoDetailActivity.this, "发表成功", Toast.LENGTH_LONG).show();
 
                                 dialog.dismiss();
-
+                                onCreate(bundle);
                             }
                         }, 2000);
                     }
