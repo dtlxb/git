@@ -20,6 +20,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.example.dell.bzbp_frame.model.Posto;
+import com.example.dell.bzbp_frame.model.Route;
+import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
 import java.text.DateFormat;
@@ -37,17 +39,21 @@ public class SearchPostoActivity extends ListActivity{
     private List<Map<String, Object>> mData;
     private ArrayList<Posto> resultlist = new ArrayList<Posto>();
     private Bundle bundle;
+    private User user;
+    private Route route;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
         bundle = this.getIntent().getExtras();//获取前一activity传递的信息
-
+        user = (User)bundle.getSerializable("user");
+        route = (Route)bundle.getSerializable("route");
         //从routedetail中查看包含的posto会传一个“route”,否则为直接按位置搜索
-        if(null==bundle.getSerializable("route")){
-            //将用户位置写入posto中上传
+        if(null==route){
+            //将用户位置&用户名写入posto中上传
             Posto temp = new Posto();
+            temp.setUsername(user.getUsername());
             temp.setLatitude((Double) bundle.getDouble("latitude"));
             temp.setLongitude((Double) bundle.getDouble("longitude"));
 
@@ -66,11 +72,27 @@ public class SearchPostoActivity extends ListActivity{
 
         }else{
 
+            Posto temp = new Posto();
+            temp.setPid(route.getRid());
+            temp.setUsername(user.getUsername());
+            MyThread myThread1 = new MyThread();
+            myThread1.setGetUrl("http://" + ip + "/rest/getPostosByRouteId");
+            myThread1.setPosto(temp);
+            myThread1.setWhat(2);
+            myThread1.start();
+            try {
+                myThread1.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //获得posto列表
+            resultlist = myThread1.getPostos();
         }
 
         if(resultlist.size() == 0){
             Posto emptyPosto = new Posto();
             emptyPosto.setName("无符合条件的搜索结果");
+            emptyPosto.setPid(-1);
             resultlist.add(emptyPosto);
         }
 
@@ -88,14 +110,15 @@ public class SearchPostoActivity extends ListActivity{
 
             Bitmap bit;
             String picture=resultlist.get(i).getImage();
-            byte[] decodedString = Base64.decode(picture, Base64.DEFAULT);
-            bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-            map.put("postolist_image",bit);
+            if(resultlist.get(i).getPid()>=0) {
+                byte[] decodedString = Base64.decode(picture, Base64.DEFAULT);
+                bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                map.put("postolist_image",bit);
+                map.put("postolist_username", resultlist.get(i).getUsername());
+                map.put("postolist_comment", resultlist.get(i).getComment());
+                map.put("postolist_date", resultlist.get(i).getDate());
+            }
             map.put("postolist_name", resultlist.get(i).getName());
-            map.put("postolist_comment", resultlist.get(i).getComment());
-            map.put("postolist_username", resultlist.get(i).getUsername());
-            map.put("postolist_date", resultlist.get(i).getDate());
             list.add(map);
         }
 
@@ -154,12 +177,17 @@ public class SearchPostoActivity extends ListActivity{
                 holder=new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.postolist, null);
-                holder.img = (ImageView)convertView.findViewById(R.id.postolist_image);
-                holder.name = (TextView)convertView.findViewById(R.id.postolist_name);
-                holder.comment = (TextView)convertView.findViewById(R.id.postolist_comment);
+
                 holder.username = (TextView)convertView.findViewById(R.id.postolist_username);
-                holder.date=(TextView)convertView.findViewById(R.id.postolist_date);
-                holder.viewBtn = (Button)convertView.findViewById(R.id.postolist_button);
+
+                if(temp.getPid()!=-1) {
+                    holder.viewBtn = (Button) convertView.findViewById(R.id.postolist_button);
+                    holder.img = (ImageView)convertView.findViewById(R.id.postolist_image);
+                    holder.name = (TextView)convertView.findViewById(R.id.postolist_name);
+                    holder.comment = (TextView)convertView.findViewById(R.id.postolist_comment);
+                    holder.date=(TextView)convertView.findViewById(R.id.postolist_date);
+                }
+                holder.name = (TextView)convertView.findViewById(R.id.postolist_name);
                 convertView.setTag(holder);
 
             }else {
@@ -167,30 +195,31 @@ public class SearchPostoActivity extends ListActivity{
                 holder = (ViewHolder)convertView.getTag();
             }
 
+            holder.name.setText("name:" + (String) mData.get(position).get("postolist_name"));
+            if(temp.getPid()!=-1) {
+                holder.img.setImageBitmap((Bitmap) mData.get(position).get("postolist_image"));
 
-            holder.img.setImageBitmap((Bitmap)mData.get(position).get("postolist_image"));
-            holder.name.setText("name:"+(String)mData.get(position).get("postolist_name"));
-            //holder.comment.setText((String)mData.get(position).get("postolist_comment"));
-            //holder.username.setText((String)mData.get(position).get("postolist_username"));
+                //holder.comment.setText((String)mData.get(position).get("postolist_comment"));
+                //holder.username.setText((String)mData.get(position).get("postolist_username"));
 
-            DateFormat format= new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
-            String time = format.format((Long)mData.get(position).get("postolist_date"));
-            holder.date.setText("time:"+time);
+                DateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+                String time = format.format((Long) mData.get(position).get("postolist_date"));
+                holder.date.setText("time:" + time);
 
-            holder.viewBtn.setOnClickListener(new View.OnClickListener() {
+                holder.viewBtn.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(SearchPostoActivity.this,PostoDetailActivity.class);
-                    Bundle intent_bundle = new Bundle();
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(SearchPostoActivity.this, PostoDetailActivity.class);
+                        Bundle intent_bundle = new Bundle();
 
-                    intent_bundle.putSerializable("user",bundle.getSerializable("user"));
-                    intent_bundle.putSerializable("posto",temp);
-                    i.putExtras(intent_bundle);
-                    startActivity(i);
-                }
-            });
-
+                        intent_bundle.putSerializable("user", bundle.getSerializable("user"));
+                        intent_bundle.putSerializable("posto",temp);
+                        i.putExtras(intent_bundle);
+                        startActivity(i);
+                    }
+                });
+            }
 
             return convertView;
         }

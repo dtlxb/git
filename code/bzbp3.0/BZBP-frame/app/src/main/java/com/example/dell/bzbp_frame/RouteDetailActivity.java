@@ -196,7 +196,7 @@ public class RouteDetailActivity extends AppCompatActivity {
                 Intent i = new Intent(RouteDetailActivity.this,SearchPostoActivity.class);
                 Bundle intent_bundle = new Bundle();
                 intent_bundle.putSerializable("user",user);
-                intent_bundle.putSerializable("Route",route);
+                intent_bundle.putSerializable("route",route);
                 i.putExtras(intent_bundle);
                 startActivity(i);
                 //popupWindow.dismiss();
