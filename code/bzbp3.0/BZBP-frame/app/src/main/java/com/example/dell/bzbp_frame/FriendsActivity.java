@@ -135,6 +135,97 @@ public class FriendsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //获取bundle
+        bundle = this.getIntent().getExtras();
+        //获取user
+        user=(User)bundle.getSerializable("user");
+
+        final EditText editText_name=(EditText)findViewById(R.id.edittext_share_name);
+
+        //获取好友列表
+        Posto getfriends = new Posto();
+        getfriends.setPid(user.getId());
+        MyThread myThread1 = new MyThread();
+        myThread1.setGetUrl("http://" + ip + "/rest/getFriendsById");
+        myThread1.setPosto(getfriends);
+        myThread1.setWhat(9);
+        myThread1.start();
+        try {
+            myThread1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        resultlist = myThread1.getUsers();
+
+        //没有好友的情况
+        if(resultlist.size() == 0){
+            User emptyUser = new User();
+            emptyUser.setUsername("暂无好友QAQ");
+            resultlist.add(emptyUser);
+        }
+
+        SimpleAdapter adapter = new SimpleAdapter(this,getData(),R.layout.friendlist,
+                new String[]{
+                        "friendlist_username"},
+                new int[]{
+                        R.id.friendlist_username
+                });
+
+        ListView friendlist = (ListView) findViewById(R.id.friends_list);
+        friendlist.setAdapter(adapter);
+
+
+        final EditText editText_username=(EditText)findViewById(R.id.edit_add_friend);
+
+        this.findViewById(R.id.button_add_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //-----------------------------------------------
+
+                if(editText_username.getText().toString().equals("")) return;
+                Posto temp = new Posto();//pid为自己，rid为输入的目标id
+                temp.setPid(user.getId());
+                temp.setBelong_rid(Integer.parseInt(editText_username.getText().toString()));
+
+                MyThread myThread1 = new MyThread();
+                myThread1.setGetUrl("http://"+ip+"/rest/applyFriend");
+                myThread1.setWhat(0);
+                myThread1.setPosto(temp);
+                myThread1.start();
+
+                try {
+                    myThread1.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                String apply_result = myThread1.getResult();
+                int apply_result_int = Integer.parseInt(apply_result);
+                if(apply_result_int<0){
+                    Toast.makeText(FriendsActivity.this,"不合法的对象", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(FriendsActivity.this,"申请已提交", Toast.LENGTH_LONG).show();
+                }
+
+
+
+            }
+        });
+
+        this.findViewById(R.id.button_application_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FriendsActivity.this,FriendsApplyActivity.class);
+                Bundle intent_bundle = new Bundle();
+                intent_bundle.putSerializable("user",user);
+                i.putExtras(intent_bundle);
+                startActivity(i);
+            }
+        });
+    }
+
     private List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

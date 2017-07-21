@@ -91,6 +91,7 @@ public class CameraActivity extends TakePhotoActivity {
 
         i.putExtras(this.bundle);
         startActivity(i);
+        CameraActivity.this.finish();
     }
 
 }
