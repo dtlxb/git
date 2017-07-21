@@ -44,7 +44,7 @@
         android:layout_marginTop="300dp"
         android:text="        register"
         android:textSize="15dp"
-        android:background="@drawable/login_button"/>
+        android:background="@drawable/button1"/>
 
     <Button
         android:layout_height="49dp"
@@ -56,7 +56,7 @@
         android:layout_marginTop="350dp"
         android:text="        cancel"
         android:textSize="15dp"
-        android:background="@drawable/login_button"/>
+        android:background="@drawable/button1"/>
 
 
 </FrameLayout>
