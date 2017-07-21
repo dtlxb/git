@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 
+import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.LogUtil;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.model.TResult;

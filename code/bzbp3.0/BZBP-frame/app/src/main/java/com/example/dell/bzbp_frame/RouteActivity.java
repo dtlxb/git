@@ -373,6 +373,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 bundle.putBoolean("is_in_route",true);
                 bundle.putInt("rid",route.getRid());
                 bundle.putSerializable("route",route);
+                bundle.putSerializable("user",user);
                 bundle.putDouble("latitude",last_location.latitude);
                 bundle.putDouble("longitude",last_location.longitude);
                 //时间
@@ -641,6 +642,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         //拿到route.posto_list里最后一个posto的实体
         Posto posto = new Posto();
         posto.setPid(route.getPids().get(route.getPids().size()-1));
+        posto.setUsername(user.getUsername());
 
         MyThread myThread1 = new MyThread();
         myThread1.setGetUrl("http://" + ip + "/rest/getPostoById");
@@ -653,6 +655,8 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             e.printStackTrace();
         }
         //if (myThread1.getPostos()==null)return;
+
+        if (myThread1.getPostos()==null)return;
 
         posto = myThread1.getPostos().get(0);
         if (posto==null)return;
