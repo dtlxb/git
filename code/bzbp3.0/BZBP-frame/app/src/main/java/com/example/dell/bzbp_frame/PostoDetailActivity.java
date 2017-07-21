@@ -49,6 +49,10 @@ public class PostoDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_posto_detail);
         //获取bundle
+        init();
+    }
+    private void init(){
+        //获取bundle
         bundle = this.getIntent().getExtras();
         view_praise = (TextView)this.findViewById(R.id.postodetail_praise);
         //获取posto,user
@@ -159,7 +163,7 @@ public class PostoDetailActivity extends AppCompatActivity {
                                 Toast.makeText(PostoDetailActivity.this, "发表成功", Toast.LENGTH_LONG).show();
 
                                 dialog.dismiss();
-                                onCreate(bundle);
+                                init();
                             }
                         }, 2000);
                     }
@@ -200,8 +204,6 @@ public class PostoDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
-
 
     }
     //listview获取信息
