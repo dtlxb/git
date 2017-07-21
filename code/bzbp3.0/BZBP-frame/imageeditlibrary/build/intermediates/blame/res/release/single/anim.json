@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_slide_out_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\in_bottom_to_top.xml",
+        "source": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\src\\main\\res\\anim\\in_bottom_to_top.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_fade_out.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_fade_out.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_slide_in_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_slide_in_top.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_slide_out_top.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_out_top.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_popup_exit.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_popup_exit.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\out_bottom_to_top.xml",
+        "source": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\src\\main\\res\\anim\\out_bottom_to_top.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_fade_in.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_fade_in.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\menushow.xml",
+        "source": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\src\\main\\res\\anim\\menushow.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\menuhide.xml",
+        "source": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\src\\main\\res\\anim\\menuhide.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\MyApplication17\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\anim\\abc_popup_enter.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_popup_enter.xml"
+    }
+]
