@@ -29,9 +29,9 @@
         android:id="@+id/share_spinner"
         android:entries="@array/share"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"/>
 
-    </Spinner>
+
 
     <LinearLayout
         android:layout_width="match_parent"

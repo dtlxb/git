@@ -1,9 +1,0 @@
-diff a/code/bzbp3.0/BZBP-frame/app/src/main/AndroidManifest.xml b/code/bzbp3.0/BZBP-frame/app/src/main/AndroidManifest.xml	(rejected hunks)
-@@ -44,6 +44,7 @@
-         <meta-data
-             android:name="com.amap.api.v2.apikey"
- 
-+            android:value="825fccdfaf26f5a59cbbcdaed69e3f15"/>
- 
- 
-         <activity android:name=".MainActivity"/>

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.PopupWindow;
@@ -499,6 +500,10 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
     //marker_list持有当前地图上的所有marker。
     private ArrayList<Marker> marker_list = new ArrayList<Marker>();
 
+    //posto_list持有上次“搜索附近posto”所拿回来的所有posto。
+    //它要和地图上显示的posto同步
+    private ArrayList<Posto> posto_list = null;
+
 
     //把自己的位置发送给服务器，得到一个与自己临近的posto的List。（计算过程在服务器上完成）
     private List<Posto> getNearbyPostos(){
@@ -522,6 +527,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         }
         List<Posto> resultlist = myThread1.getPostos();
 
+        //更新posto_list
+        posto_list = (ArrayList<Posto>) ((ArrayList<Posto>) resultlist).clone();
         return resultlist;
     }
 
@@ -531,6 +538,8 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         for (int i = 0;i<marker_list.size();i++){
             marker_list.get(i).remove();
         }
+        //重置posto_list
+        posto_list = new ArrayList<Posto>();
         return marker_list.size();
     }
 
@@ -556,13 +565,7 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         LatLng position = new LatLng(posto.getLatitude(),posto.getLongitude());
 
         //取出posto内部的图片
-        Bitmap bit;
-        BitmapDescriptor bitmapDescriptor;
-        BitmapDescriptorFactory bitmapDescriptorFactory = new BitmapDescriptorFactory();
-
-        byte[] decodedString = Base64.decode(posto.getImage(), Base64.DEFAULT);
-        bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        bitmapDescriptor = bitmapDescriptorFactory.fromBitmap(bit);
+        BitmapDescriptor bitmapDescriptor = ImageStringToBitmap(posto.getImage());
 
         //设置marker的信息
         MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
@@ -582,14 +585,37 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
             jumpPoint(marker);
         }
         Toast.makeText(MainActivity.this, "您点击了Posto:"+marker.getTitle(), Toast.LENGTH_LONG).show();
-        //if (null == popupWindow){
-            initPopuptWindow_posto();
 
-        //弹出一个菜单
+
+        //连接到图形界面
+        initPopuptWindow_posto();
+
+        //接下来实现“在弹出菜单里显示posto的详细信息”。
+
+        //找到内容所对应的view
+
+        ImageView imageView = (ImageView) popupWindow.getContentView().findViewById(R.id.main_posto_marker_image);
+        TextView textView = (TextView) popupWindow.getContentView().findViewById((R.id.main_posto_marker_name));
+
+        //找出marker对应的posto
+        Integer pid = Integer.parseInt(marker.getTitle());
+        Posto temp = null;
+
+        if (posto_list==null)return false;//当前地图上没有posto
+        for (int i = 0;i<posto_list.size();i++){
+            if (posto_list.get(i).getPid()==pid){
+                temp = posto_list.get(i);
+                break;
+            }
+        }
+        if (temp==null)return false;//没找到marker对应的posto
+
+        //更新内容
+        imageView.setImageBitmap(ImageStringToBitmap(temp.getImage()).getBitmap());
+        textView.setText(temp.getName());
+
+        //弹出菜单
         popupWindow.showAsDropDown(findViewById(R.id.marker_pop));
-
-        //在弹出菜单里显示posto的详细信息。
-        //
 
         return true;
     }
@@ -629,5 +655,20 @@ public class MainActivity extends AppCompatActivity implements LocationSource,
         });
     }
 
+
+
+    //辅助函数：把posto里的image String转化成BitmapDescriptor
+
+    public BitmapDescriptor ImageStringToBitmap(String image){
+        //取出posto内部的图片
+        Bitmap bit;
+        BitmapDescriptor bitmapDescriptor;
+        BitmapDescriptorFactory bitmapDescriptorFactory = new BitmapDescriptorFactory();
+
+        byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+        bit = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        bitmapDescriptor = bitmapDescriptorFactory.fromBitmap(bit);
+        return bitmapDescriptor;
+    }
 
 }

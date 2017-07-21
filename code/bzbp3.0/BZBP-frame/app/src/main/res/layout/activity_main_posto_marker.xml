@@ -7,9 +7,15 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/main_posto_marker_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Posto的名字"/>
+
+    <ImageView
+        android:id="@+id/main_posto_marker_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/button_main_posto_marker_detail"
