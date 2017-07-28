@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/button_menu_search_posto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="search posto"/>
+
+    <Button
+        android:id="@+id/button_menu_search_route"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="search route"/>
+
+    <Button
+        android:id="@+id/button_menu_friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="frineds"/>
+
+    <Button
+        android:id="@+id/button_menu_nearby_posto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="show nearby postos"/>
+
+    <Button
+        android:id="@+id/button_menu_remove_posto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="remove all postos"/>
+
+    <Button
+        android:id="@+id/button_menu_album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="album"/>
+
+
+</LinearLayout>
