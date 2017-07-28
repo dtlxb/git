@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\WJB\BZBP-frame\BZBP-frame\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="release"><source path="D:\WJB\BZBP-frame\BZBP-frame\imageeditlibrary\src\release\shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="C:\Users\wangjb\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="release"><source path="C:\Users\wangjb\Documents\git\code\BZBP-S\imageeditlibrary\src\release\shaders"/></dataSet></merger>
