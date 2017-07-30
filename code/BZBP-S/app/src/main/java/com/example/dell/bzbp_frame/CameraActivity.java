@@ -19,6 +19,7 @@ public class CameraActivity extends TakePhotoActivity {
     private Bundle bundle;
     private boolean is_in_route = false;    //是否在route里
     private int rid;                        //如果在，则获得rid
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +82,6 @@ public class CameraActivity extends TakePhotoActivity {
         //long time = timestamp.getTime();// 直接转换成long
 
         this.bundle.putString("images",s);
-        //this.bundle.putSerializable("time",time);
 
         //route
 
@@ -89,7 +89,6 @@ public class CameraActivity extends TakePhotoActivity {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         long time = timestamp.getTime();// 直接转换成long
         bundle.putLong("time",time);
-
         i.putExtras(this.bundle);
         startActivity(i);
         CameraActivity.this.finish();

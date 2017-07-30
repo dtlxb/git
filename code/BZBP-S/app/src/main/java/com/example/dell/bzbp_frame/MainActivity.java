@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
     private MyLatlng last_location = new MyLatlng(-1.0,-1.0);
     private Bundle bundle;
     private User user;
-    public static String ip = "192.168.1.97:8080/BookStore";
+    public static String ip;
 
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
@@ -97,6 +97,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
 
     @Override
     protected void initData() {
+        ip = this.getString(R.string.ipv4);
         bundle = this.getIntent().getExtras();
         user = (User)bundle.getSerializable("user");
         Toast.makeText(MainActivity.this,"id:"+user.getId(), Toast.LENGTH_LONG).show();
@@ -177,7 +178,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         new AlertDialog.Builder(this).setTitle("Warnning").setMessage("Are you sure left?")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog,int whichButton){
-                        MainActivity.this.finish();
+                        android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 }).show();
     }

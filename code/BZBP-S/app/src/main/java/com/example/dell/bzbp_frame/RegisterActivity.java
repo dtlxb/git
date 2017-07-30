@@ -1,46 +1,41 @@
 package com.example.dell.bzbp_frame;
 
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
-import java.util.ArrayList;
-import java.util.List;
+public class RegisterActivity extends BaseActivity{
 
-public class RegisterActivity extends AppCompatActivity {
+    private static User thisuser;
+    private static String ip;
+    private Button button_register_register;
+    private Button button_register_cancel;
+    private EditText editText_register_username;
+    private EditText editText_register_password;
 
-    private Handler hh=new Handler();
-    public static User thisuser;
-
-
-    private List<User> users=new ArrayList<User>();
-
-    public static String ip="192.168.1.97:8080/BookStore";
-
-    public void msgbox(String msg)
-    {
-        new AlertDialog.Builder(this).setTitle("提示").setMessage(msg)
-                .setNeutralButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
+    @Override
+    protected void initData() {
+        ip = this.getString(R.string.ipv4);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void initView() {
         setContentView(R.layout.activity_register);
-        this.findViewById(R.id.button_register_cancel).setOnClickListener(new View.OnClickListener() {
+        button_register_register = (Button) findViewById(R.id.button_register_register);
+        button_register_cancel = (Button) findViewById(R.id.button_register_cancel);
+        editText_register_username = (EditText) findViewById(R.id.edittext_register_username);
+        editText_register_password = (EditText) findViewById(R.id.edittext_register_password);
+    }
+
+    @Override
+    protected void initListener() {
+        //取消注册
+        button_register_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -48,23 +43,24 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        this.findViewById(R.id.button_register_register).setOnClickListener(new View.OnClickListener() {
+        //提交注册
+        button_register_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                String temp_username=((EditText)findViewById(R.id.edittext_register_username)).getText().toString();
-                String temp_password=((EditText)findViewById(R.id.edittext_register_password)).getText().toString();
-
-                if(temp_username.equals("")||temp_password.equals(""))
+                //获取用户输入的用户名和密码
+                String username = editText_register_username.getText().toString();
+                String password = editText_register_password.getText().toString();
+                //判断输入是否为空
+                if(username.equals("")||password.equals(""))
                 {
                     msgbox("不能为空");
                     return;
                 }
-
+                //将用户名和密码包装成USER提交
                 thisuser=new User();
-                thisuser.setUsername(temp_username);
-                thisuser.setPassword(temp_password);
+                thisuser.setUsername(username);
+                thisuser.setPassword(password);
 
                 MyThread myThread1 = new MyThread();
                 myThread1.setGetUrl("http://"+ip+"/rest/addUser");
@@ -76,13 +72,9 @@ public class RegisterActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                //msgbox( myThread1.getResult());
-
+                //注册成功返回ID，否则返回-1
                 String result = myThread1.getResult();
                 Integer result_int=Integer.parseInt(result);
-                //msgbox(result);
-
                 if(result_int<=0){
                     msgbox("用户名重复");
                 } else{
@@ -95,6 +87,11 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void doBusiness(Bundle savedInstanceState) {
+
     }
 }
 

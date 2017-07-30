@@ -1,11 +1,7 @@
 package com.example.dell.bzbp_frame;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,12 +9,9 @@ import android.widget.EditText;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoginActivity extends BaseActivity {
 
-    public static String ip = "192.168.1.97:8080/BookStore";
+    public static String ip;
     private Button button_login_register;
     private Button button_login_login;
     private EditText editText_login_username;
@@ -39,6 +32,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        ip = this.getString(R.string.ipv4);
         // 用来初始化数据以及处理数据
     }
 
@@ -90,7 +84,6 @@ public class LoginActivity extends BaseActivity {
                 //登录成功返回用户数字ID，否则返回-1
                 String result = myThread1.getResult();
                 Integer result_int=Integer.parseInt(result);
-                //int result_int = Integer.parseInt(password);
                 if(result_int<=0){
                     msgbox("用户名或密码错误");
                 }else{

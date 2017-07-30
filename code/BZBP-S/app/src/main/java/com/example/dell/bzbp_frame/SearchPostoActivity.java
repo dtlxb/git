@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class SearchPostoActivity extends BaseActivity{
 
-    public static String ip = "192.168.1.97:8080/BookStore";
+    public static String ip;
 
     private ListView list_searchposto;
     private TextView textView_searchposto_no_posto;
@@ -47,6 +47,7 @@ public class SearchPostoActivity extends BaseActivity{
 
     @Override
     protected void initData() {
+        ip = this.getString(R.string.ipv4);
         //获取前一activity传递的信息
         bundle = this.getIntent().getExtras();
         user = (User)bundle.getSerializable("user");
