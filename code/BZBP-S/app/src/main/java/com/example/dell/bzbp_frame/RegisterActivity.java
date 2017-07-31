@@ -63,15 +63,8 @@ public class RegisterActivity extends BaseActivity{
                 thisuser.setPassword(password);
 
                 MyThread myThread1 = new MyThread();
-                myThread1.setGetUrl("http://"+ip+"/rest/addUser");
-                myThread1.setUser(thisuser);
-                myThread1.setWhat(1);
-                myThread1.start();
-                try {
-                    myThread1.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                submit(myThread1,ip+"/rest/addUser",thisuser,1);
+
                 //注册成功返回ID，否则返回-1
                 String result = myThread1.getResult();
                 Integer result_int=Integer.parseInt(result);

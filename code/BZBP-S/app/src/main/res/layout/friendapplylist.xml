@@ -4,12 +4,12 @@
               android:layout_width="fill_parent"
               android:layout_height="80dp">
 
-        <TextView android:id="@+id/friendapplylist_username"
+        <TextView android:id="@+id/text_view_friendapplylist_username"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"/>
 
         <Button
-            android:id="@+id/friendapplylist_button"
+            android:id="@+id/button_friendapplylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="200dp"

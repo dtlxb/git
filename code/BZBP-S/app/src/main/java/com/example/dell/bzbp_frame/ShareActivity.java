@@ -25,65 +25,59 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class ShareActivity extends Activity {
-    private TextView textview_address;
-    private ImageView imageview_image;
-    private Button mCancelButton;
-    private Button mShareButton;
+public class ShareActivity extends BaseActivity {
+
+    private ImageView imageview_share_image;
+    private EditText editText_share_name;
+    private EditText editText_share_comment;
+    private Button button_share_share;
+    private Button button_share_cancel;
+    private Spinner spinner_share;
     private String share_choice;
-    //public static String ip="50.78.0.134:8080/BookStore";
-     public static String ip="192.168.1.97:8080/BookStore";
+    public static String ip;
+    private Bundle bundle;
+    private User user;
+    private Bitmap bitmap;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_share);
+    protected void initData() {
+        ip = this.getString(R.string.ipv4);
 
-
-        final Bundle bundle = this.getIntent().getExtras();
+        bundle = this.getIntent().getExtras();
         //获取user
-        User user = (User)bundle.getSerializable("user");
+        user = (User)bundle.getSerializable("user");
         //获取照片在手机中的路径并生成bitmap
         String image_path = (String) bundle.getString("images");
-       // String image_path = Environment.getExternalStorageDirectory()+"/temp/1499824307256.jpg";
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(image_path);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-
-
         BitmapFactory.Options opts = new BitmapFactory.Options();
         //缩放的比例，缩放是很难按准备的比例进行缩放的，其值表明缩放的倍数，SDK中建议其值是2的指数值,值越大会导致图片不清晰
-
-
         opts.inPurgeable = true;
         opts.inInputShareable = true;
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         opts.inSampleSize =2;
-        final Bitmap bitmap = BitmapFactory.decodeStream(fis,null,opts);
+        bitmap = BitmapFactory.decodeStream(fis,null,opts);
+    }
 
+    @Override
+    protected void initView() {
+        setContentView(R.layout.activity_share);
+        imageview_share_image = (ImageView)findViewById(R.id.imageview_share_image);
+        editText_share_name = (EditText)findViewById(R.id.edittext_share_name);
+        editText_share_comment = (EditText)findViewById(R.id.edittext_share_comment);
+        button_share_share = (Button)findViewById(R.id.button_share_share);
+        button_share_cancel = (Button)findViewById(R.id.button_share_cancel);
+        spinner_share = (Spinner)findViewById(R.id.spinner_share);
+    }
 
-
-        //回收
-
-
-        //获取命名&评论
-        final EditText editText_name=(EditText)findViewById(R.id.edittext_share_name);
-        final EditText editText_comment=(EditText)findViewById(R.id.edittext_share_comment);
-
-        //test
-        /*
-        textview_address = (TextView) findViewById(R.id.text_view_address);
-        textview_address.setText(user.getUsername());
-        */
-        //显示图片
-        imageview_image = (ImageView) findViewById(R.id.imageview_share_image);
-        imageview_image.setImageBitmap(bitmap);
-
-        Spinner spinner = (Spinner) findViewById(R.id.share_spinner);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    @Override
+    protected void initListener() {
+        //用户选择照片公开度：public，friend，private
+        spinner_share.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
@@ -97,28 +91,26 @@ public class ShareActivity extends Activity {
             }
         });
 
-
-        this.findViewById(R.id.button_share_cancel).setOnClickListener(new View.OnClickListener() {
+        //cancel
+        button_share_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             ShareActivity.this.finish();
-
+                ShareActivity.this.finish();
             }
         });
 
-
-        this.findViewById(R.id.button_share_share).setOnClickListener(new View.OnClickListener() {
+        //提交posto
+        button_share_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //-----------------------------------------------
                 Posto temp = new Posto();
-                temp.setUsername(((User)bundle.getSerializable("user")).getUsername());
-                temp.setName(editText_name.getText().toString());
-                temp.setComment(editText_comment.getText().toString());
+                temp.setUsername(user.getUsername());
+                temp.setName(editText_share_name.getText().toString());
+                temp.setComment(editText_share_comment.getText().toString());
 
-                //对于route过程中的posto，设置其belong_rid
-                if (bundle.getBoolean("is_in_route"))temp.setBelong_rid(bundle.getInt("rid"));
 
+                //将图片转化为String
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -129,27 +121,19 @@ public class ShareActivity extends Activity {
                 }
                 byte[] appicon =  baos.toByteArray();// 转为byte数组
                 String url = Base64.encodeToString(appicon, Base64.NO_WRAP);
+                //包装posto
                 temp.setImage(url);
-
-
-
                 temp.setLatitude((Double)bundle.getDouble("latitude"));
                 temp.setLongitude((Double)bundle.getDouble("longitude"));
-                String test = share_choice;
+                //String test = share_choice;
                 temp.setPath_local(share_choice);
                 temp.setDate((Long) bundle.getSerializable("time"));
                 temp.setBelong_rid(-1);
-                MyThread myThread1 = new MyThread();
-                myThread1.setGetUrl("http://"+ip+"/rest/addPosto");
-                myThread1.setWhat(0);
-                myThread1.setPosto(temp);
-                myThread1.start();
+                //对于route过程中的posto，设置其belong_rid
+                if (bundle.getBoolean("is_in_route"))temp.setBelong_rid(bundle.getInt("rid"));
 
-                try {
-                    myThread1.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                MyThread myThread1 = new MyThread();
+                submit(myThread1,ip+"/rest/addPosto",temp,0);
 
                 int last_pid = -1;
                 if (myThread1.getRid()!=null){
@@ -168,7 +152,7 @@ public class ShareActivity extends Activity {
                     Intent i = new Intent(ShareActivity.this,RouteActivity.class);
                     Bundle intent_bundle = new Bundle();
                     //user还是之前的user
-                    intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
+                    intent_bundle.putSerializable("user",user);
                     //route对象的pid list里加进本次新的pid
                     intent_bundle.putInt("last_pid",last_pid);
                     //intent_bundle.putSerializable("last_posto",temp);
@@ -190,5 +174,12 @@ public class ShareActivity extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void doBusiness(Bundle savedInstanceState) {
+        //显示图片
+        imageview_share_image.setImageBitmap(bitmap);
+
     }
 }

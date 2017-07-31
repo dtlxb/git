@@ -1,29 +1,5 @@
 [
     {
-        "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 57,
-                    "endOffset": 108
-                },
-                "from": {
-                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-w820dp\\dimens.xml",
-                    "position": {
-                        "startLine": 4,
-                        "startColumn": 4,
-                        "startOffset": 295,
-                        "endColumn": 57,
-                        "endOffset": 348
-                    }
-                }
-            }
-        ]
-    },
-    {
         "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
         "map": [
             {
@@ -36,30 +12,6 @@
                 },
                 "from": {
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-w820dp\\dimens.xml",
-                    "position": {
-                        "startLine": 4,
-                        "startColumn": 4,
-                        "startOffset": 295,
-                        "endColumn": 57,
-                        "endOffset": 348
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "D:\\WJB\\BZBP-frame\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 57,
-                    "endOffset": 108
-                },
-                "from": {
-                    "file": "D:\\WJB\\BZBP-frame\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\values-w820dp\\dimens.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,

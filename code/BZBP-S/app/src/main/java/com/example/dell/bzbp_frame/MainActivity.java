@@ -91,7 +91,6 @@ public class MainActivity extends BaseActivity implements LocationSource,
         textView_main_id = (TextView)findViewById(R.id.textview_main_userid);
         mapView = (MapView) findViewById(R.id.map_main);
         mLocationErrText = (TextView)findViewById(R.id.location_errInfo_text);
-
         textView_main_id.setText("ID"+user.getId());
     }
 
@@ -302,7 +301,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,FriendsActivity.class);
+                Intent i = new Intent(MainActivity.this,Friends2Activity.class);
                 Bundle intent_bundle = new Bundle();
                 //传递user信息
                 intent_bundle.putSerializable("user",bundle.getSerializable("user"));
@@ -502,15 +501,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
 
         //
         MyThread myThread1 = new MyThread();
-        myThread1.setGetUrl("http://" + ip + "/rest/getPostosByLocation");
-        myThread1.setPosto(temp);
-        myThread1.setWhat(2);
-        myThread1.start();
-        try {
-            myThread1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        submit(myThread1,ip + "/rest/getPostosByLocation",temp,2);
         List<Posto> resultlist = myThread1.getPostos();
 
         //更新posto_list

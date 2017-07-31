@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.example.dell.bzbp_frame.model.Posto;
+import com.example.dell.bzbp_frame.model.User;
+import com.example.dell.bzbp_frame.tool.MyThread;
+
 public abstract class BaseActivity extends AppCompatActivity{
 
     /** 是否禁止旋转屏幕 **/
@@ -49,6 +53,31 @@ public abstract class BaseActivity extends AppCompatActivity{
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
+    }
+
+    public void submit(MyThread myThread, String url, User user, int what){
+        myThread.setGetUrl("http://"+url);
+        myThread.setUser(user);
+
+        myThread.setWhat(what);
+        myThread.start();
+        try {
+            myThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void submit(MyThread myThread, String url, Posto posto, int what){
+        myThread.setGetUrl("http://"+url);
+        myThread.setPosto(posto);
+        myThread.setWhat(what);
+        myThread.start();
+        try {
+            myThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

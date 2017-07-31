@@ -46,7 +46,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="825fccdfaf26f5a59cbbcdaed69e3f15"/>
+            android:value="d2aaefb18066edd66a7628b0a6bc492e" />
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -55,15 +55,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".RouteActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".MenuActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".CameraActivity" />
         <activity android:name=".ShareActivity" />
         <activity android:name=".RegisterActivity" />
@@ -92,7 +90,7 @@
             android:enabled="true"
             android:exported="true" />
 
-
+        <activity android:name=".Friends2Activity"></activity>
     </application>
 
 </manifest>

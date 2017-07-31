@@ -71,15 +71,7 @@ public class LoginActivity extends BaseActivity {
                 thisuser.setPassword(password);
 
                 MyThread myThread1 = new MyThread();
-                myThread1.setGetUrl("http://"+ip+"/rest/checkUser");
-                myThread1.setUser(thisuser);
-                myThread1.setWhat(1);
-                myThread1.start();
-                try {
-                    myThread1.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                submit(myThread1,ip+"/rest/checkUser",thisuser,1);
 
                 //登录成功返回用户数字ID，否则返回-1
                 String result = myThread1.getResult();

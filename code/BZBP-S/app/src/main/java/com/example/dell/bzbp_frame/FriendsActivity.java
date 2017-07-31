@@ -79,7 +79,7 @@ public class FriendsActivity extends AppCompatActivity {
                 new String[]{
                         "friendlist_username"},
                 new int[]{
-                        R.id.friendlist_username
+                        R.id.text_view_friendlist_username
                 });
 
         ListView friendlist = (ListView) findViewById(R.id.friends_list);
@@ -171,7 +171,7 @@ public class FriendsActivity extends AppCompatActivity {
                 new String[]{
                         "friendlist_username"},
                 new int[]{
-                        R.id.friendlist_username
+                        R.id.text_view_friendlist_username
                 });
 
         ListView friendlist = (ListView) findViewById(R.id.friends_list);

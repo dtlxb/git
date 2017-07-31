@@ -131,8 +131,8 @@ public class FriendsApplyActivity extends ListActivity {
                 holder=new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.friendapplylist, null);
-                holder.username = (TextView)convertView.findViewById(R.id.friendapplylist_username);
-                holder.viewBtn = (Button)convertView.findViewById(R.id.friendapplylist_button);
+                holder.username = (TextView)convertView.findViewById(R.id.text_view_friendapplylist_username);
+                holder.viewBtn = (Button)convertView.findViewById(R.id.button_friendapplylist);
                 if(temp.getId()==-1) holder.viewBtn.setText("返回");
                 convertView.setTag(holder);
 
