@@ -34,8 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.dell.bzbp_frame.R.id.postodetail_praise;
-import static com.example.dell.bzbp_frame.R.id.routedetail_praise;
+
 import static java.lang.Math.abs;
 
 public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMapLoadedListener{

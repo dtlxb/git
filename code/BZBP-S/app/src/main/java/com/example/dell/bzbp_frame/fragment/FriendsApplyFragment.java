@@ -151,6 +151,7 @@ public class FriendsApplyFragment extends ListFragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    Toast.makeText(mContext,"添加成功", Toast.LENGTH_LONG).show();
                     onCreate(bundle);
                 }
             });

@@ -11,17 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.dell.bzbp_frame.fragment.FriendsAddFragment;
 import com.example.dell.bzbp_frame.fragment.FriendsApplyFragment;
 import com.example.dell.bzbp_frame.fragment.FriendsFragment;
 import com.example.dell.bzbp_frame.model.User;
 
 public class Friends2Activity extends FragmentActivity {
 
-
-
     private Bundle bundle;
     private User user;
     private FriendsFragment friendsFragment;
+    private FriendsAddFragment friendsAddFragment;
     private FriendsApplyFragment friendsApplyFragment;
     private Fragment[] fragments;
     private int lastShowFragment = 0;
@@ -38,10 +38,16 @@ public class Friends2Activity extends FragmentActivity {
                         lastShowFragment = 0;
                     }
                     return true;
-                case R.id.navigation_friends_apply:
+                case R.id.navigation_friends_add:
                     if (lastShowFragment != 1) {
                         switchFrament(lastShowFragment, 1);
                         lastShowFragment = 1;
+                    }
+                    return true;
+                case R.id.navigation_friends_apply:
+                    if (lastShowFragment != 2) {
+                        switchFrament(lastShowFragment, 2);
+                        lastShowFragment = 2;
                     }
                     return true;
             }
@@ -83,9 +89,9 @@ public class Friends2Activity extends FragmentActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable("user",user);
         friendsFragment.setArguments(bundle);
-
+        friendsAddFragment = new FriendsAddFragment();
         friendsApplyFragment = new FriendsApplyFragment();
-        fragments = new Fragment[]{friendsFragment ,friendsApplyFragment};
+        fragments = new Fragment[]{friendsFragment ,friendsAddFragment,friendsApplyFragment};
         lastShowFragment = 0;
         getSupportFragmentManager()
                 .beginTransaction()

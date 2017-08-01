@@ -135,4 +135,29 @@ public class FriendsFragment extends ListFragment {
         }
 
     }
+    //fragment切换时更新数据
+    @Override
+    public void onHiddenChanged(boolean hidd) {
+        if (hidd == false) {
+            Posto getfriends = new Posto();
+            getfriends.setPid(user.getId());
+            MyThread myThread1 = new MyThread();
+            myThread1.setGetUrl("http://" + ip + "/rest/getFriendsById");
+            myThread1.setPosto(getfriends);
+            myThread1.setWhat(9);
+            myThread1.start();
+            try {
+                myThread1.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            resultlist = myThread1.getUsers();
+
+            mData = getData();
+            MyAdapter adapter = new MyAdapter(mContext);
+            setListAdapter(adapter);
+        } else {
+            //
+        }
+    }
 }

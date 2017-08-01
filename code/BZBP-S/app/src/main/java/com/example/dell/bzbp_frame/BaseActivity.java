@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.example.dell.bzbp_frame.model.Comment;
 import com.example.dell.bzbp_frame.model.Posto;
+import com.example.dell.bzbp_frame.model.Praise;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
@@ -80,5 +82,28 @@ public abstract class BaseActivity extends AppCompatActivity{
         }
     }
 
+    public void submit(MyThread myThread, String url, Comment comment, int what){
+        myThread.setGetUrl("http://"+url);
+        myThread.setComment(comment);
+        myThread.setWhat(what);
+        myThread.start();
+        try {
+            myThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void submit(MyThread myThread, String url, Praise praise, int what){
+        myThread.setGetUrl("http://"+url);
+        myThread.setPraise(praise);
+        myThread.setWhat(what);
+        myThread.start();
+        try {
+            myThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -5,4 +5,9 @@
         <item>friend</item>
         <item>private</item>
     </string-array>
+
+    <string-array name="addfriend">
+        <item>find by ID</item>
+        <item>find by Username</item>
+    </string-array>
 </resources>

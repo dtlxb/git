@@ -6,6 +6,10 @@
         android:title="list" />
 
     <item
+        android:id="@+id/navigation_friends_add"
+        android:title="add" />
+
+    <item
         android:id="@+id/navigation_friends_apply"
         android:title="apply" />
 
