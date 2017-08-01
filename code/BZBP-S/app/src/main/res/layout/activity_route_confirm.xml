@@ -4,13 +4,13 @@
               android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/edittext_confirm_name"
+        android:id="@+id/edittext_routeconfirm_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLength="100"
         android:hint="请输入name"/>
     <EditText
-        android:id="@+id/edittext_confirm_comment"
+        android:id="@+id/edittext_routeconfirm_comment"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:maxLength="100"
@@ -22,12 +22,12 @@
         android:orientation="horizontal"
         android:gravity="center">
         <Button
-            android:id="@+id/button_confirm_cancel"
+            android:id="@+id/button_routeconfirm_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="cancel"/>
         <Button
-            android:id="@+id/button_confirm_confirm"
+            android:id="@+id/button_routeconfirm_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="share"/>

@@ -22,29 +22,38 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class RouteConfirmActivity extends Activity {
-    private TextView textview_address;
-    private ImageView imageview_image;
-    private Button mCancelButton;
-    private Button mShareButton;
-    //public static String ip="50.78.0.134:8080/BookStore";
-    public static String ip="192.168.1.97:8080/BookStore";
+public class RouteConfirmActivity extends BaseActivity {
+    private Bundle bundle;
+    private User user;
+    private Route route;
+
+    private TextView edittext_routeconfirm_name;
+    private TextView edittext_routeconfirm_comment;
+    private Button button_routeconfirm_cancel;
+    private Button button_routeconfirm_confirm;
+    public static String ip;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_confirm);
-
-
-        final Bundle bundle = this.getIntent().getExtras();
+    protected void initData() {
+        ip = this.getString(R.string.ipv4);
+        bundle = this.getIntent().getExtras();
         //获取user
-        User user = (User)bundle.getSerializable("user");
-        final Route route = (Route)bundle.getSerializable("route");
-        //获取命名&评论
-        final EditText editText_route_name=(EditText)findViewById(R.id.edittext_confirm_name);
-        final EditText editText_route_comment=(EditText)findViewById(R.id.edittext_confirm_comment);
+        user = (User)bundle.getSerializable("user");
+        route = (Route)bundle.getSerializable("route");
+    }
 
+    @Override
+    protected void initView() {
+        setContentView(R.layout.activity_route_confirm);
+        edittext_routeconfirm_name = (EditText)findViewById(R.id.edittext_routeconfirm_name);
+        edittext_routeconfirm_comment = (EditText)findViewById(R.id.edittext_routeconfirm_comment);
+        button_routeconfirm_cancel = (Button)findViewById(R.id.button_routeconfirm_cancel);
+        button_routeconfirm_confirm = (Button)findViewById(R.id.button_routeconfirm_confirm);
+    }
 
-        this.findViewById(R.id.button_confirm_cancel).setOnClickListener(new View.OnClickListener() {
+    @Override
+    protected void initListener() {
+        button_routeconfirm_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(RouteConfirmActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -56,34 +65,30 @@ public class RouteConfirmActivity extends Activity {
         });
 
 
-        this.findViewById(R.id.button_confirm_confirm).setOnClickListener(new View.OnClickListener() {
+        button_routeconfirm_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //-----------------------------------------------
                 Route temp = new Route();
                 //包装需要上传的route
                 temp = route;
-                temp.setName(editText_route_name.getText().toString());
-                temp.setComment(editText_route_comment.getText().toString());
+                temp.setName(edittext_routeconfirm_name.getText().toString());
+                temp.setComment(edittext_routeconfirm_comment.getText().toString());
                 MyThread myThread1 = new MyThread();
-                myThread1.setGetUrl("http://"+ip+"/rest/addRoute");
-                myThread1.setWhat(3);
-                myThread1.setRoute(temp);
-                myThread1.start();
-
-                try {
-                    myThread1.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                submit(myThread1,ip+"/rest/addRoute",temp,3);
 
                 Intent i = new Intent(RouteConfirmActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 Bundle intent_bundle = new Bundle();
-                intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
+                intent_bundle.putSerializable("user",user);
                 i.putExtras(intent_bundle);
                 startActivity(i);
 
             }
         });
+    }
+
+    @Override
+    protected void doBusiness(Bundle savedInstanceState) {
+
     }
 }

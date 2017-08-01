@@ -2,6 +2,7 @@ package com.example.dell.bzbp_frame;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.constraint.solver.SolverVariable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import com.example.dell.bzbp_frame.model.Comment;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Praise;
+import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
@@ -82,6 +84,18 @@ public abstract class BaseActivity extends AppCompatActivity{
         }
     }
 
+    public void submit(MyThread myThread, String url, Route route, int what){
+        myThread.setGetUrl("http://"+url);
+        myThread.setRoute(route);
+        myThread.setWhat(what);
+        myThread.start();
+        try {
+            myThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void submit(MyThread myThread, String url, Comment comment, int what){
         myThread.setGetUrl("http://"+url);
         myThread.setComment(comment);
@@ -106,4 +120,36 @@ public abstract class BaseActivity extends AppCompatActivity{
         }
     }
 
+    public void submit1(MyThread myThread, String url, Object object, int what){
+        myThread.setGetUrl("http://"+url);
+
+        String type = object.getClass().getName();
+        switch (type){
+            case "com.example.dell.bzbp_frame.model.User":
+                myThread.setUser((User)object);
+                break;
+            case "com.example.dell.bzbp_frame.model.Posto":
+                myThread.setPosto((Posto)object);
+                break;
+            case "com.example.dell.bzbp_frame.model.Route":
+                myThread.setRoute((Route)object);
+                break;
+            case "com.example.dell.bzbp_frame.model.Comment":
+                myThread.setComment((Comment) object);
+                break;
+            case "com.example.dell.bzbp_frame.model.Praise":
+                myThread.setPraise((Praise) object);
+                break;
+            default:
+                break;
+        }
+
+        myThread.setWhat(what);
+        myThread.start();
+        try {
+            myThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
