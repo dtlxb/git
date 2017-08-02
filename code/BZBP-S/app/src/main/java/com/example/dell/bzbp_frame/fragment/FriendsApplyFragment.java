@@ -67,7 +67,9 @@ public class FriendsApplyFragment extends ListFragment {
             e.printStackTrace();
         }
         resultlist = myThread1.getUsers();
-
+        if(resultlist.size() == 0){
+            Toast.makeText(mContext,"没有好友申请QAQ", Toast.LENGTH_LONG).show();
+        }
         mData = getData();
         MyAdapter adapter = new MyAdapter(mContext);
         setListAdapter(adapter);

@@ -127,7 +127,7 @@ public class SearchPostoActivity extends BaseActivity{
     @Override
     protected void doBusiness(Bundle savedInstanceState) {
         if(resultlist.size() == 0){
-            textView_searchposto_no_posto.setText("没有找到附近的posto！QAQ");
+            textView_searchposto_no_posto.setText("没有找到符合条件的posto！QAQ");
         }
     }
 

@@ -82,7 +82,7 @@ public class SearchRouteActivity extends BaseActivity {
     @Override
     protected void doBusiness(Bundle savedInstanceState) {
         if(resultlist.size() == 0){
-            textView_searchroute_no_route.setText("没有找到附近的route！QAQ");
+            textView_searchroute_no_route.setText("没有找到符合条件的route！QAQ");
         }
     }
 
