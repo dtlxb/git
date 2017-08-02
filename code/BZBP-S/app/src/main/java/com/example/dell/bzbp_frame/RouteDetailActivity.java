@@ -43,7 +43,7 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
     private ArrayList<Comment> resultlist = new ArrayList<Comment>();
     private Integer result_praise;
     private TextView view_praise ;
-    public static String ip="192.168.1.97:8080/BookStore";
+    public static String ip;
     private MapView mapView;
     private Route route;
 
@@ -55,6 +55,7 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
         //获取bundle
 
         bundle = this.getIntent().getExtras();
+        ip = this.getString(R.string.ipv4);
         view_praise = (TextView)this.findViewById(R.id.routedetail_praise);
         //获取posto,user
         route = (Route) bundle.getSerializable("route");

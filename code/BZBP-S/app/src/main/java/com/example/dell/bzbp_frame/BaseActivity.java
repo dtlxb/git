@@ -59,68 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity{
                 }).show();
     }
 
-    public void submit(MyThread myThread, String url, User user, int what){
-        myThread.setGetUrl("http://"+url);
-        myThread.setUser(user);
-
-        myThread.setWhat(what);
-        myThread.start();
-        try {
-            myThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void submit(MyThread myThread, String url, Posto posto, int what){
-        myThread.setGetUrl("http://"+url);
-        myThread.setPosto(posto);
-        myThread.setWhat(what);
-        myThread.start();
-        try {
-            myThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void submit(MyThread myThread, String url, Route route, int what){
-        myThread.setGetUrl("http://"+url);
-        myThread.setRoute(route);
-        myThread.setWhat(what);
-        myThread.start();
-        try {
-            myThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void submit(MyThread myThread, String url, Comment comment, int what){
-        myThread.setGetUrl("http://"+url);
-        myThread.setComment(comment);
-        myThread.setWhat(what);
-        myThread.start();
-        try {
-            myThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void submit(MyThread myThread, String url, Praise praise, int what){
-        myThread.setGetUrl("http://"+url);
-        myThread.setPraise(praise);
-        myThread.setWhat(what);
-        myThread.start();
-        try {
-            myThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void submit1(MyThread myThread, String url, Object object, int what){
+    public void submit(MyThread myThread, String url, Object object, int what){
         myThread.setGetUrl("http://"+url);
 
         String type = object.getClass().getName();

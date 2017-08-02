@@ -1,10 +1,8 @@
 package com.example.dell.bzbp_frame.fragment;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dell.bzbp_frame.R;
+import com.example.dell.bzbp_frame.SearchPostoActivity;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
@@ -41,23 +40,7 @@ public class FriendsFragment extends ListFragment {
         user = (User)bundle.getSerializable("user");
         ip = this.getString(R.string.ipv4);
 
-        Posto getfriends = new Posto();
-        getfriends.setPid(user.getId());
-        MyThread myThread1 = new MyThread();
-        myThread1.setGetUrl("http://" + ip + "/rest/getFriendsById");
-        myThread1.setPosto(getfriends);
-        myThread1.setWhat(9);
-        myThread1.start();
-        try {
-            myThread1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        resultlist = myThread1.getUsers();
-
-        mData = getData();
-        MyAdapter adapter = new MyAdapter(mContext);
-        setListAdapter(adapter);
+        init();
     }
 
 
@@ -123,41 +106,80 @@ public class FriendsFragment extends ListFragment {
             }
 
             holder.username.setText((String)mData.get(position).get("friendlist_username"));
+
+            holder.username.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Posto getfriendsdetail = new Posto();
+                    getfriendsdetail.setPid(user.getId());
+                    getfriendsdetail.setUsername(temp.getUsername());
+                    Intent i = new Intent(mContext, SearchPostoActivity.class);
+                    Bundle intent_bundle = new Bundle();
+                    intent_bundle.putSerializable("user",user);
+                    intent_bundle.putSerializable("getfriendsdetail",getfriendsdetail);
+                    i.putExtras(intent_bundle);
+                    startActivity(i);
+                }
+            });
+
             holder.viewBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext,"111", Toast.LENGTH_LONG).show();
+                    Posto deletefriends = new Posto();
+                    deletefriends.setPid(user.getId());
+                    deletefriends.setBelong_rid(temp.getId());
+                    MyThread myThread1 = new MyThread();
+                    myThread1.setGetUrl("http://" + ip + "/rest/deleteFriend");
+                    myThread1.setPosto(deletefriends);
+                    myThread1.setWhat(9);
+                    myThread1.start();
+                    try {
+                        myThread1.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Toast.makeText(mContext,"删除成功", Toast.LENGTH_LONG).show();
+                    init();
                 }
             });
+
+
 
             return convertView;
         }
 
     }
+
+    private void init(){
+        Posto getfriends = new Posto();
+        getfriends.setPid(user.getId());
+        MyThread myThread1 = new MyThread();
+        myThread1.setGetUrl("http://" + ip + "/rest/getFriendsById");
+        myThread1.setPosto(getfriends);
+        myThread1.setWhat(9);
+        myThread1.start();
+        try {
+            myThread1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        resultlist = myThread1.getUsers();
+
+        mData = getData();
+        MyAdapter adapter = new MyAdapter(mContext);
+        setListAdapter(adapter);
+    }
+
     //fragment切换时更新数据
     @Override
     public void onHiddenChanged(boolean hidd) {
         if (hidd == false) {
-            Posto getfriends = new Posto();
-            getfriends.setPid(user.getId());
-            MyThread myThread1 = new MyThread();
-            myThread1.setGetUrl("http://" + ip + "/rest/getFriendsById");
-            myThread1.setPosto(getfriends);
-            myThread1.setWhat(9);
-            myThread1.start();
-            try {
-                myThread1.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            resultlist = myThread1.getUsers();
-
-            mData = getData();
-            MyAdapter adapter = new MyAdapter(mContext);
-            setListAdapter(adapter);
+            init();
         } else {
-            //
+            //onpause
         }
     }
 }

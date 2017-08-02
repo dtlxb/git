@@ -71,7 +71,7 @@ public class LoginActivity extends BaseActivity {
                 thisuser.setPassword(password);
 
                 MyThread myThread1 = new MyThread();
-                submit1(myThread1,ip+"/rest/checkUser",thisuser,1);
+                submit(myThread1,ip+"/rest/checkUser",thisuser,1);
 
                 //登录成功返回用户数字ID，否则返回-1
                 String result = myThread1.getResult();

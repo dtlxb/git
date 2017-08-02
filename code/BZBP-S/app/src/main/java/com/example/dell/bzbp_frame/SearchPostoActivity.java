@@ -55,25 +55,40 @@ public class SearchPostoActivity extends BaseActivity{
 
         //从routedetail中查看包含的posto会传一个“route”,否则为直接按位置搜索
         if(null==route){
-            //将用户位置&用户名写入posto中上传
-            Posto temp = new Posto();
-            temp.setUsername(user.getUsername());
-            temp.setLatitude((Double) bundle.getDouble("latitude"));
-            temp.setLongitude((Double) bundle.getDouble("longitude"));
+            if((Posto)bundle.getSerializable("getfriendsdetail")!=null){
+                Posto getfriendsdetail = (Posto)bundle.getSerializable("getfriendsdetail");
+                MyThread myThread1 = new MyThread();
+                myThread1.setGetUrl("http://" + ip + "/rest/getPostoByUsername");
+                myThread1.setPosto(getfriendsdetail);
+                myThread1.setWhat(2);
+                myThread1.start();
+                try {
+                    myThread1.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //获得posto列表
+                resultlist = myThread1.getPostos();
+            }else {
+                //将用户位置&用户名写入posto中上传
+                Posto temp = new Posto();
+                temp.setUsername(user.getUsername());
+                temp.setLatitude((Double) bundle.getDouble("latitude"));
+                temp.setLongitude((Double) bundle.getDouble("longitude"));
 
-            MyThread myThread1 = new MyThread();
-            myThread1.setGetUrl("http://" + ip + "/rest/getPostosByLocation");
-            myThread1.setPosto(temp);
-            myThread1.setWhat(2);
-            myThread1.start();
-            try {
-                myThread1.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                MyThread myThread1 = new MyThread();
+                myThread1.setGetUrl("http://" + ip + "/rest/getPostosByLocation");
+                myThread1.setPosto(temp);
+                myThread1.setWhat(2);
+                myThread1.start();
+                try {
+                    myThread1.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //获得posto列表
+                resultlist = myThread1.getPostos();
             }
-            //获得posto列表
-            resultlist = myThread1.getPostos();
-
         }else{
 
             Posto temp = new Posto();

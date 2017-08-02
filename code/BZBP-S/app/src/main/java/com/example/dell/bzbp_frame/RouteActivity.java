@@ -88,7 +88,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
     //用户是否按下了stop，决定离开界面
     private boolean customer_stopped = false;
 
-    public static String ip="192.168.1.97:8080/BookStore";
+    public static String ip;
 
     //定位功能所用
     private TextView mLocationErrText;
@@ -142,7 +142,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
         setContentView(R.layout.activity_route);
 
         bundle = this.getIntent().getExtras();
-
+        ip = this.getString(R.string.ipv4);
         /*
         if (bundle.getSerializable("route")!=null){//从posto回来的
             //拿出之前的route对象，并在location list里加入最新的pid

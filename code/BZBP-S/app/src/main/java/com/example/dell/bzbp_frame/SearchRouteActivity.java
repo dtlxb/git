@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.view.ViewGroup;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Route;
+import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
 import java.text.DateFormat;
@@ -30,20 +31,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class SearchRouteActivity extends ListActivity {
-    public static String ip = "192.168.1.97:8080/BookStore";
+public class SearchRouteActivity extends BaseActivity {
+    public static String ip;
 
-    private ListView listview;
+    private ListView list_searchroute;
+    private TextView textView_searchroute_no_route;
+
     private List<Map<String, Object>> mData;
     private ArrayList<Route> resultlist = new ArrayList<Route>();
     private Bundle bundle;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initData() {
         bundle = this.getIntent().getExtras();//获取前一activity传递的信息
+        ip = this.getString(R.string.ipv4);
+
         Posto temp = new Posto();
-
-
         temp.setLatitude((Double) bundle.getDouble("latitude"));
         temp.setLongitude((Double) bundle.getDouble("longitude"));
 
@@ -59,10 +62,28 @@ public class SearchRouteActivity extends ListActivity {
         }
 
         resultlist = myThread1.getRoutes();
-
         mData = getData();
-        MyAdapter2 adapter = new MyAdapter2(this);
-        setListAdapter(adapter);
+    }
+
+    @Override
+    protected void initView() {
+        setContentView(R.layout.activity_route_search);
+        textView_searchroute_no_route = (TextView)findViewById(R.id.text_view_searchroute_noroute);
+        list_searchroute = (ListView)findViewById(R.id.list_searchroute);
+        MyAdapter adapter = new MyAdapter(this);
+        list_searchroute.setAdapter(adapter);
+    }
+
+    @Override
+    protected void initListener() {
+
+    }
+
+    @Override
+    protected void doBusiness(Bundle savedInstanceState) {
+        if(resultlist.size() == 0){
+            textView_searchroute_no_route.setText("没有找到附近的route！QAQ");
+        }
     }
 
     private List<Map<String, Object>> getData() {
@@ -75,14 +96,7 @@ public class SearchRouteActivity extends ListActivity {
             map.put("routelist_date", resultlist.get(i).getStart_time());
             list.add(map);
         }
-
-
         return list;
-    }
-    // ListView 中某项被选中后的逻辑
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-
     }
 
     public final class ViewHolder{
@@ -91,13 +105,11 @@ public class SearchRouteActivity extends ListActivity {
         public Button button;
     }
 
-
-    public class MyAdapter2 extends BaseAdapter {
+    private class MyAdapter extends BaseAdapter {
 
         private LayoutInflater mInflater;
 
-
-        public MyAdapter2(Context context){
+        public MyAdapter(Context context){
             this.mInflater = LayoutInflater.from(context);
         }
         @Override
@@ -158,8 +170,6 @@ public class SearchRouteActivity extends ListActivity {
                     startActivity(i);
                 }
             });
-
-
             return convertView;
         }
 
