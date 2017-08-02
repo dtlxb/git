@@ -369,9 +369,9 @@ public class MyThread extends Thread {
                     postotmp.setImage(thisposto.getString("image"));
 
 
-                     postotmp.setDate(thisposto.getLong("date"));
+                    postotmp.setDate(thisposto.getLong("date"));
 
-
+                    postotmp.setBelong_rid(thisposto.getInt("belong_rid"));
 
 
                     Postos.add(postotmp);

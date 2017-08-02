@@ -49,18 +49,8 @@ public class SearchRouteActivity extends BaseActivity {
         Posto temp = new Posto();
         temp.setLatitude((Double) bundle.getDouble("latitude"));
         temp.setLongitude((Double) bundle.getDouble("longitude"));
-
         MyThread myThread1 = new MyThread();
-        myThread1.setGetUrl("http://" + ip + "/rest/getRoutesByLocation");
-        myThread1.setPosto(temp);
-        myThread1.setWhat(4);
-        myThread1.start();
-        try {
-            myThread1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        submit(myThread1,ip + "/rest/getRoutesByLocation",temp,4);
         resultlist = myThread1.getRoutes();
         mData = getData();
     }

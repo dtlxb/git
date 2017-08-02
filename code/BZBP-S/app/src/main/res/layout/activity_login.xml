@@ -13,17 +13,6 @@
         />
 
     <EditText
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/edittext_login_password"
-        android:textSize="20dp"
-        android:textColor="#ff4499aa"
-        android:hint="password"
-        android:layout_marginTop="200dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"/>
-
-    <EditText
         android:id="@+id/edittext_login_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,6 +23,17 @@
         android:textColor="#ff4499aa"
         android:textSize="20dp"/>
 
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/edittext_login_password"
+        android:textSize="20dp"
+        android:textColor="#ff4499aa"
+        android:hint="password"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"/>
+
 
     <Button
         android:layout_height="49dp"
@@ -43,8 +43,8 @@
         android:id="@+id/button_login_login"
         android:textColor="#ffffffff"
         android:layout_marginTop="300dp"
-
-        android:text="        login"
+        android:paddingLeft="40dp"
+        android:text="login"
         android:textSize="15dp"
 
         android:background="@drawable/button1"
@@ -59,8 +59,8 @@
         android:id="@+id/button_login_register"
         android:textColor="#ffffffff"
         android:layout_marginTop="350dp"
-
-        android:text="        register"
+        android:paddingLeft="30dp"
+        android:text="register"
         android:textSize="15dp"
 
         android:background="@drawable/button1"/>

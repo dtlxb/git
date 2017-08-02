@@ -8,12 +8,12 @@
         "source": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\layout\\abc_screen_simple.xml"
     },
     {
-        "merged": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout\\imageitem.xml",
-        "source": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\layout\\imageitem.xml"
-    },
-    {
         "merged": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout\\view_set_stoke_width.xml",
         "source": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\layout\\view_set_stoke_width.xml"
+    },
+    {
+        "merged": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout\\imageitem.xml",
+        "source": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\layout\\imageitem.xml"
     },
     {
         "merged": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_layout.xml",
