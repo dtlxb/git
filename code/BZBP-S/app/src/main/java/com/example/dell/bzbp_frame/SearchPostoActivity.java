@@ -43,6 +43,7 @@ public class SearchPostoActivity extends BaseActivity{
     private Bundle bundle;
     private User user;
     private Route route;
+    private String source;
 
 
     @Override
@@ -52,28 +53,27 @@ public class SearchPostoActivity extends BaseActivity{
         bundle = this.getIntent().getExtras();
         user = (User)bundle.getSerializable("user");
         route = (Route)bundle.getSerializable("route");
+        source = (String)bundle.getString("source");
 
         //从routedetail中查看包含的posto会传一个“route”,否则为直接按位置搜索
-        if(null==route){
-            if((Posto)bundle.getSerializable("getfriendsdetail")!=null){
-                Posto getfriendsdetail = (Posto)bundle.getSerializable("getfriendsdetail");
-                MyThread myThread1 = new MyThread();
-                submit(myThread1,ip + "/rest/getPostoByUsername",getfriendsdetail,2);
-                //获得posto列表
-                resultlist = myThread1.getPostos();
-            }else {
-                //将用户位置&用户名写入posto中上传
-                Posto temp = new Posto();
-                temp.setUsername(user.getUsername());
-                temp.setLatitude((Double) bundle.getDouble("latitude"));
-                temp.setLongitude((Double) bundle.getDouble("longitude"));
+        if(source.equals("friend")){
+            Posto getfriendsdetail = (Posto)bundle.getSerializable("posto");
+            MyThread myThread1 = new MyThread();
+            submit(myThread1,ip + "/rest/getPostoByUsername",getfriendsdetail,2);
+            //获得posto列表
+            resultlist = myThread1.getPostos();
+        }else if(source.equals("mainmenu")){
+            //将用户位置&用户名写入posto中上传
+            Posto temp = new Posto();
+            temp.setUsername(user.getUsername());
+            temp.setLatitude((Double) bundle.getDouble("latitude"));
+            temp.setLongitude((Double) bundle.getDouble("longitude"));
 
-                MyThread myThread1 = new MyThread();
-                submit(myThread1,ip + "/rest/getPostosByLocation",temp,2);
-                //获得posto列表
-                resultlist = myThread1.getPostos();
-            }
-        }else{
+            MyThread myThread1 = new MyThread();
+            submit(myThread1,ip + "/rest/getPostosByLocation",temp,2);
+            //获得posto列表
+            resultlist = myThread1.getPostos();
+        }else if(source.equals("routedetail")){
             Posto temp = new Posto();
             temp.setPid(route.getRid());
             temp.setUsername(user.getUsername());
@@ -203,7 +203,7 @@ public class SearchPostoActivity extends BaseActivity{
             holder.date.setText("time:" + time);
 
             int test = temp.getBelong_rid();
-            if ((temp.getBelong_rid() != -1) && (route == null)) {
+            if ((temp.getBelong_rid() != -1) && (source.equals("routedetail")==false)) {
 
                 holder.route.setText("R");
                 holder.route.setOnClickListener(new View.OnClickListener() {
@@ -215,12 +215,12 @@ public class SearchPostoActivity extends BaseActivity{
                         MyThread myThread1 = new MyThread();
                         submit(myThread1, ip + "/rest/getRoutesById", getroute, 4);
 
-                        Route temp = myThread1.getRoutes().get(0);
+                        Route result_route = myThread1.getRoutes().get(0);
 
                         Intent i = new Intent(SearchPostoActivity.this, RouteDetailActivity.class);
                         Bundle intent_bundle = new Bundle();
                         intent_bundle.putSerializable("user", bundle.getSerializable("user"));
-                        intent_bundle.putSerializable("route", temp);
+                        intent_bundle.putSerializable("route", result_route);
                         i.putExtras(intent_bundle);
                         startActivity(i);
                     }

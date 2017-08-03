@@ -62,21 +62,23 @@ public abstract class BaseActivity extends AppCompatActivity{
     public void submit(MyThread myThread, String url, Object object, int what){
         myThread.setGetUrl("http://"+url);
 
-        String type = object.getClass().getName();
+        String classname = object.getClass().getName();
+        String[] typearray = classname.split("\\.");
+        String type = typearray[typearray.length - 1];
         switch (type){
-            case "com.example.dell.bzbp_frame.model.User":
+            case "User":
                 myThread.setUser((User)object);
                 break;
-            case "com.example.dell.bzbp_frame.model.Posto":
+            case "Posto":
                 myThread.setPosto((Posto)object);
                 break;
-            case "com.example.dell.bzbp_frame.model.Route":
+            case "Route":
                 myThread.setRoute((Route)object);
                 break;
-            case "com.example.dell.bzbp_frame.model.Comment":
+            case "Comment":
                 myThread.setComment((Comment) object);
                 break;
-            case "com.example.dell.bzbp_frame.model.Praise":
+            case "Praise":
                 myThread.setPraise((Praise) object);
                 break;
             default:

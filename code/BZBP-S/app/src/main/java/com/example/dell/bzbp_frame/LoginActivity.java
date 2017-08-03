@@ -70,12 +70,11 @@ public class LoginActivity extends BaseActivity {
                 thisuser.setUsername(username);
                 thisuser.setPassword(password);
 
-                //MyThread myThread1 = new MyThread();
-                //submit(myThread1,ip+"/rest/checkUser",thisuser,1);
+                MyThread myThread1 = new MyThread();
+                submit(myThread1,ip+"/rest/checkUser",thisuser,1);
 
                 //登录成功返回用户数字ID，否则返回-1
-                //String result = myThread1.getResult();
-                String result = "1";
+                String result = myThread1.getResult();
                 Integer result_int=Integer.parseInt(result);
 
                 if(result_int<=0){

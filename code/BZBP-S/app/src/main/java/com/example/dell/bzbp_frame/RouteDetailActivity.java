@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.Polyline;
 import com.amap.api.maps2d.model.PolylineOptions;
+import com.example.dell.bzbp_frame.fragment.FriendsAddFragment;
 import com.example.dell.bzbp_frame.model.Comment;
 import com.example.dell.bzbp_frame.model.MyLatlng;
 import com.example.dell.bzbp_frame.model.Posto;
@@ -37,59 +39,46 @@ import java.util.Map;
 
 import static java.lang.Math.abs;
 
-public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMapLoadedListener{
+public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoadedListener{
+
     private Bundle bundle;
-    KeyMapDailog dialog;
+    private User user;
+    private Route route;
+
     private ArrayList<Comment> resultlist = new ArrayList<Comment>();
     private Integer result_praise;
-    private TextView view_praise ;
+
+    private MapView mapView_routedetail;
+
+    private TextView textView_routedetail_name;
+    private TextView textView_routedetail_comment;
+    private TextView textView_routedetail_username;
+    private TextView textView_routedetail_date;
+    private TextView textView_postodetail_praise;
+    private Button button_routedetail_make_comment;
+    private Button button_routedetail_make_praise;
+    private Button button_routedetail_postos;
+    private ListView list_routedetail_commentlist;
+
     public static String ip;
-    private MapView mapView;
-    private Route route;
+    KeyMapDailog dialog;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_detail);
+    protected void initData() {
         //获取bundle
-
         bundle = this.getIntent().getExtras();
         ip = this.getString(R.string.ipv4);
-        view_praise = (TextView)this.findViewById(R.id.routedetail_praise);
         //获取posto,user
         route = (Route) bundle.getSerializable("route");
-        final User user = (User) bundle.getSerializable("user");
-        //显示route信息
-        ((TextView)this.findViewById(R.id.routedetail_name)).setText("name:"+route.getName());
-        ((TextView)this.findViewById(R.id.routedetail_comment)).setText("comment:"+route.getComment());
-        ((TextView)this.findViewById(R.id.routedetail_username)).setText("user:"+route.getUsername());
-        ((TextView)this.findViewById(R.id.routedetail_date)).setText("time:"+route.getStart_time());
-        //显示地图
-
-
-        //继承地图的状态
-        mapView = (MapView) findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);// 此方法必须重写
-        init(); //初始化地图
-        //draw();
-        aMap.setOnMapLoadedListener(this);
-
+        user = (User) bundle.getSerializable("user");
 
         //获取评论
-        Posto posto_getcomments = new Posto();
-        posto_getcomments.setPid(route.getRid());
-        posto_getcomments.setUsername(user.getUsername());
+        Posto route_getcomments = new Posto();
+        route_getcomments.setPid(route.getRid());
+        route_getcomments.setUsername(user.getUsername());
         MyThread myThread1 = new MyThread();
-        myThread1.setGetUrl("http://" + ip + "/rest/getCommentsRoute");
-        myThread1.setPosto(posto_getcomments);
-        myThread1.setWhat(6);
-        myThread1.start();
-        try {
-            myThread1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        submit(myThread1,ip + "/rest/getCommentsRoute",route_getcomments,6);
         resultlist = myThread1.getComments();
 
         //没有评论的情况
@@ -100,40 +89,37 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
         }
 
         //获取点赞信息,没有点过赞则为int 0
-        Posto getpraise = new Posto();//
-        getpraise.setUsername(user.getUsername());
-        getpraise.setPid(route.getRid());
+        Posto route_getpraise = new Posto();//
+        route_getpraise.setUsername(user.getUsername());
+        route_getpraise.setPid(route.getRid());
         MyThread myThread2 = new MyThread();
-        myThread2.setGetUrl("http://" + ip + "/rest/getPraisesRoute");
-        myThread2.setPosto(getpraise);
-        myThread2.setWhat(8);
-        myThread2.start();
-        try {
-            myThread2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        submit(myThread2,ip + "/rest/getPraisesRoute",route_getcomments,8);
         result_praise = myThread2.getRid();
-        //显示赞数
-        view_praise.setText("praise:"+abs(result_praise));
+    }
 
+    @Override
+    protected void initView() {
+        setContentView(R.layout.activity_route_detail);
+        textView_routedetail_name = (TextView)findViewById(R.id.text_view_routedetail_name);
+        textView_routedetail_comment = (TextView)findViewById(R.id.text_view_routedetail_comment);
+        textView_routedetail_username = (TextView)findViewById(R.id.text_view_routedetail_username);
+        textView_routedetail_date = (TextView)findViewById(R.id.text_view_routedetail_date);
+        textView_postodetail_praise = (TextView)findViewById(R.id.text_view_routedetail_praise);
 
-        SimpleAdapter adapter = new SimpleAdapter(this,getData(),R.layout.commentlist,
-                new String[]{
-                        "commentlist_username","commentlist_comment",
-                        "commentlist_date"},
-                new int[]{
-                        R.id.commentlist_username,
-                        R.id.commentlist_comment,
-                        R.id.commentlist_date,
-                });
+        button_routedetail_make_praise = (Button)findViewById(R.id.button_routedetail_make_praise);
+        button_routedetail_make_comment = (Button)findViewById(R.id.button_routedetail_make_comment);
+        button_routedetail_postos = (Button)findViewById(R.id.button_routedetail_postos);
 
-        ListView commentlist = (ListView) findViewById(R.id.routedetail_commentlist);
-        commentlist.setAdapter(adapter);
+        list_routedetail_commentlist = (ListView) findViewById(R.id.list_routedetail_commentlist);
 
+        mapView_routedetail = (MapView) findViewById(R.id.map_routedetail);
 
+    }
+
+    @Override
+    protected void initListener() {
         //浏览者发表评论的button
-        findViewById(R.id.routedetail_make_comment).setOnClickListener(new View.OnClickListener() {
+        button_routedetail_make_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog = new KeyMapDailog("评论：", new KeyMapDailog.SendBackListener() {
@@ -145,8 +131,8 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
                                 dialog.hideProgressdialog();
                                 Comment comment = new Comment();
 
-                                comment.setRid(((Route)bundle.getSerializable("route")).getRid());
-                                comment.setUsername(((User)bundle.getSerializable("user")).getUsername());
+                                comment.setRid(route.getRid());
+                                comment.setUsername(user.getUsername());
                                 comment.setContext(inputText);
 
                                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -154,22 +140,11 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
                                 comment.setDate(time);
 
                                 MyThread myThread1 = new MyThread();
-                                myThread1.setGetUrl("http://"+ip+"/rest/addComment");
-                                myThread1.setWhat(5);
-                                myThread1.setComment(comment);
-                                myThread1.start();
-
-                                try {
-                                    myThread1.join();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
+                                submit(myThread1,ip+"/rest/addComment",comment,5);
 
                                 Toast.makeText(RouteDetailActivity.this, "发表成功", Toast.LENGTH_LONG).show();
-
                                 dialog.dismiss();
-
+                                refresh();
                             }
                         }, 2000);
                     }
@@ -180,7 +155,7 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
         });
 
         //点赞button
-        this.findViewById(R.id.routedetail_make_praise).setOnClickListener(new View.OnClickListener() {
+        button_routedetail_make_praise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (result_praise < 0) {
@@ -190,46 +165,59 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
                     praise.setRid(route.getRid());
                     praise.setUsername(user.getUsername());
 
-
-
                     MyThread myThread1 = new MyThread();
-                    myThread1.setGetUrl("http://" + ip + "/rest/addPraise");
-                    myThread1.setWhat(7);
-                    myThread1.setPraise(praise);
-                    myThread1.start();
-
-                    try {
-                        myThread1.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    submit(myThread1,ip + "/rest/addPraise",praise,7);
                     //重新显示点赞数
                     result_praise += 1;
                     result_praise = -result_praise;
-                    view_praise.setText("praise:"+abs(result_praise));
-
+                    textView_postodetail_praise.setText("praise:"+abs(result_praise));
                 }
             }
         });
 
 
-        this.findViewById(R.id.routedetail_postos).setOnClickListener(new View.OnClickListener() {
+        button_routedetail_postos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(RouteDetailActivity.this,SearchPostoActivity.class);
                 Bundle intent_bundle = new Bundle();
+                intent_bundle.putString("source","routedetail");
                 intent_bundle.putSerializable("user",user);
                 intent_bundle.putSerializable("route",route);
                 i.putExtras(intent_bundle);
                 startActivity(i);
-                //popupWindow.dismiss();
             }
         });
-
-
-
     }
 
+    @Override
+    protected void doBusiness(Bundle savedInstanceState) {
+        //显示route信息
+        textView_routedetail_name.setText("name:"+route.getName());
+        textView_routedetail_comment.setText("comment:"+route.getComment());
+        textView_routedetail_username.setText("user:"+route.getUsername());
+        textView_routedetail_date.setText("time:"+route.getStart_time());
+
+        mapView_routedetail.onCreate(savedInstanceState);// 此方法必须重写
+        initmap(); //初始化地图
+        //draw();
+        aMap.setOnMapLoadedListener(this);
+
+        //显示赞数
+        textView_postodetail_praise.setText("praise:"+abs(result_praise));
+
+        SimpleAdapter adapter = new SimpleAdapter(this,getData(),R.layout.commentlist,
+                new String[]{
+                        "commentlist_username",
+                        "commentlist_comment",
+                        "commentlist_date"},
+                new int[]{
+                        R.id.commentlist_username,
+                        R.id.commentlist_comment,
+                        R.id.commentlist_date,
+                });
+        list_routedetail_commentlist.setAdapter(adapter);
+    }
 
     //listview获取信息
     private List<Map<String, Object>> getData() {
@@ -243,21 +231,16 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
             map.put("commentlist_date", resultlist.get(i).getDate());
             list.add(map);
         }
-
-
         return list;
     }
 
-
-
     private AMap aMap;
-
     /**、
      * 初始化地图
      */
-    private void init() {
+    private void initmap() {
         if (aMap == null) {
-            aMap = mapView.getMap();
+            aMap = mapView_routedetail.getMap();
             setUpMap();
         }
         //mLocationErrText = (TextView)findViewById(R.id.location_errInfo_text);
@@ -329,8 +312,37 @@ public class RouteDetailActivity extends AppCompatActivity implements AMap.OnMap
 
     @Override
     public void onMapLoaded() {
-
         draw();
+    }
+
+    //提交之后刷新评论区
+    private void refresh() {
+        //获取评论
+        Posto route_getcomments = new Posto();
+        route_getcomments.setPid(route.getRid());
+        route_getcomments.setUsername(user.getUsername());
+        MyThread myThread1 = new MyThread();
+        submit(myThread1,ip + "/rest/getCommentsRoute",route_getcomments,6);
+        resultlist = myThread1.getComments();
+
+        //没有评论的情况
+        if(resultlist.size() == 0){
+            Comment emptyComment = new Comment();
+            emptyComment.setContext("暂无评论QAQ");
+            resultlist.add(emptyComment);
+        }
+        //adapter
+        SimpleAdapter adapter = new SimpleAdapter(this,getData(),R.layout.commentlist,
+                new String[]{
+                        "commentlist_username",
+                        "commentlist_comment",
+                        "commentlist_date"},
+                new int[]{
+                        R.id.commentlist_username,
+                        R.id.commentlist_comment,
+                        R.id.commentlist_date,
+                });
+        list_routedetail_commentlist.setAdapter(adapter);
     }
 }
 

@@ -1,6 +1,8 @@
 package com.example.dell.bzbp_frame.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -55,7 +57,6 @@ public class FriendsFragment extends ListFragment {
         return list;
     }
 
-
     public final class ViewHolder{
         public TextView username;
         public Button viewBtn;
@@ -64,7 +65,6 @@ public class FriendsFragment extends ListFragment {
     private class MyAdapter extends BaseAdapter {
 
         private LayoutInflater mInflater;
-
 
         public MyAdapter(Context context){
             this.mInflater = LayoutInflater.from(context);
@@ -92,16 +92,12 @@ public class FriendsFragment extends ListFragment {
             final User temp = resultlist.get(position);
             ViewHolder holder = null;
             if (convertView == null) {
-
                 holder=new ViewHolder();
-
                 convertView = mInflater.inflate(R.layout.friendlist, null);
                 holder.username = (TextView)convertView.findViewById(R.id.text_view_friendlist_username);
                 holder.viewBtn = (Button)convertView.findViewById(R.id.button_friendlist);
                 convertView.setTag(holder);
-
             }else {
-
                 holder = (ViewHolder)convertView.getTag();
             }
 
@@ -116,8 +112,9 @@ public class FriendsFragment extends ListFragment {
                     getfriendsdetail.setUsername(temp.getUsername());
                     Intent i = new Intent(mContext, SearchPostoActivity.class);
                     Bundle intent_bundle = new Bundle();
+                    intent_bundle.putString("source","friend");
                     intent_bundle.putSerializable("user",user);
-                    intent_bundle.putSerializable("getfriendsdetail",getfriendsdetail);
+                    intent_bundle.putSerializable("posto",getfriendsdetail);
                     i.putExtras(intent_bundle);
                     startActivity(i);
                 }
@@ -127,27 +124,29 @@ public class FriendsFragment extends ListFragment {
 
                 @Override
                 public void onClick(View v) {
-                    Posto deletefriends = new Posto();
-                    deletefriends.setPid(user.getId());
-                    deletefriends.setBelong_rid(temp.getId());
-                    MyThread myThread1 = new MyThread();
-                    myThread1.setGetUrl("http://" + ip + "/rest/deleteFriend");
-                    myThread1.setPosto(deletefriends);
-                    myThread1.setWhat(9);
-                    myThread1.start();
-                    try {
-                        myThread1.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    new AlertDialog.Builder(mContext).setTitle("Warnning").setMessage("Are you sure delete?")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog,int whichButton){
+                                    Posto deletefriends = new Posto();
+                                    deletefriends.setPid(user.getId());
+                                    deletefriends.setBelong_rid(temp.getId());
+                                    MyThread myThread1 = new MyThread();
+                                    myThread1.setGetUrl("http://" + ip + "/rest/deleteFriend");
+                                    myThread1.setPosto(deletefriends);
+                                    myThread1.setWhat(9);
+                                    myThread1.start();
+                                    try {
+                                        myThread1.join();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
 
-                    Toast.makeText(mContext,"删除成功", Toast.LENGTH_LONG).show();
-                    init();
+                                    Toast.makeText(mContext,"删除成功", Toast.LENGTH_LONG).show();
+                                    init();
+                                }
+                            }).show();
                 }
             });
-
-
-
             return convertView;
         }
 
