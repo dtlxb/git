@@ -50,7 +50,10 @@ public class FriendsApplyFragment extends ListFragment {
 
         user = (User)bundle.getSerializable("user");
         ip = this.getString(R.string.ipv4);
+        init();
+    }
 
+    private void init(){
         Posto getfriendapply = new Posto();
         getfriendapply.setPid(user.getId());
         MyThread myThread1 = new MyThread();
@@ -64,12 +67,13 @@ public class FriendsApplyFragment extends ListFragment {
             e.printStackTrace();
         }
         resultlist = myThread1.getUsers();
-
+        if(resultlist.size() == 0){
+            Toast.makeText(mContext,"没有好友申请QAQ", Toast.LENGTH_LONG).show();
+        }
         mData = getData();
         MyAdapter adapter = new MyAdapter(mContext);
         setListAdapter(adapter);
     }
-
 
     private List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -158,6 +162,16 @@ public class FriendsApplyFragment extends ListFragment {
             return convertView;
         }
 
+    }
+
+    //fragment切换时更新数据
+    @Override
+    public void onHiddenChanged(boolean hidd) {
+        if (hidd == false) {
+            init();
+        } else {
+            //onpause
+        }
     }
 }
 

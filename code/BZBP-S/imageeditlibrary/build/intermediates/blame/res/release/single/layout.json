@@ -8,6 +8,13 @@
         "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\layout\\abc_list_menu_item_checkbox.xml"
     },
     {
+<<<<<<< HEAD
+=======
+        "merged": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout\\view_set_stoke_width.xml",
+        "source": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\layout\\view_set_stoke_width.xml"
+    },
+    {
+>>>>>>> 00953c31ad47f532edce4c3292616284fde8fe4e
         "merged": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout\\imageitem.xml",
         "source": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\layout\\imageitem.xml"
     },

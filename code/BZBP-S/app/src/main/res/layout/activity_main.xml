@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <Button
         android:id="@+id/button_main_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/button3"
         android:text="menu"/>
-
 
     <com.amap.api.maps2d.MapView
         android:id="@+id/map_main"
@@ -44,7 +43,8 @@
         android:layout_height="72dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/posto"/>
+        android:background="@mipmap/button2"
+        android:text="posto"/>
 
     <Button
         android:id="@+id/button_main_route"
@@ -53,7 +53,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="bottom|right"
-        android:background="@drawable/route"/>
+        android:background="@mipmap/button2"
+        android:text="route"/>
 
     <LinearLayout
         android:id="@+id/marker_pop"

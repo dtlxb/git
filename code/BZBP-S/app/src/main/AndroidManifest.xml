@@ -90,7 +90,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".Friends2Activity"></activity>
+        <activity android:name=".Friends2Activity" />
     </application>
 
 </manifest>

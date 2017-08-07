@@ -275,6 +275,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
                 Bundle intent_bundle = new Bundle();
                 //传递user信息
                 //传递位置信息 Double latitude,longitude
+                intent_bundle.putString("source","mainmenu");
                 intent_bundle.putSerializable("user",bundle.getSerializable("user"));
                 intent_bundle.putDouble("latitude",last_location.latitude);
                 intent_bundle.putDouble("longitude",last_location.longitude);
