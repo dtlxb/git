@@ -131,7 +131,7 @@ public class ShareActivity extends BaseActivity {
                 temp.setBelong_rid(-1);
                 //对于route过程中的posto，设置其belong_rid
                 if (bundle.getBoolean("is_in_route"))temp.setBelong_rid(bundle.getInt("rid"));
-
+                int test = bundle.getInt("rid");
                 MyThread myThread1 = new MyThread();
                 submit(myThread1,ip+"/rest/addPosto",temp,0);
 
