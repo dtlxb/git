@@ -14,7 +14,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="ipv4">192.168.152.112:8080/BookStore</string>
+    <string name="ipv4">192.168.43.9:8080/BookStore</string>
 
     <string name="action_settings">Settings</string>
     <string name="choose_image">choose a image for edit</string>
