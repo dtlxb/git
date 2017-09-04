@@ -310,10 +310,10 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             public void onClick(View v){
                 is_locating = true;
                 customer_paused = false;
-                int test = route.getRid();
                 if (route.getStart_time()==null){//第一次时，要在这里初始化Route的start（开始时间）。
                     route.setStart_time(new Timestamp(System.currentTimeMillis()).getTime());
                 }
+
             }
         });
 
