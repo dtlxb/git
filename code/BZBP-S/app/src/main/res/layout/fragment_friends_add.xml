@@ -9,18 +9,24 @@
     <EditText
         android:id="@+id/edit_text_friendsadd"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
 
     <Spinner
         android:id="@+id/spinner_friendsadd"
         android:entries="@array/addfriend"
         android:layout_width="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_height="50dp"/>
 
     <Button
         android:id="@+id/button_friendsadd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:text="添加好友"/>
 
 </LinearLayout>

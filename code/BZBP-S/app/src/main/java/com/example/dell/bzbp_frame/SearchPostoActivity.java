@@ -1,14 +1,11 @@
 package com.example.dell.bzbp_frame;
 
-import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.example.dell.bzbp_frame.model.Posto;
@@ -33,7 +29,11 @@ import java.util.Map;
 
 public class SearchPostoActivity extends BaseActivity{
 
+<<<<<<< HEAD
+    public static String ip = "192.168.0.105:8080/BookStore";
+=======
     public static String ip;
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
 
     private ListView list_searchposto;
     private TextView textView_searchposto_no_posto;
@@ -64,16 +64,22 @@ public class SearchPostoActivity extends BaseActivity{
             resultlist = myThread1.getPostos();
         }else if(source.equals("mainmenu")){
             //将用户位置&用户名写入posto中上传
-            Posto temp = new Posto();
-            temp.setUsername(user.getUsername());
-            temp.setLatitude((Double) bundle.getDouble("latitude"));
-            temp.setLongitude((Double) bundle.getDouble("longitude"));
-
+            Posto getnearby = new Posto();
+            getnearby.setUsername(user.getUsername());
+            getnearby.setLatitude((Double) bundle.getDouble("latitude"));
+            getnearby.setLongitude((Double) bundle.getDouble("longitude"));
             MyThread myThread1 = new MyThread();
-            submit(myThread1,ip + "/rest/getPostosByLocation",temp,2);
+            submit(myThread1,ip + "/rest/getPostosByLocation",getnearby,2);
             //获得posto列表
             resultlist = myThread1.getPostos();
-        }else if(source.equals("routedetail")){
+        }else if(source.equals("mine")){
+            Posto getmine = new Posto();
+            getmine.setUsername(user.getUsername());
+            MyThread myThread1 = new MyThread();
+            submit(myThread1,ip + "/rest/getPostoByUsername",getmine,2);
+            //获得posto列表
+            resultlist = myThread1.getPostos();
+        } else if(source.equals("routedetail")){
             Posto temp = new Posto();
             temp.setPid(route.getRid());
             temp.setUsername(user.getUsername());

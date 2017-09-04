@@ -1,2 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<merger version="3"><dataSet config="main"><source path="D:\Users\huzeyu\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="debug"><source path="D:\Users\huzeyu\Documents\git\code\BZBP-S\imageeditlibrary\src\debug\shaders"/></dataSet></merger>
+=======
 <merger version="3"><dataSet config="main"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\debug\shaders"/></dataSet></merger>
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+<merger version="3"><dataSet config="main"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\debug\shaders"/></dataSet></merger>
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+<merger version="3"><dataSet config="main"><source path="C:\Users\wangjb\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\wangjb\Documents\git\code\BZBP-S\imageeditlibrary\src\debug\shaders"/></dataSet></merger>
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993

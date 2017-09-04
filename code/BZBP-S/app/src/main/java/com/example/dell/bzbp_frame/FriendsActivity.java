@@ -1,46 +1,29 @@
 package com.example.dell.bzbp_frame;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.support.annotation.IntegerRes;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import com.example.dell.bzbp_frame.model.Posto;
+import com.example.dell.bzbp_frame.model.User;
+import com.example.dell.bzbp_frame.tool.MyThread;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Base64;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.dell.bzbp_frame.model.Posto;
-import com.example.dell.bzbp_frame.model.Route;
-import com.example.dell.bzbp_frame.model.User;
-import com.example.dell.bzbp_frame.tool.MyThread;
 
 public class FriendsActivity extends AppCompatActivity {
 
     private Bundle bundle;
     private User user;
     private ArrayList<User> resultlist = new ArrayList<User>();
-    public static String ip="192.168.1.97:8080/BookStore";
+    public static String ip="192.168.0.105:8080/BookStore";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

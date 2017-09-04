@@ -1,6 +1,584 @@
 [
     {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ka-rGE\\values-ka-rGE.xml",
+=======
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+        "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 108,
+                    "endOffset": 159
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 108,
+                        "endOffset": 159
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 164,
+                    "endColumn": 107,
+                    "endOffset": 267
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 164,
+                        "endColumn": 107,
+                        "endOffset": 267
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 272,
+                    "endColumn": 122,
+                    "endOffset": 390
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 272,
+                        "endColumn": 122,
+                        "endOffset": 390
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 395,
+                    "endColumn": 103,
+                    "endOffset": 494
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 395,
+                        "endColumn": 103,
+                        "endOffset": 494
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 499,
+                    "endColumn": 110,
+                    "endOffset": 605
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 499,
+                        "endColumn": 110,
+                        "endOffset": 605
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 610,
+                    "endColumn": 87,
+                    "endOffset": 693
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 610,
+                        "endColumn": 87,
+                        "endOffset": 693
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 698,
+                    "endColumn": 104,
+                    "endOffset": 798
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 698,
+                        "endColumn": 104,
+                        "endOffset": 798
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 803,
+                    "endColumn": 112,
+                    "endOffset": 911
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 803,
+                        "endColumn": 112,
+                        "endOffset": 911
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 916,
+                    "endColumn": 83,
+                    "endOffset": 995
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 916,
+                        "endColumn": 83,
+                        "endOffset": 995
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 1000,
+                    "endColumn": 81,
+                    "endOffset": 1077
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1000,
+                        "endColumn": 81,
+                        "endOffset": 1077
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1082,
+                    "endColumn": 82,
+                    "endOffset": 1160
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1082,
+                        "endColumn": 82,
+                        "endOffset": 1160
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1165,
+                    "endColumn": 112,
+                    "endOffset": 1273
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1165,
+                        "endColumn": 112,
+                        "endOffset": 1273
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1278,
+                    "endColumn": 106,
+                    "endOffset": 1380
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1278,
+                        "endColumn": 106,
+                        "endOffset": 1380
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1385,
+                    "endColumn": 97,
+                    "endOffset": 1478
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1385,
+                        "endColumn": 97,
+                        "endOffset": 1478
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1483,
+                    "endColumn": 112,
+                    "endOffset": 1591
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1483,
+                        "endColumn": 112,
+                        "endOffset": 1591
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1596,
+                    "endColumn": 103,
+                    "endOffset": 1695
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1596,
+                        "endColumn": 103,
+                        "endOffset": 1695
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1700,
+                    "endColumn": 103,
+                    "endOffset": 1799
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1700,
+                        "endColumn": 103,
+                        "endOffset": 1799
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1804,
+                    "endColumn": 121,
+                    "endOffset": 1921
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1804,
+                        "endColumn": 121,
+                        "endOffset": 1921
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1926,
+                    "endColumn": 97,
+                    "endOffset": 2019
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 1926,
+                        "endColumn": 97,
+                        "endOffset": 2019
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 2024,
+                    "endColumn": 80,
+                    "endOffset": 2100
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 2024,
+                        "endColumn": 80,
+                        "endOffset": 2100
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 22,
+                    "startColumn": 4,
+                    "startOffset": 2105,
+                    "endColumn": 100,
+                    "endOffset": 2201
+                },
+                "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 2105,
+                        "endColumn": 100,
+                        "endOffset": 2201
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "D:\\WJB\\BZBP-frame\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+        "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
         "map": [
             {
                 "to": {
@@ -391,7 +969,12 @@
                     "endOffset": 2201
                 },
                 "from": {
+=======
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+=======
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-ka-rGE\\values-ka-rGE.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
                     "position": {
                         "startLine": 22,
                         "startColumn": 4,

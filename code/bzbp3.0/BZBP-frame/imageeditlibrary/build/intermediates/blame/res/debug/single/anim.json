@@ -1,58 +1,58 @@
 [
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_popup_enter.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_out_bottom.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_slide_out_bottom.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_fade_out.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\menushow.xml",
-        "source": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\menushow.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\out_bottom_to_top.xml",
+        "source": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\out_bottom_to_top.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\menuhide.xml",
-        "source": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\menuhide.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_out_top.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_slide_in_bottom.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_popup_exit.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_slide_out_top.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\in_bottom_to_top.xml",
+        "source": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\in_bottom_to_top.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\out_bottom_to_top.xml",
-        "source": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\out_bottom_to_top.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\menuhide.xml",
+        "source": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\menuhide.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\in_bottom_to_top.xml",
-        "source": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\in_bottom_to_top.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_in_top.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_popup_exit.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_popup_enter.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_fade_out.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_slide_in_bottom.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\menushow.xml",
+        "source": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\src\\main\\res\\anim\\menushow.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_fade_in.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_fade_in.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
-        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\anim\\abc_slide_in_top.xml"
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
     }
 ]
