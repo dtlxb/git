@@ -51,7 +51,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.amap.api.mapcore.util.ag.v;
+
 
 public class MainActivity extends BaseActivity implements LocationSource,
         AMapLocationListener, OnMarkerClickListener {
@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         ip = this.getString(R.string.ipv4);
         bundle = this.getIntent().getExtras();
         user = (User)bundle.getSerializable("user");
-        Toast.makeText(MainActivity.this,"id:"+user.getId(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this,"id:"+user.getId(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -139,6 +139,8 @@ public class MainActivity extends BaseActivity implements LocationSource,
                 Intent i = new Intent(MainActivity.this,RouteActivity.class);
                 Bundle intent_bundle = new Bundle();
                 intent_bundle.putSerializable("user",user);
+                //传递时间
+                intent_bundle.putLong("starttime",new Timestamp(System.currentTimeMillis()).getTime());
                 i.putExtras(intent_bundle);
                 startActivity(i);
             }
@@ -244,7 +246,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         View popupWindow_view = getLayoutInflater().inflate(R.layout.activity_menu, null,
                 false);
         // 创建PopupWindow实例
-        popupWindow = new PopupWindow(popupWindow_view, 600, 1000, true);
+        popupWindow = new PopupWindow(popupWindow_view, 600, 1920, true);
         // 设置动画效果
         popupWindow.setAnimationStyle(R.style.AnimationFade);
         //点击其他地方消失
@@ -259,6 +261,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
             }
         });
         // menu视图里面的控件
+        Button mine = (Button) popupWindow_view.findViewById(R.id.button_menu_mine);
         Button search_posto = (Button) popupWindow_view.findViewById(R.id.button_menu_search_posto);
         Button search_route = (Button) popupWindow_view.findViewById(R.id.button_menu_search_route);
         Button friends = (Button) popupWindow_view.findViewById(R.id.button_menu_friends);
@@ -267,6 +270,20 @@ public class MainActivity extends BaseActivity implements LocationSource,
         Button album = (Button) popupWindow_view.findViewById(R.id.button_menu_album);
 
         // menu视图里面的控件触发的事件
+        //自己的posto
+        mine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,SearchPostoActivity.class);
+                Bundle intent_bundle = new Bundle();
+                //传递user信息
+                //传递位置信息 Double latitude,longitude
+                intent_bundle.putString("source","mine");
+                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
+                i.putExtras(intent_bundle);
+                startActivity(i);
+            }
+        });
         //按当前位置搜索posto
         search_posto.setOnClickListener(new View.OnClickListener() {
             @Override

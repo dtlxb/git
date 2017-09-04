@@ -55,6 +55,7 @@ public class PostoDetailActivity extends BaseActivity {
     private TextView textView_postodetail_praise;
     private Button button_postodetail_make_comment;
     private Button button_postodetail_make_praise;
+    private Button button_postodetail_gps;
     private ListView list_postodetail_commentlist;
 
     public static String ip;
@@ -104,7 +105,7 @@ public class PostoDetailActivity extends BaseActivity {
 
         button_postodetail_make_comment = (Button)this.findViewById(R.id.button_postodetail_make_comment);
         button_postodetail_make_praise = (Button)this.findViewById(R.id.button_postodetail_make_praise);
-
+        button_postodetail_gps = (Button)this.findViewById(R.id.button_postodetail_gps);
         list_postodetail_commentlist = (ListView)this.findViewById(R.id.list_postodetail_commentlist);
     }
 
@@ -164,6 +165,18 @@ public class PostoDetailActivity extends BaseActivity {
                     result_praise = -result_praise;
                     textView_postodetail_praise.setText("praise:"+abs(result_praise));
                 }
+            }
+        });
+
+        button_postodetail_gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(PostoDetailActivity.this,GPSActivity.class);
+                i.putExtra("sw","31.03");
+                i.putExtra("sj","121.44");
+                i.putExtra("ew",posto.getLatitude().toString());
+                i.putExtra("ej",posto.getLongitude().toString());
+                startActivity(i);
             }
         });
     }

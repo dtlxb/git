@@ -17,7 +17,9 @@
         android:id="@+id/navigation_friends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
+        android:background="@drawable/shape_menu_button"
+        app:itemTextColor="@color/black"
+        app:itemIconTint="@color/black"
         app:menu="@menu/navigation" />
 
 

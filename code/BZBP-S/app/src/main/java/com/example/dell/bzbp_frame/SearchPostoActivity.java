@@ -64,16 +64,22 @@ public class SearchPostoActivity extends BaseActivity{
             resultlist = myThread1.getPostos();
         }else if(source.equals("mainmenu")){
             //将用户位置&用户名写入posto中上传
-            Posto temp = new Posto();
-            temp.setUsername(user.getUsername());
-            temp.setLatitude((Double) bundle.getDouble("latitude"));
-            temp.setLongitude((Double) bundle.getDouble("longitude"));
-
+            Posto getnearby = new Posto();
+            getnearby.setUsername(user.getUsername());
+            getnearby.setLatitude((Double) bundle.getDouble("latitude"));
+            getnearby.setLongitude((Double) bundle.getDouble("longitude"));
             MyThread myThread1 = new MyThread();
-            submit(myThread1,ip + "/rest/getPostosByLocation",temp,2);
+            submit(myThread1,ip + "/rest/getPostosByLocation",getnearby,2);
             //获得posto列表
             resultlist = myThread1.getPostos();
-        }else if(source.equals("routedetail")){
+        }else if(source.equals("mine")){
+            Posto getmine = new Posto();
+            getmine.setUsername(user.getUsername());
+            MyThread myThread1 = new MyThread();
+            submit(myThread1,ip + "/rest/getPostoByUsername",getmine,2);
+            //获得posto列表
+            resultlist = myThread1.getPostos();
+        } else if(source.equals("routedetail")){
             Posto temp = new Posto();
             temp.setPid(route.getRid());
             temp.setUsername(user.getUsername());
