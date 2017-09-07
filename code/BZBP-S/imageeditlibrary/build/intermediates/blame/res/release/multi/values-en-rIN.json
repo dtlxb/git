@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-en-rIN\\values-en-rIN.xml",
+        "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-en-rIN\\values-en-rIN.xml",
         "map": [
             {
                 "to": {
@@ -11,6 +11,7 @@
                     "endOffset": 154
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 2,
@@ -393,32 +394,9 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+>>>>>>> parent of 8ccc034... no message
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
-<<<<<<< HEAD
-                    "position": {
-                        "startLine": 22,
-                        "startColumn": 4,
-                        "startOffset": 2051,
-                        "endColumn": 100,
-                        "endOffset": 2147
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-en-rIN\\values-en-rIN.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 103,
-                    "endOffset": 154
-                },
-                "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -437,7 +415,7 @@
                     "endOffset": 262
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -456,7 +434,7 @@
                     "endOffset": 385
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -475,7 +453,7 @@
                     "endOffset": 485
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -494,7 +472,7 @@
                     "endOffset": 593
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -513,7 +491,7 @@
                     "endOffset": 677
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -532,7 +510,7 @@
                     "endOffset": 777
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -551,7 +529,7 @@
                     "endOffset": 892
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -570,7 +548,7 @@
                     "endOffset": 969
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -589,7 +567,7 @@
                     "endOffset": 1045
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -608,7 +586,7 @@
                     "endOffset": 1127
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -627,7 +605,7 @@
                     "endOffset": 1230
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -646,7 +624,7 @@
                     "endOffset": 1334
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -665,7 +643,7 @@
                     "endOffset": 1433
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -684,7 +662,7 @@
                     "endOffset": 1538
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -703,7 +681,7 @@
                     "endOffset": 1641
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -722,7 +700,7 @@
                     "endOffset": 1745
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -741,7 +719,7 @@
                     "endOffset": 1864
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -760,7 +738,7 @@
                     "endOffset": 1964
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -779,7 +757,7 @@
                     "endOffset": 2046
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
@@ -798,6 +776,7 @@
                     "endOffset": 2147
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-en-rIN\\values-en-rIN.xml",
 =======
 >>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
@@ -807,6 +786,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-en-rIN\\values-en-rIN.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-en-rIN\\values-en-rIN.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 22,
                         "startColumn": 4,
