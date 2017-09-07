@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
+        "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-w820dp-v13\\values-w820dp-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 108
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-w820dp-v13\\values-w820dp-v13.xml",
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-w820dp-v13\\values-w820dp-v13.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

@@ -81,7 +81,7 @@ public class LoginActivity extends BaseActivity {
                     msgbox("用户名或密码错误");
                 }else{
                     thisuser.setId(result_int);
-                    Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                    Intent i = new Intent(LoginActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     Bundle intent_bundle = new Bundle();
                     intent_bundle.putSerializable("user",thisuser);
                     i.putExtras(intent_bundle);

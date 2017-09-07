@@ -47,7 +47,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="d2aaefb18066edd66a7628b0a6bc492e" />
+            android:value="825fccdfaf26f5a59cbbcdaed69e3f15" />
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -83,7 +83,6 @@
             android:name="com.xinlan.imageeditlibrary.editimage.EditImageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".AblumActivity" />
         //gps定位服务
         <service android:name="com.amap.api.location.APSService" />
         <service

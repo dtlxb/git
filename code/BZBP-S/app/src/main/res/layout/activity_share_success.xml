@@ -7,9 +7,14 @@
 
     <ImageView
         android:id="@+id/imageview_sharesuccess_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="fitCenter"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="share success!"/>
 
     <TextView
         android:id="@+id/text_view_sharesuccess_name"

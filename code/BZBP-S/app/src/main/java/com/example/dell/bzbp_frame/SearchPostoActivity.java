@@ -87,6 +87,21 @@ public class SearchPostoActivity extends BaseActivity{
             submit(myThread1,ip + "/rest/getPostosByRouteId",temp,2);
             //获得posto列表
             resultlist = myThread1.getPostos();
+        } else if(source.equals("hot")){
+            Posto temp = new Posto();
+            temp.setUsername(user.getUsername());
+            MyThread myThread1 = new MyThread();
+            submit(myThread1,ip + "",temp,2);
+            //获得posto列表
+            resultlist = myThread1.getPostos();
+        } else if(source.equals("hot")){
+            Posto temp = new Posto();
+            temp.setUsername(user.getUsername());
+            //temp.setxxxx(bundle.getxxxx)
+            MyThread myThread1 = new MyThread();
+            submit(myThread1,ip + "",temp,2);
+            //获得posto列表
+            resultlist = myThread1.getPostos();
         }
         if (resultlist.size()!=0) mData = getData();
     }
@@ -144,6 +159,7 @@ public class SearchPostoActivity extends BaseActivity{
         public TextView date;
         public Button viewBtn;
         public TextView route;
+        public TextView praise;
     }
 
     public class MyAdapter extends BaseAdapter {
@@ -190,6 +206,7 @@ public class SearchPostoActivity extends BaseActivity{
                 holder.comment = (TextView) convertView.findViewById(R.id.postolist_comment);
                 holder.date = (TextView) convertView.findViewById(R.id.postolist_date);
                 holder.route = (TextView) convertView.findViewById(R.id.postolist_route);
+                holder.praise = (TextView) convertView.findViewById(R.id.postolist_praise);
 
                 convertView.setTag(holder);
 
@@ -207,8 +224,9 @@ public class SearchPostoActivity extends BaseActivity{
             DateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
             String time = format.format((Long) mData.get(position).get("postolist_date"));
             holder.date.setText("time:" + time);
-
-            int test = temp.getBelong_rid();
+            if (source.equals("hot")){
+                holder.praise.setText("praise:");
+            }
             if ((temp.getBelong_rid() != -1) && (source.equals("routedetail")==false)) {
 
                 holder.route.setText("R");

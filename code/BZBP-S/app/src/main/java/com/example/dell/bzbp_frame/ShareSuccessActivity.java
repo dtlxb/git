@@ -101,8 +101,8 @@ public class ShareSuccessActivity extends BaseActivity {
 
     @Override
     protected void doBusiness(Bundle savedInstanceState) {
-        tv_sharesuccess_name.setText(bundle.getString("share_name"));
-        tv_sharesuccess_comment.setText(bundle.getString("share_comment"));
+        tv_sharesuccess_name.setText("name:"+bundle.getString("share_name"));
+        tv_sharesuccess_comment.setText("comment:"+bundle.getString("share_comment"));
         //显示图片
         iv_sharesuccess_image.setImageBitmap(bitmap);
     }

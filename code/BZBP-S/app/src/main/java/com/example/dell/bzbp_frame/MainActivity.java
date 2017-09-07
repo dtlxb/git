@@ -267,7 +267,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         Button friends = (Button) popupWindow_view.findViewById(R.id.button_menu_friends);
         Button nearby_posto = (Button) popupWindow_view.findViewById(R.id.button_menu_nearby_posto);
         Button remove_posto = (Button) popupWindow_view.findViewById(R.id.button_menu_remove_posto);
-        Button album = (Button) popupWindow_view.findViewById(R.id.button_menu_album);
+
 
         // menu视图里面的控件触发的事件
         //自己的posto
@@ -345,18 +345,6 @@ public class MainActivity extends BaseActivity implements LocationSource,
                 //显示被隐藏的定位marker
                 mLocMarker.setVisible(true);
                 mCircle.setVisible(true);
-            }
-        });
-        //本地相册（编辑图片）
-        album.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,AblumActivity.class);
-                Bundle intent_bundle = new Bundle();
-                //传递用户信息
-                intent_bundle.putSerializable("user",bundle.getSerializable("user"));
-                i.putExtras(intent_bundle);
-                startActivity(i);
             }
         });
     }

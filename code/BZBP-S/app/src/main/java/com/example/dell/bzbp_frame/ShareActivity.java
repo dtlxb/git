@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,9 +22,12 @@ import android.widget.Toast;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
+import com.example.dell.bzbp_frame.tool.FileUtils;
 import com.example.dell.bzbp_frame.tool.MyThread;
+import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,6 +39,7 @@ public class ShareActivity extends BaseActivity {
     private EditText editText_share_comment;
     private Button button_share_share;
     private Button button_share_cancel;
+    private Button button_share_edit;
     private Spinner spinner_share;
     private CheckBox checkBox_share;
     private String share_choice;
@@ -43,6 +48,7 @@ public class ShareActivity extends BaseActivity {
     private User user;
     private Bitmap bitmap;
     private String image_path;
+    private String path;
 
     @Override
     protected void initData() {
@@ -77,6 +83,7 @@ public class ShareActivity extends BaseActivity {
         editText_share_comment = (EditText)findViewById(R.id.edittext_share_comment);
         button_share_share = (Button)findViewById(R.id.button_share_share);
         button_share_cancel = (Button)findViewById(R.id.button_share_cancel);
+        button_share_edit = (Button)findViewById(R.id.button_share_edit);
         spinner_share = (Spinner)findViewById(R.id.spinner_share);
     }
 
@@ -94,6 +101,15 @@ public class ShareActivity extends BaseActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 share_choice = "public";
+            }
+        });
+
+        //edit
+        button_share_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File outputFile = FileUtils.genEditFile();
+                EditImageActivity.start(ShareActivity.this,image_path,outputFile.getAbsolutePath(),9);
             }
         });
 
@@ -209,5 +225,45 @@ public class ShareActivity extends BaseActivity {
                         ShareActivity.this.finish();
                     }
                 }).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            handleEditorImage(data);
+        }
+    }
+
+    private void handleEditorImage(Intent data) {
+        String newFilePath = data.getStringExtra(EditImageActivity.EXTRA_OUTPUT);
+        boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
+
+        if (isImageEdit){
+            Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
+            image_path = newFilePath;
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(image_path);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            //缩放的比例，缩放是很难按准备的比例进行缩放的，其值表明缩放的倍数，SDK中建议其值是2的指数值,值越大会导致图片不清晰
+            opts.inPurgeable = true;
+            opts.inInputShareable = true;
+            opts.inPreferredConfig = Bitmap.Config.RGB_565;
+            opts.inSampleSize =2;
+            bitmap = BitmapFactory.decodeStream(fis,null,opts);
+            imageview_share_image.setImageBitmap(bitmap);
+        }else{//未编辑  还是用原来的图片
+            newFilePath = data.getStringExtra(EditImageActivity.FILE_PATH);
+        }
     }
 }

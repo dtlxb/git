@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/imageview_share_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="fitCenter"/>
     <EditText
@@ -48,6 +48,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
+        <Button
+            android:id="@+id/button_share_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="edit"/>
         <Button
             android:id="@+id/button_share_cancel"
             android:layout_width="wrap_content"
