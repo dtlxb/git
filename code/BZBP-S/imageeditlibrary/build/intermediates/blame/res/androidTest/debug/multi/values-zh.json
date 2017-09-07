@@ -13,6 +13,7 @@
                 },
                 "from": {
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+<<<<<<< HEAD
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -1285,6 +1286,8 @@
                 },
                 "from": {
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+=======
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
