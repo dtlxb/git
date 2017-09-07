@@ -1,29 +1,27 @@
 package com.example.dell.bzbp_frame;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Base64;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+<<<<<<< HEAD
 import android.view.View;
+=======
+import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dell.bzbp_frame.model.Comment;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Praise;
-import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.KeyMapDailog;
 import com.example.dell.bzbp_frame.tool.MyThread;
@@ -34,7 +32,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
 import static java.lang.Math.abs;
 
 public class PostoDetailActivity extends BaseActivity {
@@ -46,6 +47,10 @@ public class PostoDetailActivity extends BaseActivity {
 
     private ArrayList<Comment> resultlist = new ArrayList<Comment>();
     private Integer result_praise;
+<<<<<<< HEAD
+    private TextView view_praise;
+    public static String ip="192.168.0.105:8080/BookStore";
+=======
 
     private ImageView image_view_postodetail_image;
     private TextView textView_postodetail_name;
@@ -61,6 +66,7 @@ public class PostoDetailActivity extends BaseActivity {
     public static String ip;
     KeyMapDailog dialog;
 
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
     @Override
     protected void initData() {
         ip = this.getString(R.string.ipv4);

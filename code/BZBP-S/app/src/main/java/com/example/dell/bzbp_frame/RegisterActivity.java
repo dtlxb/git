@@ -11,12 +11,16 @@ import com.example.dell.bzbp_frame.tool.MyThread;
 
 public class RegisterActivity extends BaseActivity{
 
+<<<<<<< HEAD
+    public static String ip="192.168.0.105:8080/BookStore";
+=======
     private static User thisuser;
     private static String ip;
     private Button button_register_register;
     private Button button_register_cancel;
     private EditText editText_register_username;
     private EditText editText_register_password;
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
 
     @Override
     protected void initData() {

@@ -10,7 +10,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,13 +17,10 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.PopupWindow;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -32,6 +28,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.AMap.OnMarkerClickListener;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
@@ -43,16 +40,23 @@ import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.example.dell.bzbp_frame.model.*;
-import com.amap.api.maps2d.AMap.OnMarkerClickListener;
+import com.example.dell.bzbp_frame.model.MyLatlng;
+import com.example.dell.bzbp_frame.model.Posto;
+import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.MyThread;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
 
 
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
 public class MainActivity extends BaseActivity implements LocationSource,
         AMapLocationListener, OnMarkerClickListener {
 
@@ -72,7 +76,11 @@ public class MainActivity extends BaseActivity implements LocationSource,
     private MyLatlng last_location = new MyLatlng(-1.0,-1.0);
     private Bundle bundle;
     private User user;
+<<<<<<< HEAD
+    public static String ip = "192.168.0.105:8080/BookStore";
+=======
     public static String ip;
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
 
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);

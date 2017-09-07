@@ -47,7 +47,23 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
+<<<<<<< HEAD
             android:value="825fccdfaf26f5a59cbbcdaed69e3f15" />
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            android:value="a7945ca5681eb0f6620bb50895c63249"/>
+=======
+            android:value="825fccdfaf26f5a59cbbcdaed69e3f15" />
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+            android:value="d2aaefb18066edd66a7628b0a6bc492e" />
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+            android:value="d2aaefb18066edd66a7628b0a6bc492e" />
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+>>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
 
         <activity android:name=".SplashActivity">
             <intent-filter>

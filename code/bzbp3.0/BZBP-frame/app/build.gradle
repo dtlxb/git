@@ -1,6 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('D:/111/111.jks')
+            keyAlias 'key0'
+            keyPassword '1996123'
+            storePassword '1996123'
+        }
+
+    }
+
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
@@ -8,8 +18,13 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
+        multiDexEnabled true
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
     }
     buildTypes {
         release {
@@ -20,6 +35,7 @@ android {
 }
 
 dependencies {
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -39,4 +55,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':imageeditlibrary')
     compile project(path: ':imageeditlibrary')
+    compile('com.xyzlf.share:sharesdk:0.0.9') {
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
 }
