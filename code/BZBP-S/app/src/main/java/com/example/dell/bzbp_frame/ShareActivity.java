@@ -1,6 +1,8 @@
 package com.example.dell.bzbp_frame;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,12 +45,8 @@ public class ShareActivity extends BaseActivity {
     private Bundle bundle;
     private User user;
     private Bitmap bitmap;
-<<<<<<< HEAD
     private String image_path;
     private String path;
-=======
->>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
-
     @Override
     protected void initData() {
         ip = this.getString(R.string.ipv4);
@@ -201,8 +199,7 @@ public class ShareActivity extends BaseActivity {
         //显示图片
         imageview_share_image.setImageBitmap(bitmap);
 
-    }
-<<<<<<< HEAD
+}
 
     @Override
     public void onBackPressed() {
@@ -253,6 +250,4 @@ public class ShareActivity extends BaseActivity {
             newFilePath = data.getStringExtra(EditImageActivity.FILE_PATH);
         }
     }
-=======
->>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
 }
