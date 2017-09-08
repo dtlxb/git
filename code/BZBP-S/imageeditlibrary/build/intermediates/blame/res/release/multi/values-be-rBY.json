@@ -12,8 +12,11 @@
                 },
                 "from": {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
 =======
+=======
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
                     "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
 <<<<<<< HEAD
 >>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
@@ -834,6 +837,9 @@
                     "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
 =======
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -852,7 +858,7 @@
                     "endOffset": 278
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -871,7 +877,7 @@
                     "endOffset": 401
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -890,7 +896,7 @@
                     "endOffset": 504
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -909,7 +915,7 @@
                     "endOffset": 620
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -928,7 +934,7 @@
                     "endOffset": 706
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -947,7 +953,7 @@
                     "endOffset": 814
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -966,7 +972,7 @@
                     "endOffset": 932
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -985,7 +991,7 @@
                     "endOffset": 1011
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -1004,7 +1010,7 @@
                     "endOffset": 1089
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -1023,7 +1029,7 @@
                     "endOffset": 1172
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -1042,7 +1048,7 @@
                     "endOffset": 1278
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -1061,7 +1067,7 @@
                     "endOffset": 1384
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -1080,7 +1086,7 @@
                     "endOffset": 1482
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -1099,7 +1105,7 @@
                     "endOffset": 1590
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -1118,7 +1124,7 @@
                     "endOffset": 1695
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -1137,7 +1143,7 @@
                     "endOffset": 1800
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -1156,7 +1162,7 @@
                     "endOffset": 1920
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -1175,7 +1181,7 @@
                     "endOffset": 2020
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -1194,7 +1200,7 @@
                     "endOffset": 2101
                 },
                 "from": {
-                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
@@ -1213,6 +1219,7 @@
                     "endOffset": 2210
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-be-rBY\\values-be-rBY.xml",
 <<<<<<< HEAD
 =======
@@ -1226,6 +1233,9 @@
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
 =======
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-be-rBY\\values-be-rBY.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 22,
                         "startColumn": 4,

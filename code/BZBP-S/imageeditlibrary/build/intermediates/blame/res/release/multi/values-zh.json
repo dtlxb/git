@@ -13,6 +13,7 @@
                 },
                 "from": {
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+<<<<<<< HEAD
                     "position": {
                         "startLine": 24,
                         "startColumn": 4,
@@ -591,13 +592,15 @@
                 },
                 "from": {
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
                     "position": {
                         "startLine": 24,
                         "startColumn": 4,
-                        "startOffset": 1070,
+                        "startOffset": 1072,
                         "endLine": 37,
                         "endColumn": 19,
-                        "endOffset": 1420
+                        "endOffset": 1422
                     }
                 }
             },
@@ -606,19 +609,17 @@
                     "startLine": 16,
                     "startColumn": 4,
                     "startOffset": 397,
-                    "endColumn": 41,
-                    "endOffset": 434
+                    "endColumn": 43,
+                    "endOffset": 436
                 },
                 "from": {
-                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
                     "position": {
                         "startLine": 1,
                         "startColumn": 4,
                         "startOffset": 17,
-                        "endColumn": 41,
-                        "endOffset": 54
-=======
->>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+                        "endColumn": 43,
+                        "endOffset": 56
                     }
                 }
             },
@@ -633,6 +634,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -640,6 +642,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -660,6 +665,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -667,6 +673,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -687,6 +696,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -694,6 +704,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 44,
                         "startColumn": 4,
@@ -714,6 +727,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -721,6 +735,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 42,
                         "startColumn": 4,
@@ -741,6 +758,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -748,6 +766,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 41,
                         "startColumn": 4,
@@ -768,6 +789,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -775,6 +797,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -795,6 +820,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -802,6 +828,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -822,6 +851,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -829,6 +859,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 40,
                         "startColumn": 4,
@@ -849,6 +882,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -856,6 +890,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -876,6 +913,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -883,6 +921,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 22,
                         "startColumn": 4,
@@ -903,6 +944,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -910,6 +952,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -930,6 +975,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -937,6 +983,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -957,6 +1006,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -964,6 +1014,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -984,6 +1037,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -991,6 +1045,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -1011,6 +1068,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1018,6 +1076,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -1038,6 +1099,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1045,6 +1107,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -1065,6 +1130,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1072,6 +1138,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -1092,6 +1161,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1099,6 +1169,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 39,
                         "startColumn": 4,
@@ -1119,6 +1192,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1126,6 +1200,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -1146,6 +1223,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1153,6 +1231,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -1173,6 +1254,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1180,6 +1262,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -1200,6 +1285,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1207,6 +1293,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -1227,6 +1316,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1234,6 +1324,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
@@ -1254,6 +1347,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1261,6 +1355,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -1281,6 +1378,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1288,6 +1386,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 45,
                         "startColumn": 4,
@@ -1308,6 +1409,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1315,6 +1417,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -1335,6 +1440,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1342,6 +1448,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -1362,6 +1471,7 @@
                 "from": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
@@ -1369,6 +1479,9 @@
 =======
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 46,
                         "startColumn": 4,

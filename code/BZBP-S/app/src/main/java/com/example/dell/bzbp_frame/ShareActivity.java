@@ -1,18 +1,15 @@
 package com.example.dell.bzbp_frame;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -41,14 +38,16 @@ public class ShareActivity extends BaseActivity {
     private Button button_share_cancel;
     private Button button_share_edit;
     private Spinner spinner_share;
-    private CheckBox checkBox_share;
     private String share_choice;
     public static String ip;
     private Bundle bundle;
     private User user;
     private Bitmap bitmap;
+<<<<<<< HEAD
     private String image_path;
     private String path;
+=======
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
 
     @Override
     protected void initData() {
@@ -58,8 +57,7 @@ public class ShareActivity extends BaseActivity {
         //获取user
         user = (User)bundle.getSerializable("user");
         //获取照片在手机中的路径并生成bitmap
-        //
-        image_path = (String) bundle.getString("images");
+        String image_path = (String) bundle.getString("images");
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(image_path);
@@ -153,7 +151,7 @@ public class ShareActivity extends BaseActivity {
                 temp.setBelong_rid(-1);
                 //对于route过程中的posto，设置其belong_rid
                 if (bundle.getBoolean("is_in_route"))temp.setBelong_rid(bundle.getInt("rid"));
-
+                int test = bundle.getInt("rid");
                 MyThread myThread1 = new MyThread();
                 submit(myThread1,ip+"/rest/addPosto",temp,0);
 
@@ -161,7 +159,7 @@ public class ShareActivity extends BaseActivity {
                 if (myThread1.getRid()!=null){
                     last_pid = myThread1.getRid().intValue();//本次新posto的id
                 }
-                boolean test = bundle.getBoolean("is_in_route");
+
                 //------------------------------------------------
                 //测试
                 //Intent i = new Intent(ShareActivity.this,Test2Activity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -171,8 +169,7 @@ public class ShareActivity extends BaseActivity {
                 //
                 //对于route中的posto,返回之前的route
                 if (bundle.getBoolean("is_in_route")){
-
-                    Intent i = new Intent(ShareActivity.this,ShareSuccessActivity.class);
+                    Intent i = new Intent(ShareActivity.this,RouteActivity.class);
                     Bundle intent_bundle = new Bundle();
                     //user还是之前的user
                     intent_bundle.putSerializable("user",user);
@@ -182,28 +179,17 @@ public class ShareActivity extends BaseActivity {
                     //Route r = (Route) bundle.getSerializable("route");
                     //r.getPids().add(last_pid);
                     //intent_bundle.putSerializable("route",r);
-                    intent_bundle.putBoolean("is_in_route",true);
+
                     //把route对象传回routeactivity，以恢复拍照前的状态
-                    intent_bundle.putString("share_name",editText_share_name.getText().toString());
-                    intent_bundle.putString("share_comment",editText_share_comment.getText().toString());
-                    intent_bundle.putString("share_image",image_path);
                     intent_bundle.putSerializable("route",(Route)bundle.getSerializable("route"));
                     i.putExtras(intent_bundle);
-                    ShareActivity.this.finish();
                     startActivity(i);
-
-
                 }
                 else{
-                    Intent i = new Intent(ShareActivity.this,ShareSuccessActivity.class);
+                    Intent i = new Intent(ShareActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     Bundle intent_bundle = new Bundle();
                     intent_bundle.putSerializable("user",((User)bundle.getSerializable("user")));
-                    intent_bundle.putBoolean("is_in_route",false);
-                    intent_bundle.putString("share_name",editText_share_name.getText().toString());
-                    intent_bundle.putString("share_comment",editText_share_comment.getText().toString());
-                    intent_bundle.putString("share_image",image_path);
                     i.putExtras(intent_bundle);
-                    ShareActivity.this.finish();
                     startActivity(i);
                 }
             }
@@ -216,6 +202,7 @@ public class ShareActivity extends BaseActivity {
         imageview_share_image.setImageBitmap(bitmap);
 
     }
+<<<<<<< HEAD
 
     @Override
     public void onBackPressed() {
@@ -266,4 +253,6 @@ public class ShareActivity extends BaseActivity {
             newFilePath = data.getStringExtra(EditImageActivity.FILE_PATH);
         }
     }
+=======
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
 }

@@ -12,6 +12,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
     },
@@ -35,12 +36,15 @@
         "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
 =======
+=======
+>>>>>>> parent of 8ccc034... no message
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
     },
     {
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+<<<<<<< HEAD
 >>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
 =======
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
@@ -66,6 +70,11 @@
         "merged": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
         "source": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+<<<<<<< HEAD
 >>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
+=======
+=======
+>>>>>>> parent of 8ccc034... no message
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
     }
 ]

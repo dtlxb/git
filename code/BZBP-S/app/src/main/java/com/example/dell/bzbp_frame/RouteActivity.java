@@ -189,7 +189,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
             //测试用：为route插入初始值
             //route.location_list.add(new LatLng(31.03,121.43));
             route.location_list.add(new MyLatlng(31.03,121.44));
-            route.setStart_time(bundle.getLong("starttime"));
+
             //把rid初始化成-1，后台可以知道这是一个新route。
             //route.setRid(-1);
 
@@ -313,6 +313,7 @@ public class RouteActivity extends AppCompatActivity implements LocationSource,
                 if (route.getStart_time()==null){//第一次时，要在这里初始化Route的start（开始时间）。
                     route.setStart_time(new Timestamp(System.currentTimeMillis()).getTime());
                 }
+
             }
         });
 

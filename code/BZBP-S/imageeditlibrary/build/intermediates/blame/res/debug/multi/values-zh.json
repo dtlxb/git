@@ -7,6 +7,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
 =======
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
@@ -627,8 +628,21 @@
     {
         "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
 =======
+<<<<<<< HEAD
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+=======
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
 >>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+        "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+        "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+        "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+>>>>>>> parent of 8ccc034... no message
         "map": [
             {
                 "to": {
@@ -640,7 +654,23 @@
                     "endOffset": 392
                 },
                 "from": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 24,
                         "startColumn": 4,
@@ -660,14 +690,31 @@
                     "endOffset": 436
                 },
                 "from": {
+<<<<<<< HEAD
 >>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
+=======
+                    "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+                    "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+=======
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> parent of 8ccc034... no message
                     "position": {
                         "startLine": 1,
                         "startColumn": 4,
                         "startOffset": 17,
-=======
->>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
                         "endColumn": 43,
                         "endOffset": 56
                     }

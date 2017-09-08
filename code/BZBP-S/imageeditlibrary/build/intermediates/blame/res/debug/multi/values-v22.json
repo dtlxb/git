@@ -11,7 +11,12 @@
                     "endOffset": 125
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v22\\values-v22.xml",
+=======
+<<<<<<< HEAD
+                    "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-v22\\values-v22.xml",
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -76,33 +81,9 @@
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+>>>>>>> parent of 8ccc034... no message
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v22\\values-v22.xml",
-<<<<<<< HEAD
-                    "position": {
-                        "startLine": 9,
-                        "startColumn": 4,
-                        "startOffset": 553,
-                        "endLine": 13,
-                        "endColumn": 12,
-                        "endOffset": 896
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v22\\values-v22.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 74,
-                    "endOffset": 125
-                },
-                "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v22\\values-v22.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -121,7 +102,7 @@
                     "endOffset": 212
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v22\\values-v22.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v22\\values-v22.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -141,7 +122,7 @@
                     "endOffset": 548
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v22\\values-v22.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v22\\values-v22.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -162,6 +143,7 @@
                     "endOffset": 896
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v22\\values-v22.xml",
 =======
 >>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
@@ -171,7 +153,13 @@
 =======
                     "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-v22\\values-v22.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
+<<<<<<< HEAD
 >>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
+=======
+=======
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v22\\values-v22.xml",
+>>>>>>> parent of 8ccc034... no message
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,

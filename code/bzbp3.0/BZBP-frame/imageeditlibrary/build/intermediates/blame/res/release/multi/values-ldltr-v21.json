@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-ldltr-v21\\values-ldltr-v21.xml",
+        "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\bzbp3.0\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-ldltr-v21\\values-ldltr-v21.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 163
                 },
                 "from": {
-                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
+                    "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

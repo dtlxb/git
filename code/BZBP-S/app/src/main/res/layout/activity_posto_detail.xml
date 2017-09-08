@@ -59,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:text="make comments"/>
 
+<<<<<<< HEAD
                 <Button
                         android:id="@+id/button_postodetail_gps"
                         android:layout_width="wrap_content"
@@ -67,6 +68,8 @@
                         android:text="goto"/>
 
 
+=======
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
         </LinearLayout>
 
         <ListView

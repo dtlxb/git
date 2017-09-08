@@ -3,17 +3,14 @@
 
     <item
         android:id="@+id/navigation_friends_list"
-        android:icon="@mipmap/friendlist"
         android:title="list" />
 
     <item
         android:id="@+id/navigation_friends_add"
-        android:icon="@mipmap/search"
         android:title="add" />
 
     <item
         android:id="@+id/navigation_friends_apply"
-        android:icon="@mipmap/friendapply"
         android:title="apply" />
 
 </menu>

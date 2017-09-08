@@ -4,27 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/colorPrimary"
     android:orientation="vertical">
-
-    <Button
-        android:id="@+id/button_menu_mine"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:gravity="center_vertical|left"
-        android:background="@drawable/shape_menu_button"
-        android:text="mine"
-        android:textColor="@color/black"
-        android:textSize="15dp"/>
 
     <Button
         android:id="@+id/button_menu_search_posto"
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:gravity="center_vertical|left"
-        android:background="@drawable/shape_menu_button"
+        android:background="@drawable/button1"
+        android:paddingLeft="10dp"
         android:text="nearby posto"
-        android:textColor="@color/black"
+        android:textColor="#ffffffff"
         android:textSize="15dp"/>
 
     <Button
@@ -32,9 +22,10 @@
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:gravity="center_vertical|left"
-        android:background="@drawable/shape_menu_button"
+        android:background="@drawable/button1"
+        android:paddingLeft="10dp"
         android:text="nearby route"
-        android:textColor="@color/black"
+        android:textColor="#ffffffff"
         android:textSize="15dp"/>
 
 
@@ -43,9 +34,10 @@
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:gravity="center_vertical|left"
-        android:background="@drawable/shape_menu_button"
+        android:background="@drawable/button1"
+        android:paddingLeft="35dp"
         android:text="friends"
-        android:textColor="@color/black"
+        android:textColor="#ffffffff"
         android:textSize="15dp"/>
 
     <Button
@@ -53,9 +45,10 @@
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:gravity="center_vertical|left"
-        android:background="@drawable/shape_menu_button"
+        android:background="@drawable/button1"
+        android:paddingLeft="15dp"
         android:text="show posto"
-        android:textColor="@color/black"
+        android:textColor="#ffffffff"
         android:textSize="15dp"/>
 
     <Button
@@ -63,9 +56,25 @@
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:gravity="center_vertical|left"
-        android:background="@drawable/shape_menu_button"
+        android:background="@drawable/button1"
+        android:paddingLeft="10dp"
         android:text="remove posto"
-        android:textColor="@color/black"
+        android:textColor="#ffffffff"
         android:textSize="15dp"/>
 
+<<<<<<< HEAD
+=======
+    <Button
+        android:id="@+id/button_menu_album"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/button1"
+        android:paddingLeft="40dp"
+        android:text="album"
+        android:textColor="#ffffffff"
+        android:textSize="15dp"/>
+
+
+>>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
 </LinearLayout>
