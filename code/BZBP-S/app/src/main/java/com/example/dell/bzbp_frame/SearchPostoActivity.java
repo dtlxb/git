@@ -29,11 +29,8 @@ import java.util.Map;
 
 public class SearchPostoActivity extends BaseActivity{
 
-<<<<<<< HEAD
+
     public static String ip = "192.168.0.105:8080/BookStore";
-=======
-    public static String ip;
->>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
 
     private ListView list_searchposto;
     private TextView textView_searchposto_no_posto;
