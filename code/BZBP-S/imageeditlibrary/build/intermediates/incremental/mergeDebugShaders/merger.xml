@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <<<<<<< HEAD
+<merger version="3"><dataSet config="main"><source path="D:\Users\huzeyu\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="debug"><source path="D:\Users\huzeyu\Documents\git\code\BZBP-S\imageeditlibrary\src\debug\shaders"/></dataSet></merger>
+=======
+<<<<<<< HEAD
 <merger version="3"><dataSet config="main"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\debug\shaders"/></dataSet></merger>
 =======
 <<<<<<< HEAD
@@ -27,3 +30,4 @@
 <merger version="3"><dataSet config="main"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\dell\Documents\git\code\BZBP-S\imageeditlibrary\src\debug\shaders"/></dataSet></merger>
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85

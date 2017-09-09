@@ -1,6 +1,9 @@
 [
     {
 <<<<<<< HEAD
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+=======
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
 =======
 <<<<<<< HEAD
@@ -19,6 +22,7 @@
         "outputFile": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
 >>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
         "map": [
             {
                 "to": {
@@ -30,6 +34,9 @@
                     "endOffset": 392
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
 <<<<<<< HEAD
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 =======
@@ -47,6 +54,7 @@
                     "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
 >>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
 >>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 24,
                         "startColumn": 4,
@@ -69,22 +77,18 @@
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
-=======
-                    "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
->>>>>>> 9c6db154497685ac208e5f205a82b977f9c924d0
-=======
-                    "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
->>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
-=======
-                    "file": "C:\\Users\\wangjb\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
->>>>>>> 08463ef4c8a966eb2b9cd2576569300f7b9cd993
                     "position": {
                         "startLine": 1,
                         "startColumn": 4,
                         "startOffset": 17,
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
                         "endColumn": 41,
                         "endOffset": 54
@@ -715,6 +719,7 @@
                         "startLine": 1,
                         "startColumn": 4,
                         "startOffset": 17,
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                         "endColumn": 43,
                         "endOffset": 56
                     }
@@ -729,7 +734,11 @@
                     "endOffset": 473
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -748,7 +757,11 @@
                     "endOffset": 519
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -767,7 +780,11 @@
                     "endOffset": 557
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 44,
                         "startColumn": 4,
@@ -786,7 +803,11 @@
                     "endOffset": 595
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 42,
                         "startColumn": 4,
@@ -805,7 +826,11 @@
                     "endOffset": 634
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 41,
                         "startColumn": 4,
@@ -824,7 +849,11 @@
                     "endOffset": 670
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -843,7 +872,11 @@
                     "endOffset": 706
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -862,7 +895,11 @@
                     "endOffset": 769
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 40,
                         "startColumn": 4,
@@ -881,7 +918,11 @@
                     "endOffset": 807
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -900,7 +941,11 @@
                     "endOffset": 850
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 22,
                         "startColumn": 4,
@@ -919,7 +964,11 @@
                     "endOffset": 892
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -938,7 +987,11 @@
                     "endOffset": 940
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -957,7 +1010,11 @@
                     "endOffset": 1003
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -976,7 +1033,11 @@
                     "endOffset": 1070
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -995,7 +1056,11 @@
                     "endOffset": 1132
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -1014,7 +1079,11 @@
                     "endOffset": 1195
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -1033,7 +1102,11 @@
                     "endOffset": 1259
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -1052,7 +1125,11 @@
                     "endOffset": 1295
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 39,
                         "startColumn": 4,
@@ -1071,7 +1148,11 @@
                     "endOffset": 1346
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -1090,7 +1171,11 @@
                     "endOffset": 1391
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -1109,7 +1194,11 @@
                     "endOffset": 1429
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -1128,7 +1217,11 @@
                     "endOffset": 1465
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -1147,7 +1240,11 @@
                     "endOffset": 1511
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
@@ -1166,7 +1263,11 @@
                     "endOffset": 1561
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -1185,7 +1286,11 @@
                     "endOffset": 1599
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 45,
                         "startColumn": 4,
@@ -1204,7 +1309,11 @@
                     "endOffset": 1639
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -1223,7 +1332,11 @@
                     "endOffset": 1675
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -1242,7 +1355,11 @@
                     "endOffset": 1717
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+=======
                     "file": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\src\\main\\res\\values-zh\\strings.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 46,
                         "startColumn": 4,

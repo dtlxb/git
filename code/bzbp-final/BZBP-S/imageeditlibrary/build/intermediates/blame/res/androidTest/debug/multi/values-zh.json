@@ -1,0 +1,579 @@
+[
+    {
+        "outputFile": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-zh\\values-zh.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 15,
+                    "endColumn": 19,
+                    "endOffset": 392
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endLine": 15,
+                        "endColumn": 19,
+                        "endOffset": 392
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 397,
+                    "endColumn": 43,
+                    "endOffset": 436
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 397,
+                        "endColumn": 43,
+                        "endOffset": 436
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 441,
+                    "endColumn": 36,
+                    "endOffset": 473
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 441,
+                        "endColumn": 36,
+                        "endOffset": 473
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 478,
+                    "endColumn": 45,
+                    "endOffset": 519
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 478,
+                        "endColumn": 45,
+                        "endOffset": 519
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 524,
+                    "endColumn": 37,
+                    "endOffset": 557
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 524,
+                        "endColumn": 37,
+                        "endOffset": 557
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 562,
+                    "endColumn": 37,
+                    "endOffset": 595
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 562,
+                        "endColumn": 37,
+                        "endOffset": 595
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 600,
+                    "endColumn": 38,
+                    "endOffset": 634
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 600,
+                        "endColumn": 38,
+                        "endOffset": 634
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 22,
+                    "startColumn": 4,
+                    "startOffset": 639,
+                    "endColumn": 35,
+                    "endOffset": 670
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 639,
+                        "endColumn": 35,
+                        "endOffset": 670
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 675,
+                    "endColumn": 35,
+                    "endOffset": 706
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 675,
+                        "endColumn": 35,
+                        "endOffset": 706
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 24,
+                    "startColumn": 4,
+                    "startOffset": 711,
+                    "endColumn": 62,
+                    "endOffset": 769
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 24,
+                        "startColumn": 4,
+                        "startOffset": 711,
+                        "endColumn": 62,
+                        "endOffset": 769
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 25,
+                    "startColumn": 4,
+                    "startOffset": 774,
+                    "endColumn": 37,
+                    "endOffset": 807
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 25,
+                        "startColumn": 4,
+                        "startOffset": 774,
+                        "endColumn": 37,
+                        "endOffset": 807
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 26,
+                    "startColumn": 4,
+                    "startOffset": 812,
+                    "endColumn": 42,
+                    "endOffset": 850
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 26,
+                        "startColumn": 4,
+                        "startOffset": 812,
+                        "endColumn": 42,
+                        "endOffset": 850
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 27,
+                    "startColumn": 4,
+                    "startOffset": 855,
+                    "endColumn": 41,
+                    "endOffset": 892
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 27,
+                        "startColumn": 4,
+                        "startOffset": 855,
+                        "endColumn": 41,
+                        "endOffset": 892
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 28,
+                    "startColumn": 4,
+                    "startOffset": 897,
+                    "endColumn": 47,
+                    "endOffset": 940
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 28,
+                        "startColumn": 4,
+                        "startOffset": 897,
+                        "endColumn": 47,
+                        "endOffset": 940
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 29,
+                    "startColumn": 4,
+                    "startOffset": 945,
+                    "endColumn": 62,
+                    "endOffset": 1003
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 29,
+                        "startColumn": 4,
+                        "startOffset": 945,
+                        "endColumn": 62,
+                        "endOffset": 1003
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 30,
+                    "startColumn": 4,
+                    "startOffset": 1008,
+                    "endColumn": 66,
+                    "endOffset": 1070
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 30,
+                        "startColumn": 4,
+                        "startOffset": 1008,
+                        "endColumn": 66,
+                        "endOffset": 1070
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 31,
+                    "startColumn": 4,
+                    "startOffset": 1075,
+                    "endColumn": 61,
+                    "endOffset": 1132
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 31,
+                        "startColumn": 4,
+                        "startOffset": 1075,
+                        "endColumn": 61,
+                        "endOffset": 1132
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 32,
+                    "startColumn": 4,
+                    "startOffset": 1137,
+                    "endColumn": 62,
+                    "endOffset": 1195
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 32,
+                        "startColumn": 4,
+                        "startOffset": 1137,
+                        "endColumn": 62,
+                        "endOffset": 1195
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 33,
+                    "startColumn": 4,
+                    "startOffset": 1200,
+                    "endColumn": 63,
+                    "endOffset": 1259
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 33,
+                        "startColumn": 4,
+                        "startOffset": 1200,
+                        "endColumn": 63,
+                        "endOffset": 1259
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 34,
+                    "startColumn": 4,
+                    "startOffset": 1264,
+                    "endColumn": 35,
+                    "endOffset": 1295
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 34,
+                        "startColumn": 4,
+                        "startOffset": 1264,
+                        "endColumn": 35,
+                        "endOffset": 1295
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 1300,
+                    "endColumn": 50,
+                    "endOffset": 1346
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 35,
+                        "startColumn": 4,
+                        "startOffset": 1300,
+                        "endColumn": 50,
+                        "endOffset": 1346
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 36,
+                    "startColumn": 4,
+                    "startOffset": 1351,
+                    "endColumn": 44,
+                    "endOffset": 1391
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 36,
+                        "startColumn": 4,
+                        "startOffset": 1351,
+                        "endColumn": 44,
+                        "endOffset": 1391
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 1396,
+                    "endColumn": 37,
+                    "endOffset": 1429
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 37,
+                        "startColumn": 4,
+                        "startOffset": 1396,
+                        "endColumn": 37,
+                        "endOffset": 1429
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 38,
+                    "startColumn": 4,
+                    "startOffset": 1434,
+                    "endColumn": 35,
+                    "endOffset": 1465
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 38,
+                        "startColumn": 4,
+                        "startOffset": 1434,
+                        "endColumn": 35,
+                        "endOffset": 1465
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 39,
+                    "startColumn": 4,
+                    "startOffset": 1470,
+                    "endColumn": 45,
+                    "endOffset": 1511
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 39,
+                        "startColumn": 4,
+                        "startOffset": 1470,
+                        "endColumn": 45,
+                        "endOffset": 1511
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 40,
+                    "startColumn": 4,
+                    "startOffset": 1516,
+                    "endColumn": 49,
+                    "endOffset": 1561
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 40,
+                        "startColumn": 4,
+                        "startOffset": 1516,
+                        "endColumn": 49,
+                        "endOffset": 1561
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 41,
+                    "startColumn": 4,
+                    "startOffset": 1566,
+                    "endColumn": 37,
+                    "endOffset": 1599
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 41,
+                        "startColumn": 4,
+                        "startOffset": 1566,
+                        "endColumn": 37,
+                        "endOffset": 1599
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 42,
+                    "startColumn": 4,
+                    "startOffset": 1604,
+                    "endColumn": 39,
+                    "endOffset": 1639
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 42,
+                        "startColumn": 4,
+                        "startOffset": 1604,
+                        "endColumn": 39,
+                        "endOffset": 1639
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 43,
+                    "startColumn": 4,
+                    "startOffset": 1644,
+                    "endColumn": 35,
+                    "endOffset": 1675
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 43,
+                        "startColumn": 4,
+                        "startOffset": 1644,
+                        "endColumn": 35,
+                        "endOffset": 1675
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 44,
+                    "startColumn": 4,
+                    "startOffset": 1680,
+                    "endColumn": 41,
+                    "endOffset": 1717
+                },
+                "from": {
+                    "file": "D:\\androidsdk\\BZBP-S\\imageeditlibrary\\build\\intermediates\\bundles\\debug\\res\\values-zh\\values-zh.xml",
+                    "position": {
+                        "startLine": 44,
+                        "startColumn": 4,
+                        "startOffset": 1680,
+                        "endColumn": 41,
+                        "endOffset": 1717
+                    }
+                }
+            }
+        ]
+    }
+]

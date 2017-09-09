@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_friends_list"
+        android:icon="@mipmap/friendlist"
+        android:title="list" />
+
+    <item
+        android:id="@+id/navigation_friends_add"
+        android:icon="@mipmap/search"
+        android:title="add" />
+
+    <item
+        android:id="@+id/navigation_friends_apply"
+        android:icon="@mipmap/friendapply"
+        android:title="apply" />
+
+</menu>

@@ -11,7 +11,14 @@ import com.example.dell.bzbp_frame.tool.MyThread;
 
 public class LoginActivity extends BaseActivity {
 
+<<<<<<< HEAD
+
+    public static String ip = "192.168.0.105:8080/BookStore";
+
+
+=======
     public static String ip;
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
     private Button button_login_register;
     private Button button_login_login;
     private EditText editText_login_username;
