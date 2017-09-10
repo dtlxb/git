@@ -51,6 +51,8 @@
         android:textColor="#ffffffff"
         android:textSize="15dp"/>
 
+<<<<<<< HEAD
+=======
     <Button
         android:id="@+id/button_menu_remove_posto"
         android:layout_width="200dp"

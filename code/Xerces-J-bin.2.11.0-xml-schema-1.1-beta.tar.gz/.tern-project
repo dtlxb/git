@@ -1,1 +1,18 @@
+<<<<<<< HEAD
 {"ide":{},"libs":["ecma5","browser"],"plugins":{"guess-types":{},"angular":{}}}
+=======
+{
+  "libs": [
+    "ecma5",
+    "browser"
+  ],
+  "plugins": {
+    "guess-types": {
+      
+    },
+    "angular1": {
+      
+    }
+  }
+}
+>>>>>>> f4e6a08fdac5619c326128f4ab6a2e6d57b40ae5
