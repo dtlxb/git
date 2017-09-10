@@ -62,8 +62,6 @@
         android:textColor="#ffffffff"
         android:textSize="15dp"/>
 
-<<<<<<< HEAD
-=======
     <Button
         android:id="@+id/button_menu_album"
         android:layout_width="200dp"
@@ -76,5 +74,4 @@
         android:textSize="15dp"/>
 
 
->>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
 </LinearLayout>
