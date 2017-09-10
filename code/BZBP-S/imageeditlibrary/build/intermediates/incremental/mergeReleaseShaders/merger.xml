@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
+<merger version="3"><dataSet config="main"><source path="D:\Users\huzeyu\Documents\git\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="release"><source path="D:\Users\huzeyu\Documents\git\code\BZBP-S\imageeditlibrary\src\release\shaders"/></dataSet></merger>
+=======
 <merger version="3"><dataSet config="main"><source path="C:\Users\LI\Desktop\M\M2\code\BZBP-S\imageeditlibrary\src\main\shaders"/></dataSet><dataSet config="release"><source path="C:\Users\LI\Desktop\M\M2\code\BZBP-S\imageeditlibrary\src\release\shaders"/></dataSet></merger>
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85

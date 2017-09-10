@@ -52,6 +52,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -62,6 +64,7 @@ import java.util.List;
 import static com.amap.api.mapcore.util.ag.v;
 >>>>>>> parent of 8ccc034... no message
 
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 public class MainActivity extends BaseActivity implements LocationSource,
         AMapLocationListener, OnMarkerClickListener {
 
@@ -81,7 +84,13 @@ public class MainActivity extends BaseActivity implements LocationSource,
     private MyLatlng last_location = new MyLatlng(-1.0,-1.0);
     private Bundle bundle;
     private User user;
+<<<<<<< HEAD
+
+    public static String ip = "192.168.0.105:8080/BookStore";
+
+=======
     public static String ip;
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);

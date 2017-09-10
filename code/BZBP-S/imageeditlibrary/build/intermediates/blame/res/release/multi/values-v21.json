@@ -1,6 +1,9 @@
 [
     {
 <<<<<<< HEAD
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -25,6 +28,7 @@
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
         "map": [
             {
                 "to": {
@@ -35,6 +39,9 @@
                     "endOffset": 154
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
 <<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
@@ -59,6 +66,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -78,6 +86,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -101,6 +112,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -120,6 +132,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -143,6 +158,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -162,6 +178,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -185,6 +204,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -204,6 +224,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -227,6 +250,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -246,6 +270,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -269,6 +296,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -288,6 +316,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -311,6 +342,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -330,6 +362,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -353,6 +388,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -372,6 +408,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -395,6 +434,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -414,6 +454,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -437,6 +480,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -456,6 +500,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -479,6 +526,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -498,6 +546,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -521,6 +572,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -540,6 +592,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -563,6 +618,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -582,6 +638,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -605,6 +664,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -624,6 +684,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -647,6 +710,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -666,6 +730,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -689,6 +756,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -708,6 +776,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -731,6 +802,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -751,6 +823,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -774,6 +849,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -795,6 +871,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -818,6 +897,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
@@ -838,6 +918,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -861,6 +944,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 23,
                         "startColumn": 4,
@@ -880,6 +964,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -903,6 +990,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 24,
                         "startColumn": 4,
@@ -922,6 +1010,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -945,6 +1036,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 25,
                         "startColumn": 4,
@@ -965,6 +1057,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -988,6 +1083,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 26,
                         "startColumn": 4,
@@ -1009,6 +1105,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1032,6 +1131,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 28,
                         "startColumn": 4,
@@ -1052,6 +1152,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1075,6 +1178,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 30,
                         "startColumn": 4,
@@ -1094,6 +1198,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1117,6 +1224,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 31,
                         "startColumn": 4,
@@ -1136,6 +1244,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1159,6 +1270,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 32,
                         "startColumn": 4,
@@ -1178,6 +1290,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1201,6 +1316,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 33,
                         "startColumn": 4,
@@ -1221,6 +1337,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1244,6 +1363,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 34,
                         "startColumn": 4,
@@ -1265,6 +1385,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1288,6 +1411,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 36,
                         "startColumn": 4,
@@ -1309,6 +1433,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1332,6 +1459,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 38,
                         "startColumn": 4,
@@ -1353,6 +1481,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1376,6 +1507,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 40,
                         "startColumn": 4,
@@ -1397,6 +1529,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1420,6 +1555,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 42,
                         "startColumn": 4,
@@ -1441,6 +1577,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1464,6 +1603,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 44,
                         "startColumn": 4,
@@ -1484,6 +1624,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1507,6 +1650,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 46,
                         "startColumn": 4,
@@ -1527,6 +1671,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1550,6 +1697,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 47,
                         "startColumn": 4,
@@ -1571,6 +1719,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1594,6 +1745,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 52,
                         "startColumn": 4,
@@ -1615,6 +1767,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1638,6 +1793,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 54,
                         "startColumn": 4,
@@ -1658,6 +1814,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1681,6 +1840,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 56,
                         "startColumn": 4,
@@ -1700,6 +1860,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1723,6 +1886,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 57,
                         "startColumn": 4,
@@ -1743,6 +1907,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1766,6 +1933,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 58,
                         "startColumn": 4,
@@ -1787,6 +1955,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1810,6 +1981,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 60,
                         "startColumn": 4,
@@ -1830,6 +2002,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1853,6 +2028,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 62,
                         "startColumn": 4,
@@ -1872,6 +2048,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1895,6 +2074,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 63,
                         "startColumn": 4,
@@ -1914,6 +2094,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1937,6 +2120,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 64,
                         "startColumn": 4,
@@ -1956,6 +2140,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -1979,6 +2166,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 65,
                         "startColumn": 4,
@@ -1998,6 +2186,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2021,6 +2212,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 66,
                         "startColumn": 4,
@@ -2041,6 +2233,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2064,6 +2259,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 67,
                         "startColumn": 4,
@@ -2085,6 +2281,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2108,6 +2307,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 111,
                         "startColumn": 4,
@@ -2129,6 +2329,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2152,6 +2355,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 114,
                         "startColumn": 4,
@@ -2173,6 +2377,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2196,6 +2403,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 158,
                         "startColumn": 4,
@@ -2217,6 +2425,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2240,6 +2451,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 161,
                         "startColumn": 4,
@@ -2261,6 +2473,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2284,6 +2499,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 164,
                         "startColumn": 4,
@@ -2305,6 +2521,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2328,6 +2547,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 166,
                         "startColumn": 4,
@@ -2349,6 +2569,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2372,6 +2595,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 168,
                         "startColumn": 4,
@@ -2393,6 +2617,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2416,6 +2643,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 170,
                         "startColumn": 4,
@@ -2437,6 +2665,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2460,6 +2691,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 173,
                         "startColumn": 4,
@@ -2481,6 +2713,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2504,6 +2739,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 175,
                         "startColumn": 4,
@@ -2524,6 +2760,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2547,6 +2786,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 178,
                         "startColumn": 4,
@@ -2566,6 +2806,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2589,6 +2832,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 179,
                         "startColumn": 4,
@@ -2609,6 +2853,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2632,6 +2879,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 180,
                         "startColumn": 4,
@@ -2652,6 +2900,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2675,6 +2926,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 183,
                         "startColumn": 4,
@@ -2694,6 +2946,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2717,6 +2972,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 184,
                         "startColumn": 4,
@@ -2736,6 +2992,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2759,6 +3018,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 185,
                         "startColumn": 4,
@@ -2778,6 +3038,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2801,6 +3064,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 186,
                         "startColumn": 4,
@@ -2820,6 +3084,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2843,6 +3110,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 187,
                         "startColumn": 4,
@@ -2863,6 +3131,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2886,6 +3157,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 188,
                         "startColumn": 4,
@@ -2906,6 +3178,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2929,6 +3204,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 191,
                         "startColumn": 4,
@@ -2949,6 +3225,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -2972,6 +3251,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 192,
                         "startColumn": 4,
@@ -2993,6 +3273,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3016,6 +3299,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 194,
                         "startColumn": 4,
@@ -3037,6 +3321,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3060,6 +3347,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 196,
                         "startColumn": 4,
@@ -3081,6 +3369,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3104,6 +3395,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 198,
                         "startColumn": 4,
@@ -3125,6 +3417,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3148,6 +3443,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 200,
                         "startColumn": 4,
@@ -3169,6 +3465,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3192,6 +3491,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 204,
                         "startColumn": 4,
@@ -3212,6 +3512,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3235,6 +3538,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 206,
                         "startColumn": 4,
@@ -3254,6 +3558,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3277,6 +3584,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 207,
                         "startColumn": 4,
@@ -3296,6 +3604,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3319,6 +3630,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 208,
                         "startColumn": 4,
@@ -3339,6 +3651,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3362,6 +3677,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 209,
                         "startColumn": 4,
@@ -3383,6 +3699,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3406,6 +3725,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 211,
                         "startColumn": 4,
@@ -3427,6 +3747,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3450,6 +3773,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 215,
                         "startColumn": 4,
@@ -3471,6 +3795,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3494,6 +3821,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 217,
                         "startColumn": 4,
@@ -3514,6 +3842,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3537,6 +3868,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 219,
                         "startColumn": 4,
@@ -3556,6 +3888,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3579,6 +3914,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 220,
                         "startColumn": 4,
@@ -3598,6 +3934,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3621,6 +3960,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 221,
                         "startColumn": 4,
@@ -3640,6 +3980,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3663,6 +4006,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 222,
                         "startColumn": 4,
@@ -3683,6 +4027,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3706,6 +4053,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 223,
                         "startColumn": 4,
@@ -3726,6 +4074,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3749,6 +4100,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 225,
                         "startColumn": 4,
@@ -3768,6 +4120,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3791,6 +4146,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 226,
                         "startColumn": 4,
@@ -3811,6 +4167,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3834,6 +4193,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 227,
                         "startColumn": 4,
@@ -3854,6 +4214,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3877,6 +4240,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 237,
                         "startColumn": 4,
@@ -3896,6 +4260,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3919,6 +4286,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 238,
                         "startColumn": 4,
@@ -3939,6 +4307,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -3962,6 +4333,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 239,
                         "startColumn": 4,
@@ -3983,6 +4355,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4006,6 +4381,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 251,
                         "startColumn": 4,
@@ -4026,6 +4402,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4049,6 +4428,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 263,
                         "startColumn": 4,
@@ -4068,6 +4448,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4091,6 +4474,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 264,
                         "startColumn": 4,
@@ -4111,6 +4495,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4134,6 +4521,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 265,
                         "startColumn": 4,
@@ -4155,6 +4543,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4178,6 +4569,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 268,
                         "startColumn": 4,
@@ -4198,6 +4590,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4221,6 +4616,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 271,
                         "startColumn": 4,
@@ -4241,6 +4637,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4264,6 +4663,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 272,
                         "startColumn": 4,
@@ -4284,6 +4684,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4307,6 +4710,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 275,
                         "startColumn": 4,
@@ -4327,6 +4731,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4350,6 +4757,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 276,
                         "startColumn": 4,
@@ -4371,6 +4779,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
@@ -4394,6 +4805,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 279,
                         "startColumn": 4,
@@ -4415,12 +4827,15 @@
                 },
                 "from": {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v21\\values-v21.xml",
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v21\\values-v21.xml",
                     "position": {
                         "startLine": 282,
@@ -4433,6 +4848,8 @@
                 }
             }
         ]
+<<<<<<< HEAD
+=======
     },
     {
         "outputFile": "D:\\WJB\\BZBP-frame\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v21\\values-v21.xml",
@@ -6509,5 +6926,6 @@
                 }
             }
         ]
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
     }
 ]

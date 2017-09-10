@@ -3,11 +3,18 @@ package com.example.dell.bzbp_frame;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+<<<<<<< HEAD
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Base64;
+import android.view.View;
+=======
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,7 +41,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 import static java.lang.Math.abs;
 
 public class PostoDetailActivity extends BaseActivity {
@@ -46,6 +56,12 @@ public class PostoDetailActivity extends BaseActivity {
 
     private ArrayList<Comment> resultlist = new ArrayList<Comment>();
     private Integer result_praise;
+<<<<<<< HEAD
+
+    private TextView view_praise;
+    public static String ip="192.168.0.105:8080/BookStore";
+=======
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 
     private ImageView image_view_postodetail_image;
     private TextView textView_postodetail_name;
@@ -57,9 +73,12 @@ public class PostoDetailActivity extends BaseActivity {
     private Button button_postodetail_make_praise;
     private ListView list_postodetail_commentlist;
 
-    public static String ip;
     KeyMapDailog dialog;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
     @Override
     protected void initData() {
         ip = this.getString(R.string.ipv4);

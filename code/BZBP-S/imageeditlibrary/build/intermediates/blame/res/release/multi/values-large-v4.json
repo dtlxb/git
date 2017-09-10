@@ -1,6 +1,9 @@
 [
     {
 <<<<<<< HEAD
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -25,6 +28,7 @@
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
         "map": [
             {
                 "to": {
@@ -35,6 +39,9 @@
                     "endOffset": 109
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
 <<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
@@ -59,6 +66,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -78,6 +86,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -101,6 +112,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -120,6 +132,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -143,6 +158,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -162,6 +178,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -185,6 +204,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -204,6 +224,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -227,6 +250,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -246,6 +270,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -269,6 +296,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -288,6 +316,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -311,6 +342,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -330,6 +362,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
@@ -353,6 +388,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -372,12 +408,15 @@
                 },
                 "from": {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-large-v4\\values-large-v4.xml",
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-large-v4\\values-large-v4.xml",
                     "position": {
                         "startLine": 10,
@@ -389,6 +428,8 @@
                 }
             }
         ]
+<<<<<<< HEAD
+=======
     },
     {
         "outputFile": "D:\\WJB\\BZBP-frame\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-large-v4\\values-large-v4.xml",
@@ -583,5 +624,6 @@
                 }
             }
         ]
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
     }
 ]

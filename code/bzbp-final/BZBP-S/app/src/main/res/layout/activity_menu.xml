@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+
+
+    <Button
+        android:id="@+id/button_menu_mine"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/shape_menu_button"
+        android:text="mine"
+        android:textColor="@color/black"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/button_menu_hot_posto"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/shape_menu_button"
+        android:text="hot posto"
+        android:textColor="@color/black"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/button_menu_search_posto"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/shape_menu_button"
+        android:text="nearby posto"
+        android:textColor="@color/black"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/button_menu_search_route"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/shape_menu_button"
+        android:text="nearby route"
+        android:textColor="@color/black"
+        android:textSize="15dp"/>
+
+
+    <Button
+        android:id="@+id/button_menu_friends"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/shape_menu_button"
+        android:text="friends"
+        android:textColor="@color/black"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/button_menu_nearby_posto"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/shape_menu_button"
+        android:text="show posto"
+        android:textColor="@color/black"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/button_menu_remove_posto"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:gravity="center_vertical|left"
+        android:background="@drawable/shape_menu_button"
+        android:text="remove posto"
+        android:textColor="@color/black"
+        android:textSize="15dp"/>
+
+
+
+
+</LinearLayout>

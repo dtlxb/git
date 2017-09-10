@@ -46,7 +46,23 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
+<<<<<<< HEAD
+
+            android:value="a7945ca5681eb0f6620bb50895c63249"/>
+        <meta-data
+            android:name="weixin_key"
+            android:value="@string/weixin_key"/>
+
+        />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+=======
             android:value="825fccdfaf26f5a59cbbcdaed69e3f15" />
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 
 
         <activity android:name=".SplashActivity">

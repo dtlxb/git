@@ -1,6 +1,10 @@
 [
     {
+<<<<<<< HEAD
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
         "map": [
             {
                 "to": {
@@ -12,6 +16,9 @@
                 },
                 "from": {
 <<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
+<<<<<<< HEAD
 <<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
 =======
@@ -20,6 +27,7 @@
                     "file": "C:\\Users\\wangjb\\.android\\build-cache\\1dd39aaab154dcfd35109deeba52be9f70c8bb76\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
 <<<<<<< HEAD
 >>>>>>> acb695628c5f8353bc4eccd2e7c72ee8507a6099
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -38,7 +46,11 @@
                     "endOffset": 270
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -57,7 +69,11 @@
                     "endOffset": 393
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -76,7 +92,11 @@
                     "endOffset": 496
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -95,7 +115,11 @@
                     "endOffset": 606
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -114,7 +138,11 @@
                     "endOffset": 691
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -133,7 +161,11 @@
                     "endOffset": 797
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -152,7 +184,11 @@
                     "endOffset": 916
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -171,7 +207,11 @@
                     "endOffset": 997
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -190,7 +230,11 @@
                     "endOffset": 1077
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -209,7 +253,11 @@
                     "endOffset": 1158
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -228,7 +276,11 @@
                     "endOffset": 1261
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -247,7 +299,11 @@
                     "endOffset": 1366
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -266,7 +322,11 @@
                     "endOffset": 1464
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -285,7 +345,11 @@
                     "endOffset": 1571
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -304,7 +368,11 @@
                     "endOffset": 1680
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -323,7 +391,11 @@
                     "endOffset": 1780
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -342,7 +414,11 @@
                     "endOffset": 1895
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -361,7 +437,11 @@
                     "endOffset": 1994
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -380,7 +460,11 @@
                     "endOffset": 2075
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+=======
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
@@ -399,6 +483,10 @@
                     "endOffset": 2176
                 },
                 "from": {
+<<<<<<< HEAD
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
+                    "position": {
+=======
 <<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
 =======
@@ -1237,6 +1325,7 @@
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-kk-rKZ\\values-kk-rKZ.xml",
 >>>>>>> parent of 8ccc034... no message
                     "position": {
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                         "startLine": 22,
                         "startColumn": 4,
                         "startOffset": 2080,

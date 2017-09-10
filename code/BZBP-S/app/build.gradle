@@ -1,6 +1,24 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('D:/111/111.jks')
+            keyAlias 'key0'
+            keyPassword '1996123'
+            storePassword '1996123'
+        }
+
+    }
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
+    }
+      aaptOptions {
+                 cruncherEnabled = false
+                 useNewCruncher = false
+
+            }
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
@@ -40,6 +58,13 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
+<<<<<<< HEAD
+    compile('com.xyzlf.share:sharesdk:0.0.9') {
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+=======
     compile 'com.android.support:support-v4:26.0.0-alpha1'
     compile 'com.google.android:support-v4:r7'
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 }

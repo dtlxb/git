@@ -1,6 +1,9 @@
 [
     {
 <<<<<<< HEAD
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v16\\values-v16.xml",
+=======
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v16\\values-v16.xml",
 =======
 <<<<<<< HEAD
@@ -25,6 +28,7 @@
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v16\\values-v16.xml",
 >>>>>>> parent of 8ccc034... no message
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
         "map": [
             {
                 "to": {
@@ -36,12 +40,15 @@
                 },
                 "from": {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\values-v16\\values-v16.xml",
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     "file": "C:\\Users\\huzeyu\\.android\\build-cache\\ed0ec5a4ef80559599399ded5da0637548a11140\\output\\res\\values-v16\\values-v16.xml",
                     "position": {
                         "startLine": 2,
@@ -53,6 +60,8 @@
                 }
             }
         ]
+<<<<<<< HEAD
+=======
     },
     {
         "outputFile": "D:\\WJB\\BZBP-frame\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v16\\values-v16.xml",
@@ -95,5 +104,6 @@
                 }
             }
         ]
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
     }
 ]

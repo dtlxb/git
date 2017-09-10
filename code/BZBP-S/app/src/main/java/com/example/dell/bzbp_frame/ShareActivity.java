@@ -1,7 +1,10 @@
 package com.example.dell.bzbp_frame;
 
+<<<<<<< HEAD
+=======
 import android.app.Activity;
 import android.app.AlertDialog;
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,8 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Route;
@@ -167,7 +168,12 @@ public class ShareActivity extends BaseActivity {
                 //
                 //对于route中的posto,返回之前的route
                 if (bundle.getBoolean("is_in_route")){
+<<<<<<< HEAD
+
+                    Intent i = new Intent(ShareActivity.this, ShareSuccessActivity.class);
+=======
                     Intent i = new Intent(ShareActivity.this,RouteActivity.class);
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
                     Bundle intent_bundle = new Bundle();
                     //user还是之前的user
                     intent_bundle.putSerializable("user",user);

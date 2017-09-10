@@ -1,5 +1,7 @@
 [
     {
+<<<<<<< HEAD
+=======
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
         "map": [
             {
@@ -151,6 +153,7 @@
         ]
     },
     {
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
         "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\BZBP-S\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
         "map": [
             {
@@ -287,6 +290,8 @@
                 }
             }
         ]
+<<<<<<< HEAD
+=======
     },
     {
         "outputFile": "D:\\WJB\\BZBP-frame\\BZBP-frame\\imageeditlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
@@ -438,5 +443,6 @@
                 }
             }
         ]
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
     }
 ]

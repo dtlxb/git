@@ -37,8 +37,13 @@ public class SearchPostoActivity extends BaseActivity{
 
     public static String ip = "192.168.0.105:8080/BookStore";
 =======
+<<<<<<< HEAD
+
+    public static String ip = "192.168.0.105:8080/BookStore";
+=======
     public static String ip;
 >>>>>>> 13daf05b2b02d6a9893e9f1563f695713f82c727
+>>>>>>> 281304a3604c15432bac37155552271fa028bd85
 
     private ListView list_searchposto;
     private TextView textView_searchposto_no_posto;
