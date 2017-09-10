@@ -1,6 +1,7 @@
 package dao.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.User;
@@ -16,7 +17,11 @@ import dao.UserDao;
 public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 
 	public Integer save(User user) {
-		return (Integer) getHibernateTemplate().save(user);
+		getHibernateTemplate().save(user);
+		String hql = "select max(b.id) from User as b  ";
+		List<Integer> lst = new ArrayList<Integer>();
+		lst = getHibernateTemplate().find(hql);
+		return lst.get(0);
 	}
 
 	public void delete(User user) {
@@ -34,6 +39,14 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 		User user = users.size() > 0 ? users.get(0) : null;
 		return user;
 	}
+	
+	public User getUserByUsername(String username) {
+		@SuppressWarnings("unchecked")
+		List<User> users = (List<User>) getHibernateTemplate().find(
+				"from User as u where u.username=?", username);
+		User user = users.size() > 0 ? users.get(0) : null;
+		return user;
+	}	
 	public Integer check(String username,String password){
 		@SuppressWarnings("unchecked")
 		List<User> USERS = (List<User>) getHibernateTemplate().find(

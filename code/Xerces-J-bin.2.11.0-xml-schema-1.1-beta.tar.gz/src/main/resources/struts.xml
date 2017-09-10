@@ -12,6 +12,10 @@
 		<action name="allBooksPro" class="action.AllBooksAction">
 			<result name="success">/bookstore/jsp/book.jsp</result>
 		</action>
+		
+		<action name="allPosto" class="action.PostoAction">
+			<result name="success">/bookstore/jsp/book.jsp</result>
+		</action>		
 		<action name="addBookPro" class="action.AddBookAction">
 			<result name="success">/bookstore/jsp/book.jsp</result>
 		</action>

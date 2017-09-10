@@ -49,16 +49,23 @@
                             android:id="@+id/button_postodetail_make_praise"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
-                            android:text="praise" />
+                            android:background="@color/lightgrey"
+                            android:text="点赞" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/button_postodetail_make_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="make comments"/>
+                    android:background="@color/lightgrey"
+                    android:text="评论"/>
 
+                <Button
+                    android:id="@+id/button_postodetail_goto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lightgrey"
+                    android:text="查看地图"/>
 
         </LinearLayout>
 

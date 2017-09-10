@@ -32,11 +32,15 @@
             android:id="@+id/button_sharesuccess_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="cancel"/>
+            android:background="@color/white"
+            android:textColor="@color/grey"
+            android:text="取消"/>
         <Button
             android:id="@+id/button_sharesuccess_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="share"/>
+            android:background="@color/white"
+            android:textColor="@color/grey"
+            android:text="发布"/>
     </LinearLayout>
 </LinearLayout>

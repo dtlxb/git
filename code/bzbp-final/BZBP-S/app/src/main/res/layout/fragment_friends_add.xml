@@ -27,6 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:background="@color/white"
+        android:textColor="@color/grey"
         android:text="添加好友"/>
 
 </LinearLayout>

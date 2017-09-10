@@ -14,7 +14,7 @@ public interface RouteDao {
 	public void update(Route route);
 
 	public Route getRouteById(int id);
-
+	List<Route> getRouteByLocation(Posto Posto);
 	public List<Route> getAllRoutes();
-
+	public List<Route> getRouteByUsername(String username);
 }

@@ -39,7 +39,9 @@
 		<property name="date" type="double">
 			<column name="date" />
 		</property>
-		
+ 		<property name="open" type="java.lang.String">
+			<column name="open" />
+		</property>		
  		<property name="belong_rid" type="int">
 			<column name="belong_rid" />
 		</property>

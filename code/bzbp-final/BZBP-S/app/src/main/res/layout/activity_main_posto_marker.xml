@@ -21,6 +21,8 @@
         android:id="@+id/button_main_posto_marker_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:textColor="@color/grey"
         android:text="查看详情"/>
 
 </LinearLayout>

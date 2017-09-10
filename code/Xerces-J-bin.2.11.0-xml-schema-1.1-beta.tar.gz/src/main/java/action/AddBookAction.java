@@ -65,7 +65,7 @@ public class AddBookAction extends BaseAction {
 	public String execute() throws Exception {
 
 		Book book = new Book(title, author, price, publisher, date);
-		appService.addBook(book);
+		System.out.print(appService.addBook(book)+"123");
 
 		return SUCCESS;
 	}

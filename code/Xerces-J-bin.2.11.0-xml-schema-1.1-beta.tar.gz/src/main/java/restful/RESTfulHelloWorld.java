@@ -1,4 +1,4 @@
-package restful;
+﻿package restful;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -29,10 +29,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import model.Book;
+import model.Comment;
+import model.Friend;
+import model.ImageZipUtil;
 import model.Posto;
+import model.Praise;
 import model.Route;
+import model.Route.MyLatlng;
 import model.User;
 import model.Photo;
+import model.route_location_list;
 import service.AppService;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -81,7 +87,7 @@ public class RESTfulHelloWorld
 	//	 Date date=new java.sql.Date(System.currentTimeMillis());
 		 System.out.print(strTime);
 	//	posto.setDate((java.sql.Date) date);
-		 
+		 int id = -1;
 
 		try {
 			String picurl = posto.getImage();
@@ -94,9 +100,7 @@ public class RESTfulHelloWorld
                 }  
             }
 
-	      	 // ByteArrayInputStream bais = new ByteArrayInputStream(photoimg); 
 
-			 // BufferedImage bi1 =ImageIO.read(bais); 
     
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");//获取当前时间，进一步转化为字符串
 
@@ -114,13 +118,18 @@ public class RESTfulHelloWorld
 	            out.flush();  
 	            out.close();  
 	            posto.setPath_server("D:\\bzbp/"+ posto.getUsername()+"_"+time+".png");
-	    		appService.addPosto(posto);
+	    		 id = appService.addPosto(posto);
+	    		
+	    		 ImageZipUtil a = new ImageZipUtil();
+	    		 File file1 =new File("D://bzbp/", posto.getUsername()+"_"+time+"_small.png");  
+	    		 a.zipImageFile(file,  file1,200, 200, 1);
 			//  ImageIO.write(bi1,"jpg", w2);//不管输出什么格式图片，此处不需改动 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} 
-		 return "success";
+
+		 return id+"";
      }
 
 	
@@ -155,107 +164,18 @@ public class RESTfulHelloWorld
 		return  photo;
 	}
 	
-	
-	
-	 @POST
-     @Path("/addPicture")
-	 //@Produces(MediaType.APPLICATION_JSON)
-	 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
-	 @Consumes(MediaType.APPLICATION_JSON)
-	 @Produces("text/html")
-     public String addPicture(Photo photo ){
-		 
- 
-			try {
-				String picurl = photo.getcontent();
-				 byte[] photoimg = Base64.decodeBase64(picurl.replace("data:image/png;base64,",""));
-				 picurl = picurl.replace("base64,","");
-	            for (int i = 0; i < photoimg.length; ++i) {  
-	                if (photoimg[i] < 0) {  
-	                    // 调整异常数据  
-	                    photoimg[i] += 256;  
-	                }  
-	            }
 
-		      	 // ByteArrayInputStream bais = new ByteArrayInputStream(photoimg); 
-
-				 // BufferedImage bi1 =ImageIO.read(bais); 
-				  
-	            File file = new File("D://bzbp/", photo.getname()+".png");  
-	            if (!file.exists()) {  
-	                file.createNewFile();  
-	            }  
-	            FileOutputStream out = new FileOutputStream(file);  
-		            out.write(photoimg);  
-		            out.flush();  
-		            out.close();  
-	 
-				//  ImageIO.write(bi1,"jpg", w2);//不管输出什么格式图片，此处不需改动 
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
-			 return "success";
-     }
-	
-	
-
-	 @POST
-     @Path("/addPhoto")
-	 //@Produces(MediaType.APPLICATION_JSON)
-	 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
-	 @Consumes(MediaType.APPLICATION_JSON)
-	 @Produces("text/html")
-     public String addPicture(Posto posto ){
-		 
- 
-			try {
-				String picurl = posto.getImage();
-				 byte[] photoimg = Base64.decodeBase64(picurl.replace("data:image/png;base64,",""));
-				 picurl = picurl.replace("base64,","");
-	            for (int i = 0; i < photoimg.length; ++i) {  
-	                if (photoimg[i] < 0) {  
-	                    // 调整异常数据  
-	                    photoimg[i] += 256;  
-	                }  
-	            }
-
-		      	 // ByteArrayInputStream bais = new ByteArrayInputStream(photoimg); 
-
-				 // BufferedImage bi1 =ImageIO.read(bais); 
-	    
-	            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");//获取当前时间，进一步转化为字符串
- 
-	          //  String str = format.format(date);
-	          //  posto.setPath_server("D://bzbp/"+ posto.getUsername()+"_"+date+".png");
-	            File file = new File("D://bzbp/", posto.getUsername()+"_"+".png");  
-	            if (!file.exists()) {  
-	                file.createNewFile();  
-	            }  
-	            FileOutputStream out = new FileOutputStream(file);  
-		            out.write(photoimg);  
-		            out.flush();  
-		            out.close();  
-	 
-				//  ImageIO.write(bi1,"jpg", w2);//不管输出什么格式图片，此处不需改动 
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
-			 return "success";
-     }
-	
 		@POST
 		@Path("/getPostosBy")
 		@Produces(MediaType.APPLICATION_JSON)
 		public List<Posto>  getPostosBy(Posto posto)
 		{
 
-			List<Posto> Postos = appService.getAllPostos();
+			List<Posto> Postos = appService.getAllPostos(posto);
 			for(int i=0; i < Postos.size();i++){
 				 BASE64Encoder encoder = new sun.misc.BASE64Encoder(); 
 				 
-				  File f = new File(Postos.get(i).getPath_server());
+				  File f = new File(Postos.get(i).getPath_server().replace(".png", "_small.png"));
 				  System.out.print(Postos.get(i).getPath_server());
 				  BufferedImage bi;  
 				  try {
@@ -277,8 +197,271 @@ public class RESTfulHelloWorld
 			System.out.println(Postos.size());
 			return Postos;
 		}
+		@POST
+		@Path("/getPostosByLocation")
+		@Produces(MediaType.APPLICATION_JSON)
+		public List<Posto>  getPostosByLocation(Posto posto)
+		{
+
+			List<Posto> Postos = appService.getPostoByLocation(posto);
+			for(int i=0; i < Postos.size();i++){
+				 BASE64Encoder encoder = new sun.misc.BASE64Encoder(); 
+				 
+				  File f = new File(Postos.get(i).getPath_server().replace(".png", "_small.png"));
+				  System.out.print(Postos.get(i).getPath_server());
+				  BufferedImage bi;  
+				  try {
+					bi = ImageIO.read(f);
+					  ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+					  ImageIO.write(bi,"jpg", baos); 
+					  byte[] bytes = baos.toByteArray(); 
+					 String picurl= Base64.encodeBase64String(bytes);
+			 
+					 
+		 
+					 Postos.get(i).setImage(picurl);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+			System.out.println(Postos.size());
+			return Postos;
+		}
+		@POST
+		@Path("/getPostosByName")
+		@Produces(MediaType.APPLICATION_JSON)
+		public List<Posto>  getPostosByName(Posto posto)
+		{
+
+			List<Posto> Postos = appService.getPostoByName(posto);
+			for(int i=0; i < Postos.size();i++){
+				 BASE64Encoder encoder = new sun.misc.BASE64Encoder(); 
+				 
+				  File f = new File(Postos.get(i).getPath_server().replace(".png", "_small.png"));
+				  System.out.print(Postos.get(i).getPath_server());
+				  BufferedImage bi;  
+				  try {
+					bi = ImageIO.read(f);
+					  ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+					  ImageIO.write(bi,"jpg", baos); 
+					  byte[] bytes = baos.toByteArray(); 
+					 String picurl= Base64.encodeBase64String(bytes);
+			 
+					 
+		 
+					 Postos.get(i).setImage(picurl);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+			System.out.println(Postos.size());
+			return Postos;
+		}		
+		@POST
+		@Path("/getPostosByRouteId")
+		@Produces(MediaType.APPLICATION_JSON)
+		public List<Posto>  getPostosByRouteid(Posto posto)
+		{
+ 
+			System.out.println(posto.getPid());
+			 List<Posto> Postos=appService.getPostoByBelong_id(posto.getPid());
+			for(int i=0; i < Postos.size();i++){
+				 BASE64Encoder encoder = new sun.misc.BASE64Encoder(); 
+				 
+				  File f = new File(Postos.get(i).getPath_server().replace(".png", "_small.png"));
+				  System.out.print(Postos.get(i).getPath_server());
+				  BufferedImage bi;  
+				  try {
+					bi = ImageIO.read(f);
+					  ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+					  ImageIO.write(bi,"jpg", baos); 
+					  byte[] bytes = baos.toByteArray(); 
+					 String picurl= Base64.encodeBase64String(bytes);
+			 
+					 
+		 
+					 Postos.get(i).setImage(picurl);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+			System.out.println(Postos.size());
+			List<Posto> Result =new ArrayList<Posto>();
+			for(int i =0;i<Postos.size();i++){
+				User user1 =appService.getUserByUsername(posto.getUsername());
+				User user2 =appService.getUserByUsername(Postos.get(i).getUsername());
+				
+				if(Postos.get(i).getPath_local().equals("public")){
+					Result.add(Postos.get(i));
+				}
+				else if (Postos.get(i).getPath_local().equals("friend") ){
+
+					if(appService.check(user1.getId(),user2.getId())==0||user1.getId()==user2.getId()){
+						Result.add(Postos.get(i));
+					}
+				}
+				else if (Postos.get(i).getPath_local().equals("private")){
+					if( user1.getId()==user2.getId()){
+						Result.add(Postos.get(i));
+					}
+				}
+			}
+			return Result ;
+		}
+		
+		
+		@POST
+		@Path("/getPostoById")
+		@Produces(MediaType.APPLICATION_JSON)
+		public  List<Posto>   getPostoById(Posto posto)
+		{
+			
+			Posto postoFind = appService.getPostoById(posto.getPid()) ;
+		//	List<Posto> Postos = appService.getAllPostos();
+		//	for(int i=0; i < Postos.size();i++){
+				 BASE64Encoder encoder = new sun.misc.BASE64Encoder(); 
+				 
+				  File f = new File(postoFind.getPath_server().replace(".png", "_small.png"));
+				  System.out.print(postoFind.getPath_server());
+				  BufferedImage bi;  
+				  try {
+					bi = ImageIO.read(f);
+					  ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+					  ImageIO.write(bi,"jpg", baos); 
+					  byte[] bytes = baos.toByteArray(); 
+					 String picurl= Base64.encodeBase64String(bytes);
+			 
+					 
+		 
+					 postoFind.setImage(picurl);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			//}
+			System.out.println("postoFind"+postoFind.getName());
+			List<Posto> Postos = new ArrayList<Posto>();
+			Postos.add(postoFind);
+			List<Posto> Result =new ArrayList<Posto>();
+			for(int i =0;i<Postos.size();i++){
+				User user1 =appService.getUserByUsername(posto.getUsername());
+				User user2 =appService.getUserByUsername(Postos.get(i).getUsername());
+				
+				if(Postos.get(i).getPath_local().equals("public")){
+					Result.add(Postos.get(i));
+				}
+				else if (Postos.get(i).getPath_local().equals("friend") ){
+
+					if(appService.check(user1.getId(),user2.getId())==0||user1.getId()==user2.getId()){
+						Result.add(Postos.get(i));
+					}
+				}
+				else if (Postos.get(i).getPath_local().equals("private")){
+					if( user1.getId()==user2.getId()){
+						Result.add(Postos.get(i));
+					}
+				}
+			}
+			return Result ;
+		}
 	
+		@POST
+		@Path("/getPostoByPraiseNumber")
+		@Produces(MediaType.APPLICATION_JSON)
+		public  List<Posto>   getPostoByPraiseNumber(Posto posto)
+		{
+			List<Integer> best = appService.findBest();
+			List<Posto> Postos = new ArrayList<Posto>();
+			
+			for(int i =0;i<best.size();i++){
+				Posto postoFind = appService.getPostoById(best.get(i)) ;
+				 BASE64Encoder encoder = new sun.misc.BASE64Encoder(); 
+				 
+				  File f = new File(postoFind.getPath_server().replace(".png", "_small.png"));
+				  System.out.print(postoFind.getPath_server());
+				  BufferedImage bi;  
+				  try {
+					bi = ImageIO.read(f);
+					  ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+					  ImageIO.write(bi,"jpg", baos); 
+					  byte[] bytes = baos.toByteArray(); 
+					 String picurl= Base64.encodeBase64String(bytes);
+			 
+					 
+		 
+					 postoFind.setImage(picurl);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				  Postos.add(postoFind);
+			}
+ 
+			return Postos;
+		}
+		
+		@POST
+		@Path("/getPostoByUsername")
+		@Produces(MediaType.APPLICATION_JSON)
+		public  List<Posto>   getPostoByUsername(Posto posto)
+		{
+			
+			List<Posto> Postos = appService.getPostoByUsername(posto.getUsername()) ;
+			for(int i=0; i < Postos.size();i++){
+				 BASE64Encoder encoder = new sun.misc.BASE64Encoder(); 
+				 
+				  File f = new File(Postos.get(i).getPath_server().replace(".png", "_small.png"));
+				  System.out.print(Postos.get(i).getPath_server());
+				  BufferedImage bi;  
+				  try {
+					bi = ImageIO.read(f);
+					  ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+					  ImageIO.write(bi,"jpg", baos); 
+					  byte[] bytes = baos.toByteArray(); 
+					 String picurl= Base64.encodeBase64String(bytes);
+			 
+					 
+		 
+					 Postos.get(i).setImage(picurl);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+			System.out.println(Postos.size());
+			List<Posto> Result =new ArrayList<Posto>();  
+			for(int i =0;i<Postos.size();i++){
+				User user1 =appService.getUserByUsername(posto.getUsername());
+				User user2 =appService.getUserByUsername(Postos.get(i).getUsername());
+				
+				if(Postos.get(i).getPath_local().equals("public")){
+					Result.add(Postos.get(i));
+				}
+				else if (Postos.get(i).getPath_local().equals("friend") ){
+
+					if(appService.check(user1.getId(),user2.getId())==0||user1.getId()==user2.getId()){
+						Result.add(Postos.get(i));
+					}
+				}
+				else if (Postos.get(i).getPath_local().equals("private")){
+					if( user1.getId()==user2.getId()){
+						Result.add(Postos.get(i));
+					}
+				}
+			}
+			return Result ;
+		}
 	
+		
 		/*--------------------------------------------------------------------------------------*/
 	//route
 		
@@ -288,27 +471,458 @@ public class RESTfulHelloWorld
 		 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 		 @Consumes(MediaType.APPLICATION_JSON)
 		 @Produces("text/html")
-	     public Integer addRoute(User user){
-			 String username = user.getUsername();
-			 Route route = new Route();
-			 route.setName(username);
-		
-			 System.out.println("addUser");
- 
-			 	return  appService.addRoute(route);
+	     public String addRoute(Route route){
+			 int rid = -1;
+			 System.out.print(route.getRid()+"rid");
+			 if(route.getRid()==0){
+				// route.setRid(null);
+				 route.setEnd_time(0.0);
+				 route.setStart_time(0.0);
+				  rid =appService.addRoute(route);
+				 
+			}
+			else{
+				rid = route.rid;
+				 appService.updateRoute(route);
+				for (int i = 1 ;i < route.location_list.size()+1;i++){
+					 
+
+					route_location_list rll=new route_location_list();
+					rll.setId(route.getRid());
+					rll.setIndex(i-1);
+					rll.setLatitude(route.location_list.get(i-1).latitude);
+					rll.setLongitude( route.location_list.get(i-1).longitude);
+					appService.addroute_location_list(rll);
+
+				}
+					for (int i = 0 ;i < route.pids.size();i++){
+						 System.out.print("rid="+route.rid);
+						 	Posto postotemp = appService.getPostoById(route.pids.get(i));
+						 	postotemp.setBelong_rid(rid);
+						 	appService.updatePosto(postotemp);
+	
+				  }
+				
+			}
+			
+
+			System.out.println("route:"+route.location_list.size());
+			return  rid+"";
 	     }
 		 
 		
 		
+
+			@POST
+			@Path("/getRoutesBy")
+			@Produces(MediaType.APPLICATION_JSON)
+			public List<Route>  getRoutesBy(Posto posto)
+			{
+				int rid;
+
+				List<Route> Routes = appService.getAllRoutes();
+			
+			 	for(int i=0; i <Routes.size();i++){
+			    	ArrayList<MyLatlng> Latlngs= new ArrayList<MyLatlng>();
+				    rid= Routes.get(i).getRid();
+			        List<route_location_list> locations = appService.getroute_location_listById(rid);	
+	 
+					for(int j=0; j <locations.size();j++){
+						MyLatlng Latlngtem=new MyLatlng();
+						Latlngtem.latitude=locations.get(j).getLatitude();
+						Latlngtem.longitude=locations.get(j).getLongitude();
+						Latlngs.add(Latlngtem);
+					}
+					
+					  ArrayList<Integer> pids = new  ArrayList<Integer>();
+					List<Posto> postos =  appService.getPostoByBelong_id(rid);
+					for(int j=0; j <postos.size();j++){
+						pids.add(postos.get(j).getPid());
+					}
+					
+					
+					
+					Routes.get(i).setPids(pids);
+					Routes.get(i).setLocation_list(Latlngs);
+				}
+				System.out.println(Routes.size());
+				return Routes;
+			}
+
+			@POST
+			@Path("/getRoutesById")
+			@Produces(MediaType.APPLICATION_JSON)
+			public List<Route>  getRoutesById(Posto posto)
+			{
+				int rid;
+                Route route_tem=appService.getRouteById(posto.getBelong_rid());
+				List<Route> Routes  =new ArrayList<Route> ();
+				Routes.add(route_tem);
+			 	for(int i=0; i <Routes.size();i++){
+			    	ArrayList<MyLatlng> Latlngs= new ArrayList<MyLatlng>();
+				    rid= Routes.get(i).getRid();
+			        List<route_location_list> locations = appService.getroute_location_listById(rid);	
+	 
+					for(int j=0; j <locations.size();j++){
+						MyLatlng Latlngtem=new MyLatlng();
+						Latlngtem.latitude=locations.get(j).getLatitude();
+						Latlngtem.longitude=locations.get(j).getLongitude();
+						Latlngs.add(Latlngtem);
+					}
+					
+					  ArrayList<Integer> pids = new  ArrayList<Integer>();
+					List<Posto> postos =  appService.getPostoByBelong_id(rid);
+					for(int j=0; j <postos.size();j++){
+						pids.add(postos.get(j).getPid());
+					}
+					
+					
+					
+					Routes.get(i).setPids(pids);
+					Routes.get(i).setLocation_list(Latlngs);
+				}
+				System.out.println(Routes.size());
+				return Routes;
+			}
+
+			
+			
+			@POST
+			@Path("/getRoutesByLocation")
+			@Produces(MediaType.APPLICATION_JSON)
+			public List<Route>  getRoutesByLocation(Posto posto)
+			{
+				int rid;
+
+				List<Route> Routes = appService.getRouteByLocation(posto);
+			
+				
+				
+				
+			 	for(int i=0; i <Routes.size();i++){
+			    	ArrayList<MyLatlng> Latlngs= new ArrayList<MyLatlng>();
+				    rid= Routes.get(i).getRid();
+			        List<route_location_list> locations = appService.getroute_location_listById(rid);	
+	 
+					for(int j=0; j <locations.size();j++){
+						MyLatlng Latlngtem=new MyLatlng();
+						Latlngtem.latitude=locations.get(j).getLatitude();
+						Latlngtem.longitude=locations.get(j).getLongitude();
+						Latlngs.add(Latlngtem);
+					}
+					
+					  ArrayList<Integer> pids = new  ArrayList<Integer>();
+					List<Posto> postos =  appService.getPostoByBelong_id(rid);
+					for(int j=0; j <postos.size();j++){
+						pids.add(postos.get(j).getPid());
+					}
+					
+					
+					
+					Routes.get(i).setPids(pids);
+					Routes.get(i).setLocation_list(Latlngs);
+				}
+				System.out.println(Routes.size());
+				return Routes;
+			}	
+
+			@POST
+			@Path("/getRoutesByUsername")
+			@Produces(MediaType.APPLICATION_JSON)
+			public List<Route>  getRoutesByUsername(Posto posto)
+			{
+				int rid;
+
+				List<Route> Routes = appService.getRouteByUsername(posto.getUsername());
+			
+				
+				
+				
+			 	for(int i=0; i <Routes.size();i++){
+			    	ArrayList<MyLatlng> Latlngs= new ArrayList<MyLatlng>();
+				    rid= Routes.get(i).getRid();
+			        List<route_location_list> locations = appService.getroute_location_listById(rid);	
+	 
+					for(int j=0; j <locations.size();j++){
+						MyLatlng Latlngtem=new MyLatlng();
+						Latlngtem.latitude=locations.get(j).getLatitude();
+						Latlngtem.longitude=locations.get(j).getLongitude();
+						Latlngs.add(Latlngtem);
+					}
+					
+					  ArrayList<Integer> pids = new  ArrayList<Integer>();
+					List<Posto> postos =  appService.getPostoByBelong_id(rid);
+					for(int j=0; j <postos.size();j++){
+						pids.add(postos.get(j).getPid());
+					}
+					
+					
+					
+					Routes.get(i).setPids(pids);
+					Routes.get(i).setLocation_list(Latlngs);
+				}
+				System.out.println(Routes.size());
+				return Routes;
+			}				 
+/*-------------------------------------------------------------------------------------------------------*/
 	
-	
+	//comment
+			
+			
+			
+			
+
+			 @POST
+		     @Path("/addComment")
+			 //@Produces(MediaType.APPLICATION_JSON)
+			 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+			 @Consumes(MediaType.APPLICATION_JSON)
+			 @Produces("text/html")
+		     public String addComment(Comment comment){
+ 
+				 appService.addComment(comment);
+ 
+				return  "SUCCESS";
+		     }
+			 
+			 
+
+				@POST
+				@Path("/getComments")
+				@Produces(MediaType.APPLICATION_JSON)
+				public List<Comment>  getComments(Posto posto)
+				{
+				 
+
+					List<Comment> Comments = appService.getCommentsByPid(posto.getPid());
+					System.out.print(Comments.size());
+					return Comments;
+				}
+				@POST
+				@Path("/getCommentsRoute")
+				@Produces(MediaType.APPLICATION_JSON)
+				public List<Comment>  getCommentsRoute(Posto posto)
+				{
+				 
+
+					List<Comment> Comments = appService.getCommentsByRid(posto.getPid());
+					System.out.print(Comments.size());
+					return Comments;
+				}
+
+				/*-------------------------------------------------------------------------------------------------------*/
+				
+				//praise
+						
+						
+						
+						
+
+						 @POST
+					     @Path("/addPraise")
+						 //@Produces(MediaType.APPLICATION_JSON)
+			   			 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+						 @Consumes(MediaType.APPLICATION_JSON)
+						 @Produces("text/html")
+					     public String addPraise(Praise Praise){
+			 
+							 appService.addPraise(Praise);
+			 
+							return  "SUCCESS";
+					     }
+						 
+						 
+
+							@POST
+							@Path("/getPraises")
+							@Produces(MediaType.APPLICATION_JSON)
+							public int  getPraises(Posto posto)
+							{
+							 
+								
+								List<Praise> Praises = appService.getPraisesByPid(posto.getPid());
+								int size =  Praises.size();
+								for(int i =0;i< Praises.size();i++){
+									if (Praises.get(i).getUsername().equals(posto.getUsername())){
+										size =  -1*size;
+										break;
+									}
+								}
+								System.out.print(size);
+								return size;
+							}	
+							
+							
+							
+							@POST
+							@Path("/getPraisesRoute")
+							@Produces(MediaType.APPLICATION_JSON)
+							public int  getPraisesRoute(Posto posto)
+							{
+							 
+								
+								List<Praise> Praises = appService.getPraisesByRid(posto.getPid());
+								int size =  Praises.size();
+								for(int i =0;i< Praises.size();i++){
+									if (Praises.get(i).getUsername().equals(posto.getUsername()) ){
+										size =  -1*size;
+										break;
+									}
+								}
+								System.out.print("size:"+size);
+								return size;
+							}
+							
+	/*-------------------------------------------------------------------------------------------------------*/
+							
+	//Friend
+	 //uid1 申请人 uid2被申请好友的那个人
+							 @POST
+						     @Path("/deleteFriend")
+							 //@Produces(MediaType.APPLICATION_JSON)
+							 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+							 @Consumes(MediaType.APPLICATION_JSON)
+							 @Produces("text/html")
+						     public String deleteFriend(Posto posto){
+								 Friend friend=new Friend() ;
+ 
+								friend=appService.getFriendByUids(posto.getPid(), posto.getBelong_rid(), 1);
+								appService.deleteFriend(friend);
+ 
+								return  "1";
+						     }
+							 @POST
+						     @Path("/addFriend")
+							 //@Produces(MediaType.APPLICATION_JSON)
+							 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+							 @Consumes(MediaType.APPLICATION_JSON)
+							 @Produces("text/html")
+						     public String addFriend(Posto posto){
+								 Friend friend=new Friend() ;
+								 friend.setUid1(posto.getPid());
+								 friend.setUid2(posto.getBelong_rid());
+								 friend.setState(1);
+							 	appService.addFriend(friend);
+								friend=appService.getFriendByUids(posto.getPid(), posto.getBelong_rid(), 0);
+								appService.deleteFriend(friend);
+								friend=appService.getFriendByUids(posto.getPid(), posto.getBelong_rid(), 0);
+								if(friend!=null)appService.deleteFriend(friend);
+								return  "1";
+						     }
+							 
+							 @POST
+						     @Path("/applyFriend")
+							 //@Produces(MediaType.APPLICATION_JSON)
+							 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+							 @Consumes(MediaType.APPLICATION_JSON)
+							 @Produces("text/html")
+						     public String applyFriend(Posto posto){
+								 int uid1 = posto.getPid();
+								 int uid2 = posto.getBelong_rid();
+							 	 if(appService.check(uid1, uid2)==1 && appService.getUserById(uid2)!=null &&uid1!=uid2 ){
+									 Friend friend=new Friend() ;
+									 friend.setUid1(posto.getPid());
+									 friend.setUid2(posto.getBelong_rid());
+									 friend.setState(0);
+								   	appService.addFriend(friend);
+					 
+									return  "1";
+								 }
+							 	 return "-1";
+						     }	
+							 
+							 @POST
+						     @Path("/applyFriendByName")
+							 //@Produces(MediaType.APPLICATION_JSON)
+							 //@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+							 @Consumes(MediaType.APPLICATION_JSON)
+							 @Produces("text/html")
+						     public String applyFriendByName(Posto posto){
+								 int uid1 = posto.getPid();
+								 String name = posto.getName();
+								 User user2 = appService.getUserByUsername(name);
+								 
+								 if (user2==null) return "-1";  
+								 
+								 int uid2 =user2.getId();
+							 	 if(appService.check(uid1, uid2)==1 && appService.getUserById(uid2)!=null &&uid1!=uid2 ){
+									 Friend friend=new Friend() ;
+									 friend.setUid1(posto.getPid());
+									 friend.setUid2(uid2);
+									 friend.setState(0);
+								   	appService.addFriend(friend);
+					 
+									return  "1";
+								 }
+							 	 return "-1";
+						     }										
+							 
+
+								@POST
+								@Path("/getFriendsById")
+								@Produces(MediaType.APPLICATION_JSON)
+								public List<User>  getFriendsById(Posto posto)
+								{
+								 
+									 List<User> users= new ArrayList<User>();
+									 
+									List<Friend> Friends = appService.getFriendById(posto.getPid());
+									for(int i = 0 ; i < Friends.size();i++){
+										
+										User user;
+										int state = Friends.get(i).getState();
+										if(state ==1){
+												int uid1 = Friends.get(i).getUid1();
+												int uid2 = Friends.get(i).getUid2();
+								
+												if(uid1==posto.getPid()){
+													user = appService.getUserById(uid2);
+												}
+												else{
+													user = appService.getUserById(uid1);
+												}
+									
+												users.add(user);
+										}
+
+									}
+									System.out.println(users.size()+"user");
+										return users;
+								}
+								
+								@POST
+								@Path("/getAppliesById")
+								@Produces(MediaType.APPLICATION_JSON)
+								public List<User>  getApplysById(Posto posto)
+								{
+								 
+									List<User> users= new ArrayList<User>();
+									List<Friend> Friends = appService.getFriendById(posto.getPid());
+									for(int i = 0 ; i < Friends.size();i++){
+										
+										User user;
+										int state = Friends.get(i).getState();
+										int id =  Friends.get(i).getUid2();
+										if(id==posto.getPid()&&state ==0){
+												int uid1 = Friends.get(i).getUid1();
+												int uid2 = Friends.get(i).getUid2();
+								
+												if(uid2==posto.getPid()){
+													user = appService.getUserById(uid1);
+													users.add(user);
+												}
+									
+											
+										}
+
+									}
+									System.out.println(users.size()+"user");
+										return users;
+								}
+								
 	/*-------------------------------------------------------------------------------------------------------*/
 	
 	//user
-	
-	
-	
-	
 		@GET
 		@Path("/getUsers")
 		@Produces(MediaType.APPLICATION_JSON)
@@ -332,11 +946,11 @@ public class RESTfulHelloWorld
 		 System.out.println("addUser");
 	
 		 if(appService.checkUsername(user.getUsername(),user.getPassword())==0){
-			 	 appService.addUser(user);
-			 	 return "success";
+			 	 
+			 	 return  appService.addUser(user).toString();
 		 }
 		 else{
-			 return "fail";
+			 return "-1";
 		 }
 		 
      }
@@ -350,13 +964,13 @@ public class RESTfulHelloWorld
      public String checkUser(User user){
 		 
 
-	
+	 
 		 if(appService.checkUser(user.getUsername(),user.getPassword())>0){
 			 	 
-			 	 return "success";
+			 	 return appService.checkUser(user.getUsername(),user.getPassword()).toString();
 		 }
 		 else{
-			 return "fail";
+			 return "-1";
 		 }
 		 
      }

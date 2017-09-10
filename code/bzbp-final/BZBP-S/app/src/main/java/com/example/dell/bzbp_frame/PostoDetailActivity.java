@@ -3,27 +3,20 @@ package com.example.dell.bzbp_frame;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dell.bzbp_frame.model.Comment;
 import com.example.dell.bzbp_frame.model.Posto;
 import com.example.dell.bzbp_frame.model.Praise;
-import com.example.dell.bzbp_frame.model.Route;
 import com.example.dell.bzbp_frame.model.User;
 import com.example.dell.bzbp_frame.tool.KeyMapDailog;
 import com.example.dell.bzbp_frame.tool.MyThread;
@@ -35,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 import static java.lang.Math.abs;
 
@@ -59,6 +51,8 @@ public class PostoDetailActivity extends BaseActivity {
     private Button button_postodetail_make_praise;
     private Button button_postodetail_gps;
     private ListView list_postodetail_commentlist;
+
+    private Button button_postodetail_goto;
 
     public static String ip;
     KeyMapDailog dialog;
@@ -108,6 +102,8 @@ public class PostoDetailActivity extends BaseActivity {
         button_postodetail_make_comment = (Button)this.findViewById(R.id.button_postodetail_make_comment);
         button_postodetail_make_praise = (Button)this.findViewById(R.id.button_postodetail_make_praise);
         list_postodetail_commentlist = (ListView)this.findViewById(R.id.list_postodetail_commentlist);
+
+        button_postodetail_goto = (Button)this.findViewById(R.id.button_postodetail_goto);
     }
 
     @Override
@@ -166,6 +162,25 @@ public class PostoDetailActivity extends BaseActivity {
                     result_praise = -result_praise;
                     textView_postodetail_praise.setText("praise:"+abs(result_praise));
                 }
+            }
+        });
+
+
+        //导航button
+        //点击此button后，跳转到新的地图界面，那个界面上只显示这个posto的位置。（之后可以加入导航）
+        button_postodetail_goto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(PostoDetailActivity.this,GuideActivity.class);
+                Bundle intent_bundle = new Bundle();
+
+                //传递user信息
+                intent_bundle.putSerializable("user",user);
+                //posto信息
+                intent_bundle.putSerializable("posto",posto);
+
+                i.putExtras(intent_bundle);
+                startActivity(i);
             }
         });
     }

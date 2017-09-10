@@ -34,7 +34,6 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -50,8 +49,7 @@
             android:value="a7945ca5681eb0f6620bb50895c63249" />
         <meta-data
             android:name="weixin_key"
-            android:value="@string/weixin_key"/>
-
+            android:value="@string/weixin_key" />
         />
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -59,7 +57,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -102,6 +99,7 @@
 
         <activity android:name=".Friends2Activity" />
         <activity android:name=".ShareSuccessActivity" />
+        <activity android:name=".GuideActivity"></activity>
     </application>
 
 </manifest>

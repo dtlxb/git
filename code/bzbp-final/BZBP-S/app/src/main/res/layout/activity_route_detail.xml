@@ -37,14 +37,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="praise"/>
+            android:background="@color/white"
+            android:textColor="@color/grey"
+            android:text="点赞"/>
 
         <Button
             android:id="@+id/button_routedetail_make_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="make comments"/>
+            android:background="@color/white"
+            android:textColor="@color/grey"
+            android:text="评论"/>
 
 
         </LinearLayout>
@@ -52,7 +56,9 @@
             android:id="@+id/button_routedetail_postos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="view postos"/>
+            android:background="@color/white"
+            android:textColor="@color/grey"
+            android:text="查看相关照片"/>
 
 
     </LinearLayout>

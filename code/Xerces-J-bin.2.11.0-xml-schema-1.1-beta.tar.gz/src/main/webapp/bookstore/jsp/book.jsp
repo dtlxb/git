@@ -1,11 +1,12 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="model.Book"%>
+<%@ page import="model.Posto"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
-<title>BookStore</title>
+<title>BZBP</title>
 
 <%
 	String path = request.getContextPath();
@@ -27,13 +28,21 @@
 		bookList = (ArrayList<Book>) request.getAttribute("books");
 			}
 	%>
+	
+	<%
+		ArrayList<Posto> PostoList = new ArrayList<Posto>();
+			if (request.getAttribute("postos") != null) {
+		PostoList = (ArrayList<Posto>) request.getAttribute("postos");
+			}
+	%>
+		
 	<div id="wrapper">
 		<!-- Navigation -->
 		<nav class="navbar navbar-default navbar-static-top" role="navigation"
 			style="margin-bottom: 0">
 
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">BookStore</a>
+			<a class="navbar-brand" href="#">BZBP</a>
 		</div>
 
 		<div class="navbar-default sidebar" role="navigation">
@@ -41,8 +50,8 @@
 				<ul class="nav" id="side-menu">
 					<li><a href="allUsersPro"><i class="fa fa-user fa-fw"></i>
 							Users</a></li>
-					<li><a href="allBooksPro" class="active"><i
-							class="fa fa-book fa-fw"></i> Books</a></li>
+					<li><a href="allPosto" class="active"><i
+							class="fa fa-book fa-fw"></i> Postos</a></li>
 					<li><a href="allOrdersPro"><i class="fa fa-reorder fa-fw"></i>
 							Orders</a></li>
 					<li><a href="allOrderitemsPro"><i
@@ -76,39 +85,39 @@
 									id="dataTables">
 									<thead>
 										<tr>
-										    <th>ID</th>
-											<th>Title</th>
-											<th>Author</th>
-											<th>Price</th>
-											<th>Publisher</th>
+										    <th>Name</th>
+											<th>Comment</th>
+											<th>Username</th>
 											<th>Date</th>
+											<th>Path</th>
+											<th>Routeid</th>
 											<th></th>
 										</tr>
 									</thead>
 									<tbody>
 										<%
-											for (int i = 0; i < bookList.size(); i++) {
-																				Book book = bookList.get(i);
+											for (int i = 0; i <PostoList.size(); i++) {
+																				Posto Posto = PostoList.get(i);
 										%>
 										<tr>
-										    <td><%=book.getId()%></td>
-											<td><%=book.getTitle()%></td>
-											<td><%=book.getAuthor()%></td>
-											<td><%=book.getPrice()%></td>
-											<td><%=book.getPublisher()%></td>
-											<td><%=book.getDate()%></td>
+										    <td><%=Posto.getName()%></td>
+											<td><%=Posto.getComment()%></td>
+											<td><%=Posto.getUsername()%></td>
+											<td><%=Posto.getDate()%></td>
+											<td><%=Posto.getPath_server()%></td>
+											<td><%=Posto.getBelong_rid()%></td>
 											<td>
 												<button class="btn btn-default delete" type="button"
-													data-id="<%=book.getId()%>">
+													data-id="<%=Posto.getPid()%>">
 													<i class="fa fa-trash"></i>
 												</button>
 												<button class="btn btn-default edit" type="button"
-													data-id="<%=book.getId()%>"
-													data-title="<%=book.getTitle()%>"
-													data-author="<%=book.getAuthor()%>"
-													data-price="<%=book.getPrice()%>"
-													data-publisher="<%=book.getPublisher()%>"
-													data-date="<%=book.getDate()%>">
+													data-id="<%=Posto.getPid()%>"
+													data-title="<%=Posto.getName()%>"
+													data-author="<%=Posto.getComment()%>"
+													data-price="<%=Posto.getUsername()%>"
+													data-publisher="<%=Posto.getPath_server()%>"
+													data-date="<%=Posto.getDate()%>">
 													<i class="fa fa-edit"></i>
 												</button>
 											</td>

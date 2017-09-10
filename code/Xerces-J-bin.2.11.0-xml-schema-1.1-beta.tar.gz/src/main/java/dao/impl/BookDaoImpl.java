@@ -12,6 +12,7 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
 
 	public Integer save(Book book) {
 		return (Integer) getHibernateTemplate().save(book);
+		
 	}
 
 	public void delete(Book book) {

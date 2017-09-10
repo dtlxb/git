@@ -16,5 +16,5 @@ public interface UserDao {
 	public User getUserById(int id);
 	public Integer checkUsername(String username,String password);
 	public List<User> getAllUsers();
-
+	public User getUserByUsername(String username);
 }

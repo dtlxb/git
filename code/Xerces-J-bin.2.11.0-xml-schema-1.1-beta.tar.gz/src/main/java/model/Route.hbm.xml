@@ -8,8 +8,22 @@
 			<column name="rid" />
 			<generator class="assigned" />
 		</id>
+	 	 <property name="username" type="java.lang.String">
+			<column name="username" />
+		</property>
 	 	 <property name="name" type="java.lang.String">
 			<column name="name" />
 		</property>
+		 <property name="comment" type="java.lang.String">
+			<column name="comment" />
+		</property>
+		
+		<property name="start_time" type="double">
+			<column name="start_time" />
+		</property>
+		<property name="end_time" type="double">
+			<column name="end_time" />
+		</property>
+		
 	</class>
 </hibernate-mapping>

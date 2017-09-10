@@ -3,13 +3,14 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="model.user_posto" table="user_posto">
+	<class name="model.posto_route" table="posto_route">
 		<id name="rid" type="int">
 			<column name="rid" />
 			<generator class="assigned" />
 		</id>
-	 <property name="name" type="java.lang.String">
-			<column name="name" />
+ 		<property name="pid" type="int">
+			<column name="pid" />
+			 
 		</property>
 	</class>
 </hibernate-mapping>

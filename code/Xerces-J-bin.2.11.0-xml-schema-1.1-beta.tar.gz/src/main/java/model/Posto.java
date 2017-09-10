@@ -27,8 +27,12 @@ public class Posto implements Serializable {
     private Double latitude;        //纬度·
     private Double longitude;       //经度·
  
+    private String  open; 
+ 
 
-    private Double date;              //拍摄日期（Date）·
+
+
+	private Double date;              //拍摄日期（Date）·
 
 
     private int belong_rid;    //关联route的id（-1代表无关联）·
@@ -73,7 +77,13 @@ public class Posto implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+	public String getOpen() {
+		return open;
+	}
 
+	public void setOpen(String open) {
+		this.open = open;
+	}
     public String getComment() {
         return comment;
     }
