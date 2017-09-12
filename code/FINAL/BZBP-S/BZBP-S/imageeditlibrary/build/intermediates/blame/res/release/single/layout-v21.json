@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "C:\\Users\\LI\\Desktop\\M\\FINAL\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\LI\\.android\\build-cache\\9bb202964982109ab18850be5c42830d0bdbc2c0\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\LI\\Desktop\\M\\FINAL\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\LI\\.android\\build-cache\\9bb202964982109ab18850be5c42830d0bdbc2c0\\output\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\LI\\Desktop\\M\\FINAL\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\LI\\.android\\build-cache\\9bb202964982109ab18850be5c42830d0bdbc2c0\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\dell\\Desktop\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\dell\\Desktop\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\dell\\Desktop\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\LI\\Desktop\\M\\FINAL\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\LI\\.android\\build-cache\\9bb202964982109ab18850be5c42830d0bdbc2c0\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "C:\\Users\\dell\\Desktop\\BZBP-S\\BZBP-S\\imageeditlibrary\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\dell\\.android\\build-cache\\6cdfd356291f2aa529679dbeead1d37ff512a8ca\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    }
+]
